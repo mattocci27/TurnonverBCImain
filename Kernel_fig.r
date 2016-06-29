@@ -92,7 +92,7 @@ p2 <- ggplot(kernel.20, aes(x=WSG))
 p2 <- p2 + geom_density(aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(0.53,0.68)  + labs(y="Denstiy for 0.04ha subplots",x="")+ theme
 
 p3 <- ggplot(k.ind.WSG, aes(x=WSG))
-p3 <- p3 + geom_density(adjust=4, aes(colour=as.factor(time)))  + labs(y="Density for each tree")+ theme(legend.position=c(0.22,0.6)) + guides(colour=FALSE)+ theme
+p3 <- p3 + geom_density(adjust=4, aes(colour=as.factor(time)))  + labs(y="Density for each tree",x = expression(paste("Wood density (g ",cm^-3,")")))+ theme(legend.position=c(0.22,0.6)) + guides(colour=FALSE)+ theme
 
 p4 <- ggplot(kernel.100, aes(x=moist))
 p4 <- p4 + geom_density(aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(0.3,0.9)  + guides(colour=FALSE)  + labs(y="",x="")+ theme
@@ -112,7 +112,7 @@ p8 <- p8 + geom_density(adjust=1,aes(colour=as.factor(time))) + guides(colour=FA
 
 
 p9 <- ggplot(k.ind.convex, aes(x=convex))
-p9 <- p9 + geom_density(adjust=4, aes(colour=as.factor(time))) + labs(y="",x="Convexity") + guides(colour=FALSE) + xlim(-0.15,0.25)+ theme
+p9 <- p9 + geom_density(adjust=4, aes(colour=as.factor(time))) + labs(y="",x="Convexity (m)") + guides(colour=FALSE) + xlim(-0.15,0.25)+ theme
 
 p10 <- ggplot(kernel.100, aes(x=slope))
 p10 <- p10 + geom_density(adjust=1,aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(4,6)  + guides(colour=FALSE)+ labs(y="",x="")+ theme
@@ -121,7 +121,7 @@ p11 <- ggplot(kernel.20, aes(x=slope))
 p11 <- p11 + geom_density(aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(4,6)  + guides(colour=FALSE)+ labs(y="",x="")+ theme
 
 p12 <- ggplot(k.ind.slope, aes(x=slope))
-p12 <- p12 + geom_density(adjust=4, aes(colour=as.factor(time))) + xlim(0.6,15)+ labs(y=" ",x="Slope") + guides(colour=FALSE)+ theme
+p12 <- p12 + geom_density(adjust=4, aes(colour=as.factor(time))) + xlim(0.6,15)+ labs(y=" ",x="Slope (degrees)") + guides(colour=FALSE)+ theme
 
 
 grid.arrange(p1,p4,p7,p10,
