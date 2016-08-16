@@ -7,32 +7,32 @@ source("TurnoverSource20150611.r")
 ab.data <- as.data.frame(sapply(D20m,function(x)apply(x,2,sum)))
 ab.data$sp <- rownames(ab.data)
 trait.temp <- data.frame(sp=rownames(trait),
-                         moist=trait$Moist,
-                         slope=trait$sp.slope.mean,
-                         slope.sd = trait$sp.slope.sd,
-                         convex=trait$sp.convex.mean,
-                         convex.sd=trait$sp.convex.sd,
-                         WSG=trait$WSG,
-                         slope10=trait$slope_size_10,
-                         slope20=trait$slope_size_20,
-                         slope30=trait$slope_size_30,
-                         slope40=trait$slope_size_40,
-                         slope50=trait$slope_size_50,
-                         slope60=trait$slope_size_60,
-                         slope70=trait$slope_size_70,
-                         slope80=trait$slope_size_80,
-                         slope90=trait$slope_size_90,
-                         slope100=trait$slope_size_100,
-                         convex10=trait$convex_size_10,
-                         convex20=trait$convex_size_20,
-                         convex30=trait$convex_size_30,
-                         convex40=trait$convex_size_40,
-                         convex50=trait$convex_size_50,
-                         convex60=trait$convex_size_60,
-                         convex70=trait$convex_size_70,
-                         convex80=trait$convex_size_80,
-                         convex90=trait$convex_size_90,
-                         convex100=trait$convex_size_100)
+           moist=trait$Moist,
+           slope=trait$sp.slope.mean,
+           slope.sd = trait$sp.slope.sd,
+           convex=trait$sp.convex.mean,
+           convex.sd=trait$sp.convex.sd,
+           WSG=trait$WSG,
+           slope10=trait$slope_size_10,
+           slope20=trait$slope_size_20,
+           slope30=trait$slope_size_30,
+           slope40=trait$slope_size_40,
+           slope50=trait$slope_size_50,
+           slope60=trait$slope_size_60,
+           slope70=trait$slope_size_70,
+           slope80=trait$slope_size_80,
+           slope90=trait$slope_size_90,
+           slope100=trait$slope_size_100,
+           convex10=trait$convex_size_10,
+           convex20=trait$convex_size_20,
+           convex30=trait$convex_size_30,
+           convex40=trait$convex_size_40,
+           convex50=trait$convex_size_50,
+           convex60=trait$convex_size_60,
+           convex70=trait$convex_size_70,
+           convex80=trait$convex_size_80,
+           convex90=trait$convex_size_90,
+           convex100=trait$convex_size_100)
 
 ab.t.data <- merge(ab.data,trait.temp,by="sp")
 rownames(ab.t.data) <- ab.t.data$sp
@@ -41,11 +41,11 @@ ab.t.data2 <- na.omit(ab.t.data)
 #this may be useful way to detect species.
 #using the product of delta abundance and deviaiton from mean (or median) trait for each species
 WSGab <- data.frame(sp = ab.t.data$sp,
-                    delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) - ab.t.data$census_1982/sum(ab.t.data$census_1982),
-                    delta_ab2 = ab.t.data$census_2010 - ab.t.data$census_1982,
-                    delta_ab3 = ab.t.data$census_2010/ab.t.data$census_1982,
-                    WSG = ab.t.data$WSG,
-                    WSG_delta =ab.t.data$WSG - mean(ab.t.data$WSG,na.rm=T))
+        delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) -     ab.t.data$census_1982/sum(ab.t.data$census_1982),
+        delta_ab2 = ab.t.data$census_2010 - ab.t.data$census_1982,
+        delta_ab3 = ab.t.data$census_2010/ab.t.data$census_1982,
+        WSG = ab.t.data$WSG,
+        WSG_delta =ab.t.data$WSG - mean(ab.t.data$WSG,na.rm=T))
 WSGab$index <- as.numeric(scale(WSGab$delta_ab)) * as.numeric(scale(WSGab$WSG_delta))
 
 WSGab <- WSGab[order(WSGab$index),]
@@ -134,12 +134,31 @@ dev.off()
 
 
 
-postscript("~/Dropbox/MS/TurnoverBCI/fig/ab_change.eps",width=6,height=6,paper="special")
-par(mfrow=c(1,3),mar=c(2,4,2,2))
-barplot(as.numeric(na.omit(moistab$index)), main = "Moisture",col=ifelse(moistab$delta_ab>0,"orange","purple"),border=ifelse(moistab$delta_ab>0,"orange","purple"))
-barplot(as.numeric(na.omit(convexab$index)), main = "Convexity",col=ifelse(convexab$delta_ab>0,"orange","purple"),border=ifelse(convexab$delta_ab>0,"orange","purple"),
-ylab="Contribuiton index")
-barplot(as.numeric(na.omit(slopeab$index)), main = "Slope",col=ifelse(slopeab$delta_ab>0,"orange","purple"),border=ifelse(slopeab$delta_ab>0,"orange","purple"))
+postscript("~/Dropbox/MS/TurnoverBCI/fig_current/ab_change.eps", width = 6, height = 6, paper = "special")
+par(mfrow=c(1, 3), mar = c(3, 4, 3, 3))
+
+barplot(as.numeric(na.omit(moistab$index)),
+  main = "Moisture",
+  col = ifelse(moistab$delta_ab>0,"gray","black"),
+  border = ifelse(moistab$delta_ab>0,"gray","black"),
+  horiz = T,
+  xlab= "Contribution index")
+
+barplot(as.numeric(na.omit(convexab$index)),
+  main = "Convexity",
+  col = ifelse(convexab$delta_ab>0,"gray","black"),
+  border = ifelse(convexab$delta_ab>0,"gray","black"),
+  ylab = "Contr",
+  horiz = T,
+  xlab= "Contribution index")
+
+barplot(as.numeric(na.omit(slopeab$index)),
+  main = "Slope",
+  col = ifelse(slopeab$delta_ab>0,"gray","black"),
+  border = ifelse(slopeab$delta_ab>0,"gray","black"),
+  horiz = T,
+  xlab= "Contribution index")
+
 par(mfrow=c(1,1))
 
 dev.off()

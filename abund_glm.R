@@ -50,6 +50,19 @@ summary((ab.t.data2$census_2010 - mean(ab.t.data2$census_2010))^2)
 
 summary((ab.t.data2$census_2010 - ab.t.data2$census_1982)^2)
 
+ab.t.data2 %>%
+  filter(census_2010/census_1982 > 0.2) %>%
+  glm.nb(census_2010 ~WSG
+              + moist
+              + convex
+              + slope
+              + WSG:moist
+              + WSG:convex
+              + WSG:slope
+              + offset(log(census_1982)),
+              data = .) %>%
+              summary
+
 
 
 res_all <- glm.nb(census_2010 ~WSG
