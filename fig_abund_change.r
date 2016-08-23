@@ -1,5 +1,7 @@
 rm(list = ls()) # This clears everything from memory.
 
+library(dplyr)
+
 setwd("~/Dropbox/BCI_Turnover")
 load("BCI_turnover20150611.RData")
 source("TurnoverSource20150611.r")
@@ -123,6 +125,29 @@ slopeab$index <- slopeab$delta_ab * slopeab$slope_delta*100
 slopeab <- slopeab[order(slopeab$index),]
 
 
+# sp list for appendix ====================================================
+
+taxa <- read.csv("~/Dropbox/MS/TurnoverBCI/nomenclature_R_20120305_Rready-2.csv")
+
+sp_list <- WSGab %>%
+  mutate(Wood_density = round(index, 4)) %>%
+  mutate(Abundance_change = round(delta_ab, 4)) %>%
+  select(sp, Abundance_change, Wood_density, -index) %>%
+  full_join(., moistab, by = "sp") %>%
+  mutate(Moisture = round(index, 4)) %>%
+  select(-index) %>%
+  full_join(., convexab, by = "sp") %>%
+  mutate(Convexity = round(index, 4)) %>%
+  select(-index) %>%
+  full_join(., slopeab, by = "sp") %>%
+  mutate(Slope = round(index, 4), sp6 = sp) %>%
+  left_join(., taxa, by = "sp6") %>%
+  select(sp, family, genus, species,
+    Abundance_change, Wood_density, Moisture, Convexity, Slope) %>%
+  arrange(sp) %>% head
+
+write.csv()
+
 
 
 
@@ -135,7 +160,7 @@ dev.off()
 
 
 postscript("~/Dropbox/MS/TurnoverBCI/fig_current/ab_change.eps", width = 6, height = 6, paper = "special")
-par(mfrow=c(1, 3), mar = c(3, 4, 3, 3))
+par(mfrow=c(1, 3), mar = c(4, 2, 2, 2))
 
 barplot(as.numeric(na.omit(moistab$index)),
   main = "Moisture",
@@ -148,7 +173,6 @@ barplot(as.numeric(na.omit(convexab$index)),
   main = "Convexity",
   col = ifelse(convexab$delta_ab>0,"gray","black"),
   border = ifelse(convexab$delta_ab>0,"gray","black"),
-  ylab = "Contr",
   horiz = T,
   xlab= "Contribution index")
 
