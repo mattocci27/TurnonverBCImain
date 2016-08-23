@@ -144,9 +144,11 @@ sp_list <- WSGab %>%
   left_join(., taxa, by = "sp6") %>%
   select(sp, family, genus, species,
     Abundance_change, Wood_density, Moisture, Convexity, Slope) %>%
-  arrange(sp) %>% head
+  arrange(sp) %>%
+  mutate(species = paste(genus, species)) %>%
+  select(-genus) 
 
-write.csv()
+write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list.csv")
 
 
 
