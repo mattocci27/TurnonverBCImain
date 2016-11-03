@@ -147,7 +147,7 @@ ggplot(dummy0, aes(x = val)) +
   guides(colour = guide_legend(title = NULL)) +
   # guides(fill = guide_legend(override.aes = list(fille = as.factor(time)))) +
   theme(panel.margin.x = unit(0.5, "lines"),
-  legend.position = c(1.2, 0.4), legend.justification = c(1,1),
+  legend.position = c(1, 0.4), legend.justification = c(1,1),
   legend.text = element_text(size = 7),
   legend.background = element_rect(fill=alpha('blue', 0)),
   legend.key.size = unit(0.4, "cm"),
