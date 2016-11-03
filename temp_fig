@@ -25,7 +25,8 @@ r2.1 <- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data = moge %>% arrange
     mutate(obs2 = WSG - site_ef)
 
 par(mfrow=c(4,2), mar=c(4,4,2, 2))
-plot(obs2 ~ Time, res3, col = "gray",ylab = "scale(wood_density - site_effect)", main = "Estimated values")
+plot(obs2 ~ Time, res3, col = "gray",ylab = "scale(wood_density - site_effect)", main
+= "Estimated values")
 for(i in 1:50) points(obs2 ~ Time, res3 %>% filter(site == i),
   col = "gray", type = "l")
 points(fitted ~ Time, res3, pch = 16)

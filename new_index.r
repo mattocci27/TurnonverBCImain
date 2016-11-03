@@ -1,14 +1,29 @@
 rm(list = ls()) # This clears everything from memory.
 
 library(dplyr)
-library(ggplot2)
 
 setwd("~/Dropbox/BCI_Turnover")
 load("BCI_turnover20150611.RData")
 source("TurnoverSource20150611.r")
 # prepare data set
 ab.data <- as.data.frame(sapply(D20m,function(x)apply(x,2,sum)))
-ab.data$sp <- rownames(ab.data)
+
+
+sapply(D100m, function(x) x[, "HYBAPR"])
+
+ab100m <- sapply(D100m, function(x) apply(x, 1, sum))
+moge <- sapply(D100m, function(x) x[, "HYBAPR"])
+
+temp100 <- moge / ab100m
+temp100 <- temp100[, 7] - temp100[, 1]
+
+
+ab20m <- sapply(D20m, function(x) apply(x, 1, sum))
+moge <- sapply(D20m, function(x) x[, "HYBAPR"])
+
+temp20 <- moge / ab20m
+temp20 <- temp20[, 7] - temp20[, 1]
+
 trait.temp <- data.frame(sp=rownames(trait),
            moist=trait$Moist,
            slope=trait$sp.slope.mean,
@@ -41,6 +56,192 @@ ab.t.data <- merge(ab.data,trait.temp,by="sp")
 rownames(ab.t.data) <- ab.t.data$sp
 ab.t.data2 <- na.omit(ab.t.data)
 
+
+mean(temp100)
+mean(temp20)
+ab.t.data2 %>% filter(sp == "HYBAPR")
+
+
+WSG_sp <- ab.t.data %>% select(sp, WSG) %>% na.omit
+
+WSG_D100m_1982<- D100m[[1]][, WSG_sp$sp]
+WSG_D100m_2010<- D100m[[7]][, WSG_sp$sp]
+
+ab1982 <- WSG_D100m_1982/ apply(WSG_D100m_1982, 1, sum)
+ab2010 <- WSG_D100m_2010 / apply(WSG_D100m_2010, 1, sum)
+
+WSG_100m <- t(t(ab2010 - ab1982) * (WSG_sp$WSG - mean(WSG_sp$WSG)))
+
+WSG_100m <- WSG_100m[, order(-apply(WSG_100m, 2, sum))]
+
+
+temp <- WSG_sp[order(WSG_sp$WSG), ]
+WSG_100m <- WSG_100m[, order(-apply(WSG_100m, 2, sum))]
+
+WSG_100m <- WSG_100m[, order(temp$sp)]
+
+WSG_100m_dat <- data.frame(val = as.vector(WSG_100m),
+  site = rep(rownames(WSG_100m), ncol(WSG_100m)),
+  sp = rep(colnames(WSG_100m), each = nrow(WSG_100m))
+  ) %>%
+  mutate(sp  = factor(sp, levels = unique(sp)))
+
+
+
+WSG_D20m_1982<- D20m[[1]][, WSG_sp$sp]
+WSG_D20m_2010<- D20m[[7]][, WSG_sp$sp]
+
+ab1982 <- WSG_D20m_1982/ apply(WSG_D20m_1982, 1, sum)
+ab2010 <- WSG_D20m_2010 / apply(WSG_D20m_2010, 1, sum)
+
+WSG_20m <- t(t(ab2010 - ab1982) * (WSG_sp$WSG - mean(WSG_sp$WSG)))
+
+WSG_20m <- WSG_20m[, order(-apply(WSG_20m, 2, sum))]
+
+
+temp <- WSG_sp[order(WSG_sp$WSG), ]
+WSG_20m <- WSG_20m[, order(-apply(WSG_20m, 2, sum))]
+
+WSG_20m <- WSG_20m[, order(temp$sp)]
+
+WSG_20m_dat <- data.frame(val = as.vector(WSG_20m),
+  site = rep(rownames(WSG_20m), ncol(WSG_20m)),
+  sp = rep(colnames(WSG_20m), each = nrow(WSG_20m))
+  ) %>%
+  mutate(sp  = factor(sp, levels = unique(sp)))
+
+ex_dat <- data.frame(val = as.vector(mapply(rnorm, 50, seq(-0.008, 0.008, length = 200), sd = 0.0005)),
+  site = rep(1:50, 200),
+  sp = rep(1:200, each = 50))
+
+  levelplot(val ~  sp * site, data = ex_dat, col.regions = heat.colors(100), cut = 50)
+
+
+library(lattice)
+
+levelplot(val ~  sp * site, data = WSG_100m_dat, col.regions = heat.colors(100), cut = 5)
+
+levelplot(val ~  sp * site, data = WSG_20m_dat, col.regions = heat.colors(100), cut = 50)
+
+mm <- ab2010 - ab1982
+
+ab.data$sp <- rownames(ab.data)
+
+mm <- matrix(1:9, nrow = 3)
+
+mm2 <- t(mm) * 1:3
+t(mm2)
+
+# spA = 0.1 100 -> 90 -> 0 -> 0
+# spB = 0.5 10 -> 13 -> 8 -> 9
+# spC = 0.8 5 -> 4 -> 4 -> 7
+library(mgcv)
+
+dat <- data.frame(sp = c(rep("spA", 190), rep("spB", 40), rep("spC", 20)),
+     trait = c(rep(0.1, 190), rep(0.5, 40), rep(0.8, 20)),
+     census = c(rep(1, 100), rep(2, 90), rep(1, 10), rep(2, 13),
+      rep(3, 8), rep(4, 9), rep(1, 5), rep(2, 4), rep(3, 4), rep(4, 7)),
+     site = rep(c("siteA", "siteB", "siteC", "siteD", "siteE"), each = 50))
+
+res <- gam(trait ~ s(census, k = 3), data = dat)
+
+res2 <- gamm(trait ~ s(census, k =3), data = dat, random = list(site = ~1))
+
+p <- ggplot(dat, aes(x = census, y = trait, colour = sp)) +
+  geom_jitter(width = 0.2)
+print(p)
+
+p <- ggplot(dat, aes(x = census, y = trait, colour = sp)) +
+  geom_point()
+print(p)
+
+r1.r <- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data=moge20, correlation = corAR1())
+
+
+
+# unlist(WSG100.ind)
+
+moge <- c(rep(ab.t.data2$WSG, ab.t.data2$census_1982),
+  rep(ab.t.data2$WSG, ab.t.data2$census_1985),
+  rep(ab.t.data2$WSG, ab.t.data2$census_1990),
+  rep(ab.t.data2$WSG, ab.t.data2$census_1995),
+  rep(ab.t.data2$WSG, ab.t.data2$census_2000),
+  rep(ab.t.data2$WSG, ab.t.data2$census_2005),
+  rep(ab.t.data2$WSG, ab.t.data2$census_2010))
+
+
+moge1 <- D100m[[1]][, ab.t.data2$sp] %>% as_data_frame %>%
+  mutate(site = rownames(D100m[[1]])) %>%
+  tidyr::gather("sp", "abund", 1:202)
+
+dat1 <- data_frame(site = rep(moge1$site, moge1$abund),
+      sp = rep(moge1$sp, moge1$abund))
+
+moge2 <- D100m[[2]][, ab.t.data2$sp] %>% as_data_frame %>%
+  mutate(site = rownames(D100m[[2]])) %>%
+  tidyr::gather("sp", "abund", 1:202)
+
+dat2 <- data_frame(site = rep(moge2$site, moge2$abund),
+      sp = rep(moge2$sp, moge2$abund))
+
+
+moge3 <- D100m[[3]][, ab.t.data2$sp] %>% as_data_frame %>%
+  mutate(site = rownames(D100m[[3]])) %>%
+  tidyr::gather("sp", "abund", 1:202)
+
+dat3 <- data_frame(site = rep(moge3$site, moge3$abund),
+      sp = rep(moge3$sp, moge3$abund))
+
+
+moge4 <- D100m[[4]][, ab.t.data2$sp] %>% as_data_frame %>%
+  mutate(site = rownames(D100m[[4]])) %>%
+  tidyr::gather("sp", "abund", 1:202)
+
+dat4 <- data_frame(site = rep(moge4$site, moge4$abund),
+      sp = rep(moge4$sp, moge4$abund))
+
+
+moge5 <- D100m[[5]][, ab.t.data2$sp] %>% as_data_frame %>%
+  mutate(site = rownames(D100m[[5]])) %>%
+  tidyr::gather("sp", "abund", 1:202)
+
+dat5 <- data_frame(site = rep(moge5$site, moge5$abund),
+      sp = rep(moge5$sp, moge5$abund))
+
+
+moge6 <- D100m[[6]][, ab.t.data2$sp] %>% as_data_frame %>%
+  mutate(site = rownames(D100m[[6]])) %>%
+  tidyr::gather("sp", "abund", 1:202)
+
+dat6 <- data_frame(site = rep(moge6$site, moge6$abund),
+      sp = rep(moge6$sp, moge6$abund))
+
+
+moge7 <- D100m[[7]][, ab.t.data2$sp] %>% as_data_frame %>%
+  mutate(site = rownames(D100m[[7]])) %>%
+  tidyr::gather("sp", "abund", 1:202)
+
+dat7 <- data_frame(site = rep(moge7$site, moge7$abund),
+      sp = rep(moge7$sp, moge7$abund))
+
+gam_dat <- rbind(dat1, dat2, dat3, dat4, dat5, dat6, dat7)
+
+gam_dat <- gam_dat %>% as_data_frame %>%
+  mutate(Time = rep(c(1982, 1985, 1990, 1995, 2000, 2005, 2010), c(nrow(dat1), nrow(dat2), nrow(dat3), nrow(dat4), nrow(dat5), nrow(dat6), nrow(dat7))))
+
+gam_dat <- left_join(gam_dat, ab.t.data2, by = "sp")
+
+system.time(gam_ind <- gamm(WSG ~  s(Time, k=4), data = gam_dat, correlation = corAR1()))
+
+
+
+system.time(gamm_ind <- gamm(WSG ~  s(Time,k=4), random = list(site = ~1), data = gam_dat, correlation = corAR1()))
+
+system.time(lme_ind <- lmer(WSG ~ Time + (Time|site), data = gam_dat))
+
+system.time(lme_ind2 <- lmer(WSG ~ Time + (Time|sp), data = gam_dat))
+
+# =====================================================
 #this may be useful way to detect species.
 #using the product of delta abundance and deviaiton from mean (or median) trait for each species
 WSGab <- data.frame(sp = ab.t.data$sp,
@@ -161,63 +362,34 @@ par(lwd=1)
 dev.off()
 
 
-p0 <- barplot(as.numeric(na.omit(slopeab$index)),
-  main = "Slope",
-  col = ifelse(slopeab$delta_ab>0,"gray","black"),
-  border = ifelse(slopeab$delta_ab>0,"gray","black"),
-  horiz = T,
-  xlab= "Contribution index",
-  ylim = c(0, 360))
 
 postscript("~/Dropbox/MS/TurnoverBCI/fig_current/ab_change.eps", width = 6, height = 6, paper = "special")
-
-par(mfrow=c(1, 4), mar = c(4, 4, 2, 2))
-
-p <- barplot(as.numeric(na.omit(WSGab$index)),
-  main = "Wood density",
-  ylab = "Species ranked by contribution index",
-  xlab = "Contribution index",
-  col = ifelse(WSGab$delta_ab>0,"gray","black"),
-  border = ifelse(WSGab$delta_ab>0,"gray","black"),
-  horiz = T,
-  ylim = c(0, 360))
-  # axis(2, tick = FALSE,line = -0.8, cex.axis = 0.9)
-  axis(2, tcl = 0.2, labels = FALSE, at = p0)
+par(mfrow=c(1, 3), mar = c(4, 2, 2, 2))
 
 barplot(as.numeric(na.omit(moistab$index)),
   main = "Moisture",
   col = ifelse(moistab$delta_ab>0,"gray","black"),
   border = ifelse(moistab$delta_ab>0,"gray","black"),
   horiz = T,
-  xlab= "Contribution index",
-  ylim = c(0, 360))
+  xlab= "Contribution index")
 
 barplot(as.numeric(na.omit(convexab$index)),
   main = "Convexity",
   col = ifelse(convexab$delta_ab>0,"gray","black"),
   border = ifelse(convexab$delta_ab>0,"gray","black"),
   horiz = T,
-  xlab= "Contribution index",
-  ylim = c(0, 360))
+  xlab= "Contribution index")
 
 barplot(as.numeric(na.omit(slopeab$index)),
   main = "Slope",
   col = ifelse(slopeab$delta_ab>0,"gray","black"),
   border = ifelse(slopeab$delta_ab>0,"gray","black"),
   horiz = T,
-  xlab= "Contribution index",
-  ylim = c(0, 360))
+  xlab= "Contribution index")
 
 par(mfrow=c(1,1))
 
 dev.off()
-
-
-moge <- full_join(WSGab, moistab, by = "sp")
-
-ggplot(WSGab, x = index, fill = sp) + geom_bar()
-
-
 
 par(mfrow=c(1,2))
 barplot()
@@ -227,193 +399,3 @@ write.csv(WSGab, "~/Dropbox/MS/TurnoverBCI/fig0/WSGab.csv")
 write.csv(moistab, "~/Dropbox/MS/TurnoverBCI/fig0/moistab.csv")
 write.csv(convexab, "~/Dropbox/MS/TurnoverBCI/fig0/convexab.csv")
 write.csv(slope100ab, "~/Dropbox/MS/TurnoverBCI/fig0/slope100ab.csv")
-
-
-
-
-barplot(as.numeric(na.omit(WSGab$index)), main = "WSG",ylab="", xlab= "Contribution index",col=ifelse(WSGab$delta_ab>0,"gray","black"),border=ifelse(WSGab$delta_ab>0,"gray","black"),horiz=T)
-
-moge <- na.omit(WSGab$index) %>% as.numeric
-
-
-# ========================================
-WSGab <- WSGab %>%
-  mutate(WSG_index = index)
-
-moistab <- moistab %>%
-  mutate(moist_index = index)
-
-convexab <- convexab %>%
-  mutate(convex_index = index)
-
-slopeab <- slopeab %>%
-  mutate(slope_index = index)
-
-fig_dat <- full_join(WSGab, moistab, by = "sp") %>%
-  full_join(., convexab, by = "sp") %>%
-  full_join(., slopeab, by = "sp") %>%
-  tidyr::gather(., "trait", "val", c(WSG_index, slope_index, moist_index, convex_index)) %>%
-  dplyr::select(., c(sp, trait, val)) %>%
-  na.omit %>%
-  mutate(sig = ifelse(val < 0, "Negative", "Positive"))  %>%
-  mutate(val2 = abs(val)) %>%
-  mutate(trait_sig = paste(trait, sig, sep = "_"))
-
-  fig_dat %>% group_by(trait) %>%
-   summarise(mean = sum(val2, na.rm = T))
-
-temp0 <- tapply(fig_dat$val2, fig_dat$trait, mean, na.rm = T) %>% rep(each = 2)
-
-temp <- fig_dat %>% group_by(trait, sig) %>%
-  summarise(mean = mean(val2, na.rm = T)) %>%
-  mutate(trait_sig = paste(trait, sig, sep = "_")) %>%
-  as_data_frame %>%
-  dplyr::select(., c(mean, trait_sig)) %>%
-  mutate(mean2 = mean / temp0)
-
-# temp[3,1] <- 100
-
-# high slope
-# PIPECA
-
-# large change
-# PSYCLI
-
-# high abund
-# HYBAPR
-# FARAOC
-
-sp_vec <- c("PIPECO", "POULAR", "PIPECA", "PSYCLI", "HYBAPR", "FARAOC")
-
-# moist
-# TET2PA
-
-#convex
-# SWARS1
-# ALSEBL
-
-# slope
-# HYBAPR
-library(grDevices)
-
-n <- 2
-hues <- seq(15, 375, length=n+1)
-cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
-
-sp_vec2 <- c("PIPECO", "POULAR", "TET2PA", "SWARS1", "ALSEBL", "HYBAPR", "FARAOC")
-
-
-fig_dat2 <- full_join(fig_dat, temp, by = "trait_sig") %>%
-  arrange(val2) %>%
-  mutate(trait = factor(trait, levels = c("WSG_index", "moist_index", "convex_index", "slope_index"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood density", "Moisture", "Convexity", "Slope"))) %>%
-  mutate(sig = factor(sig, levels = c("Positive", "Negative"))) %>%
-  mutate(col = ifelse(sp == "POULAR", "POULAR",
-    ifelse(sp == "PIPECO", "PIPECO", "Other species"))) %>%
-  mutate(col = factor(col, levels = c("PIPECO", "POULAR", "Other species"))) %>%
-  mutate(sp2 = ifelse(sp %in% sp_vec, as.character(sp), "Other species")) %>%
-  mutate(sp3 = ifelse(sp %in% sp_vec2, as.character(sp), "Other species")) %>%
-  mutate(sp2 = factor(sp2, levels = c("FARAOC", "HYBAPR", "PIPECA", "PIPECO", "POULAR", "PSYCLI", "Other species"))) %>%
-  mutate(sp3 = factor(sp3, levels = c("ALSEBL", "HYBAPR", "PIPECO", "POULAR", "SWARS1", "TET2PA", "Other species")))
-
-
-
-
-
-  lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
-      y = 20,
-      x = rep(c(0.21, -1.9, -0.29, 0.5),  3),
-      size = rep(c("50ha", "1ha", "0.04ha"), each = 4),
-      trait = rep(c("WSG", "moist", "convex", "slope"), 3),
-      sp2 = "Other species") %>%
-      mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
-      mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
-      mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)")))
-
-
-
-postscript("~/Dropbox/MS/TurnoverBCI/fig/ab_change_pi.eps", width = 6, height = 3, paper = "special")
-
-pdf("~/Dropbox/MS/TurnoverBCI/fig/ab_change_pi.pdf", width = 6, height = 3.6)
-
-lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
-  mutate(x = 1.4, y = 0.8) %>%
-  mutate(n2 = paste("n =", n, sep = " "))
-
-  ggplot(fig_dat2) +
-  geom_bar(aes(y = val2, x = mean2/2,
-    fill = as.factor(sp2), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
-  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
-    size = 4, vjust = 0) +
-  coord_polar(theta="y") +
-  facet_grid(sig ~ trait2) +
-  # scale_fill_gradient(low = "blue", high = "red") +
-  # guides(fill = FALSE) +
-  # scale_fill_manual(values = ifelse(levels(fig_dat2$sp) == "POULAR", "red", "gray")) +
-  # scale_fill_manual(values = c("PIPECO" = "#F8766D", "POULAR" = "#00C0AF", "Other species" = "gray"), name = "") +
-  scale_fill_manual(values = c(cols_hex, "gray"),
-    guide = guide_legend(title.position = "top",
-      title = "Species",)) +
-  theme_bw() +
-  theme(axis.text.x = element_blank(),
-     axis.text.y = element_blank(),
-     axis.ticks = element_blank()) +
-  xlab("") + ylab("") +
-  theme(legend.position = "bottom",
-    legend.margin = unit(-0.2, "cm"))
-
-dev.off()
-
-
-
-val <- fig_dat %>% filter(sp == "PIPECO" | sp == "POULAR") %>%
-.$val
-
-arrow_pos <- data.frame(
-  trait2 = rep(c("Wood density", "Slope", "Moisture", "Convexity"), each = 2),
-  sp = rep(c("PIPECO", "POULAR"), 4),
-  val = val
-  )
-
-# Calculate the y positions for the labels and arrows
-# For the myd data frame, obtain counts within each bin, but separately for each class
-bwidth <- 30   # Set binwidth
-Min <- floor(min(fig_dat$val)/bwidth) * bwidth
-Max <- ceiling(max(fig_dat$val)/bwidth) * bwidth
-
-Min <- -0.5
-Max <- 0.5
-
-# Function to do the counting
-# func <- function(df) {
-#    tab = as.data.frame(table(cut(df$val, breaks = seq(Min, Max, bwidth), right = FALSE)))
-#    tab$upper = Min + bwidth * (as.numeric(rownames(tab)))
-#    return(tab)
-#    }
-#
-# # Apply the function to each class in myd data frame
-# TableOfCounts <- plyr::ddply(fig_dat2, .(trait2), function(df) func(df))
-#
-# # Transfer counts of arrow_pos
-# arrow_pos$upper <- (floor(arrow_pos$val/bwidth) * bwidth) + bwidth
-# arrow_pos <- merge(arrow_pos, TableOfCounts, by = c("trait2", "upper"))
-# arrow_pos$xvar <- (arrow_pos$upper - .5 * bwidth)      # x position of the arrow is at the midpoint of the bin
-# # arrow_pos$trait2=factor(as.character(arrow_pos$trait),
-    # levels=c("1", "2", "3", "4")) # Gets rid of warnings.
-
-arrow_pos$Freq2 <- rep(c(30,60), 4)
-
-pdf("~/Dropbox/MS/TurnoverBCI/fig/ab_change_hist.pdf", width = 6, height = 6, paper = "special")
-ggplot(fig_dat2, aes(x = val)) +
-  geom_histogram() +
-  facet_wrap( ~ trait2, scale = "free") +
-  theme_bw() +
-  ylab("No. of spcies") +
-  xlab("Contribution index") +
-
-  geom_text(data = arrow_pos, aes(label=sp, x=val, y=Freq2 + 30, colour = sp), size=4) +
-  geom_segment(data=arrow_pos,
-     aes(x=val, xend=val, y=Freq2 + 20, yend=5, colour = sp),
-     arrow=arrow(length=unit(2, "mm"))) +
-  guides(colour = FALSE)
-dev.off()

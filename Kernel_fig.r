@@ -124,6 +124,9 @@ p12 <- ggplot(k.ind.slope, aes(x=slope))
 p12 <- p12 + geom_density(adjust=4, aes(colour=as.factor(time))) + xlim(0.6,15)+ labs(y=" ",x="Slope (degrees)") + guides(colour=FALSE)+ theme
 
 
+
+grid.draw(rbind(p1, p2, p3, size="first"))
+
 grid.arrange(p1,p4,p7,p10,
       p2,p5,p8,p11,
       p3,p6,p9,p12,ncol=4)
@@ -131,7 +134,10 @@ grid.arrange(p1,p4,p7,p10,
 dev.off()
 
 
-
+library(cowplot)
+plot_grid(p1, p4, p7, p10,
+      p2, p5, p8, p11,
+      p3, p6, p9, p12, ncol = 4, align = "v")
 
 
 postscript("~/Dropbox/MS/TurnoverBCI/label.eps",width=6,height=4,paper="special")

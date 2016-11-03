@@ -232,7 +232,7 @@ slope100ab <- slope100ab[order(slope100ab$index),]
 
 postscript("~/Dropbox/MS/TurnoverBCI/ab_change.eps",width=6,height=6,paper="special")
 par(mfrow=c(2,2),mar=c(2,4,2,2))
-barplot(as.numeric(na.omit(WSGab$index)), main = "WSG",xlab="", ylab= "Contribution index",col=ifelse(WSGab$delta_ab>0,"orange","purple"),border=ifelse(WSGab$delta_ab>0,"orange","purple"))
+barplot(as.numeric(na.omit(WSGab$index)), main = "Wood density",xlab="", ylab= "Contribution index",col=ifelse(WSGab$delta_ab>0,"orange","purple"),border=ifelse(WSGab$delta_ab>0,"orange","purple"))
 barplot(as.numeric(na.omit(moistab$index)), main = "Moisture",col=ifelse(moistab$delta_ab>0,"orange","purple"),border=ifelse(moistab$delta_ab>0,"orange","purple"))
 barplot(as.numeric(na.omit(convexab$index)), main = "Convexity",col=ifelse(convexab$delta_ab>0,"orange","purple"),border=ifelse(convexab$delta_ab>0,"orange","purple"),
 ylab="Contribuiton index")

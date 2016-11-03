@@ -1,0 +1,50 @@
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: ggplot2
+Loading required package: StanHeaders
+rstan (Version 2.12.1, packaged: 2016-09-11 13:07:50 UTC, GitRev: 85f7a56811da)
+For execution on a local, multicore CPU with excess RAM we recommend calling
+rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+The following numerical problems occured the indicated number of times after warmup on chain 1
+                                                                                                 count
+Exception thrown at line 22: neg_binomial_2_log: Location parameter[4] is 0, but must be > 0!        5
+Exception thrown at line 22: neg_binomial_2_log: Location parameter[1531] is 0, but must be > 0!     1
+Exception thrown at line 22: neg_binomial_2_log: Location parameter[25] is 0, but must be > 0!       1
+Exception thrown at line 22: neg_binomial_2_log: Location parameter[37] is 0, but must be > 0!       1
+When a numerical problem occurs, the Hamiltonian proposal gets rejected.
+See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
+If the number in the 'count' column is small, do not ask about this message on stan-users.
+The following numerical problems occured the indicated number of times after warmup on chain 3
+                                                                                                     count
+Exception thrown at line 22: neg_binomial_2_log: Location parameter[1531] is inf, but must be finite     1
+Exception thrown at line 22: neg_binomial_2_log: Location parameter[34] is 0, but must be > 0!           1
+When a numerical problem occurs, the Hamiltonian proposal gets rejected.
+See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
+If the number in the 'count' column is small, do not ask about this message on stan-users.
+The following numerical problems occured the indicated number of times after warmup on chain 2
+                                                                                               count
+Exception thrown at line 22: neg_binomial_2_log: Location parameter[34] is 0, but must be > 0!     2
+When a numerical problem occurs, the Hamiltonian proposal gets rejected.
+See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
+If the number in the 'count' column is small, do not ask about this message on stan-users.
+The following numerical problems occured the indicated number of times after warmup on chain 1
+                                                                                                    count
+Exception thrown at line 22: neg_binomial_2_log: Location parameter[34] is inf, but must be finite!     1
+When a numerical problem occurs, the Hamiltonian proposal gets rejected.
+See http://mc-stan.org/misc/warnings.html#exception-hamiltonian-proposal-rejected
+If the number in the 'count' column is small, do not ask about this message on stan-users.
+/tmp/slurmd/job1806583/slurm_script: line 11: 28243 Killed                  R --vanilla --slave --args ${MODEL} plot20m < spatial_model_simple.R
+Error in unserialize(node$con) : error reading from connection
+Calls: <Anonymous> ... doTryCatch -> recvData -> recvData.SOCK0node -> unserialize
+Execution halted
+slurmstepd: Exceeded step memory limit at some point.

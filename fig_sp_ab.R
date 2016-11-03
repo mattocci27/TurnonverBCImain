@@ -302,7 +302,7 @@ make_dat <- function(plot_size = "plot20m"){
       WSG = trait$WSG)
 
     moge <- full_join(ab_data, trait_temp, by = "sp") %>%
-      na.omit %>%
+      # na.omit %>%
       mutate(site = paste("subplot", i, sep = "_"))
     ab_t_data <- bind_rows(moge, ab_t_data)
   }
@@ -425,7 +425,7 @@ p_dat2 <- ab_t_data2 %>%
 
 
 # hist(log10(ab_t_data$census_1982))
-sp_vec <- c("PIPECO", "POULAR", "TET2PA", "SWARS1", "ALSEBL", "HYBAPR")
+sp_vec <- c("PIPECO", "POULAR", "FARAOC","TET2PA", "SWARS1", "ALSEBL", "HYBAPR")
 
 dat_mean <- p_dat2 %>%
   filter(cat == "mean") %>%
@@ -433,7 +433,7 @@ dat_mean <- p_dat2 %>%
     ifelse(sp == "POULAR", "POULAR", "Other species"))) %>%
   mutate(sp2 = factor(sp2, levels = c("PIPECO", "POULAR", "Other species"))) %>%
  mutate(sp3 = ifelse(sp %in% sp_vec, as.character(sp), "Other species")) %>%
-  mutate(sp3 = factor(sp3, levels = c("ALSEBL", "HYBAPR", "PIPECO", "POULAR", "SWARS1", "TET2PA", "Other species")))
+  mutate(sp3 = factor(sp3, levels = c("ALSEBL", "FARAOC","HYBAPR", "PIPECO", "POULAR", "SWARS1", "TET2PA", "Other species")))
 
   # %>%
   # mutate(abund_cat = as.integer(log10(census_1982)) + 1)
@@ -446,14 +446,14 @@ dat_each <- p_dat2 %>%
     ifelse(sp == "POULAR", "POULAR", "Other species"))) %>%
   mutate(sp2 = factor(sp2, levels = c("PIPECO", "POULAR", "Other species"))) %>%
   mutate(sp3 = ifelse(sp %in% sp_vec, as.character(sp), "Other species")) %>%
-  mutate(sp3 = factor(sp3, levels = c("ALSEBL", "HYBAPR", "PIPECO", "POULAR", "SWARS1", "TET2PA", "Other species")))
+  mutate(sp3 = factor(sp3, levels = c("ALSEBL", "FARAOC","HYBAPR", "PIPECO", "POULAR", "SWARS1", "TET2PA", "Other species")))
 
 
 dat_mean %>% filter(ab2010/ab1982 == 0 & cat == "mean")
 
 lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
     y = 20,
-    x = rep(c(0.21, -1.9, -0.29, 0.5),  3),
+    x = rep(c(0.21, -1.9, -0.4, 0.5),  3),
     size = rep(c("50ha", "1ha", "0.04ha"), each = 4),
     trait = rep(c("WSG", "moist", "convex", "slope"), 3),
     sp2 = "Other species",
@@ -466,8 +466,8 @@ lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
   #  ggplot(ds, aes(x = data)) +
   #     geom_point(aes(y = Linear, fill = "Linear"), size = 3, alpha = 0.5)
 
-pdf("~/Dropbox/MS/TurnoverBCI/fig/fig_glm_col6.pdf", width = 6, height = 5.5, paper = "special")
-n <- 6
+pdf("~/Dropbox/MS/TurnoverBCI/fig/fig_glm_col7.pdf", width = 6, height = 6, paper = "special")
+n <- 7
 hues <- seq(15, 375, length=n+1)
 cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
 
@@ -479,12 +479,12 @@ ggplot(dat_mean %>% arrange(desc(ab1982)) %>% arrange(desc(sp3)), aes(y = ab2010
     guide = FALSE) +
   geom_point(aes(size = census_1982, alpha = sp3), pch = 21, colour = "black", stroke = 0.5) +
   # scale_size_manual(values = c(1, 2, 4, 8, 10)) +
-  scale_fill_manual(values = c(cols_hex[1:6], "black", "gray"),
+  scale_fill_manual(values = c(cols_hex[1:7], "black", "gray"),
     guide = guide_legend(title = "Species means",
-      override.aes = list(size = 4, alpha = c(0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.5)),
+      override.aes = list(size = 4, alpha = c(0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.5)),
       title.position = "top",
       order = 1)) +
-  scale_alpha_manual(values = c(rep(0.8,6), 0.5),
+  scale_alpha_manual(values = c(rep(0.8, 7), 0.5),
     guide = FALSE) +
   scale_y_log10(breaks = my_breaks()) +
   facet_grid(size ~ trait2, scale = "free_x", labeller = labeller(trait2 = label_parsed, size = label_value)) +
@@ -503,82 +503,5 @@ ggplot(dat_mean %>% arrange(desc(ab1982)) %>% arrange(desc(sp3)), aes(y = ab2010
 
 dev.off()
 
-##col by
 
-
-
-cont_ind <- read.csv("~/Dropbox/MS/TurnoverBCI/data/cont_index.csv") %>%
-  dplyr::select(sp, WSG_index, moist_index, convex_index, slope_index)
-
-cont_ind[, 2:5] <- scale(cont_ind[,2:5])
-
-dat_mean2 <- full_join(cont_ind, dat_mean, by = "sp") %>%
-  tidyr::gather("cont_ind2", "cont_ind", 2:5) %>%
-  filter((trait == "WSG" & cont_ind2 == "WSG_index") |
-    (trait == "moist" & cont_ind2 == "moist_index") |
-    (trait == "convex" & cont_ind2 == "convex_index") |
-    (trait == "slope" & cont_ind2 == "slope_index") )
-
-pdf("~/Dropbox/MS/TurnoverBCI/fig/fig_glm_cont.pdf", width = 6, height = 5.5, paper = "special")
-
-ggplot(dat_mean2 %>%
-    arrange(desc(ab1982)) %>%
-    # arrange(desc(sp3)) %>%
-    filter(is.na(cont_ind) == F) %>%
-    filter(is.na(size) == F | is.na(trait2) == F),
-    aes(y = ab2010/ab1982, x = val))  +
-  geom_point(data = dat_each, aes(y = ab2010/ab1982, x = val), colour = "gray", size = 0.8, alpha = 0.8) +
-  # scale_size_continuous(range = c(0.1, 15),
-    # guide = guide_legend(title = "Abundance in 1982")) +
-  scale_size_continuous(range = c(0.1, 15),
-    guide = FALSE) +
-  geom_point(aes(size = census_1982, alpha = 0.8, fill = cont_ind), pch = 21, colour = "black", stroke = 0.5) +
-  scale_fill_gradient2() +
-  scale_y_log10(breaks = my_breaks()) +
-  facet_grid(size ~ trait2, scale = "free_x", labeller = labeller(trait2 = label_parsed, size = label_value)) +
-  theme_bw() +
-  geom_hline(yintercept = 1, lty = 2) +
-  # theme(legend.position = "none") +
-  ylab("(No. of individual in 2010 + 1) / \n (No. of individual in 1982 + 1)") +
-  xlab("Trait values") +
-  theme(axis.text.x = element_text(angle = 45),
-    strip.text = element_text(size = 8),
-    axis.title = element_text(size = 11),
-    axis.text.x = element_text(size = 7.5),
-    axis.text.y = element_text(size = 7.5)) +
-  geom_text(data = lab_dat, aes(label = lab, x = x, y = y), hjust = 0) +
-  theme(legend.position = "bottom")
-
-dev.off()
-
-
-###
-p_dat3 <- p_dat2 %>%
-  mutate(sp2 = ifelse(sp == "PIPECO", "PIPECO",
-    ifelse(sp == "POULAR", "POULAR", "Other species"))) %>%
-  mutate(sp == ifelse(cat == "each", "Species-subplot combination"))
-   mutate(sp2 = factor(sp2, levels = c("PIPECO", "POULAR", "Other species")))
-
-
-  # scale_colour_manual(values = c("gray", "black", "red"))
-  #
-  # ggplot(dat_mean, aes(y = ab2010/ab1982, x = val, fill = log10(census_1982)))  +
-  #   geom_point(data = dat_each, aes(y = ab2010/ab1982, x = val), colour = "gray", size = 0.8) +
-  #   # scale_size_continuous(range = c(1, 20)) +
-  #   geom_point(aes(size = factor(abund_cat)), pch = 21, colour = "gray", alpha = 0.8) +
-  #   scale_size_manual(values = c(1, 2, 4, 8, 10)) +
-  #   # scale_fill_manual(values = c(cols_hex[1:2], "black")) +
-  #   scale_fill_gradient(high="#ff0000", low="#ffffcc") +
-  #   scale_y_log10(breaks = my_breaks()) +
-  #   facet_grid(size ~ trait2, scale = "free_x", labeller = labeller(trait2 = label_parsed, size = label_value)) +
-  #   theme_bw() +
-  #   geom_hline(yintercept = 1, lty = 2) +
-  #   # theme(legend.position = "none") +
-  #   ylab("No. of individual in 2010 / \n No. of individual in 1982") +
-  #   xlab("Trait values") +
-  #   theme(axis.text.x = element_text(angle = 45),
-  #     strip.text = element_text(size = 8),
-  #     axis.title = element_text(size = 11),
-  #     axis.text.x = element_text(size = 7.5),
-  #     axis.text.y = element_text(size = 7.5)) +
-  #   theme(legend.justification=c(1,0), legend.position=c(1,0))
+write.csv(ab_t_data2, "~/Desktop/abund_trait.csv", row.names = FALSE)

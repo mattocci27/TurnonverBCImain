@@ -1,0 +1,3471 @@
+[1] "plot100m"
+[1] "plot100m.RData"
+[1] "######## runs i = 1 #############"
+Start:  AIC=963.85
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 961.90
+- WSG:moist     1 961.93
+- convex:slope  1 961.94
+- WSG:convex    1 961.99
+<none>            963.85
+- moist:slope   1 966.66
+- WSG:slope     1 968.59
+
+Step:  AIC=961.9
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 959.95
+- WSG:moist     1 960.00
+- WSG:convex    1 960.06
+<none>            961.90
+- moist:slope   1 964.81
+- WSG:slope     1 966.67
+
+Step:  AIC=959.95
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:moist    1 958.05
+- WSG:convex   1 958.10
+<none>           959.95
+- moist:slope  1 962.93
+- WSG:slope    1 965.17
+
+Step:  AIC=958.05
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:convex   1 956.25
+<none>           958.05
+- moist:slope  1 961.07
+- WSG:slope    1 963.33
+
+Step:  AIC=956.25
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- convex       1 954.89
+<none>           956.25
+- moist:slope  1 959.12
+- WSG:slope    1 961.34
+
+Step:  AIC=954.89
+ab2010 ~ WSG + moist + slope + WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+<none>           954.89
+- moist:slope  1 957.53
+- WSG:slope    1 960.08
+[1] "######## runs i = 2 #############"
+Start:  AIC=936.28
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 934.38
+- WSG:convex    1 934.44
+- convex:slope  1 934.49
+- WSG:moist     1 934.87
+- moist:slope   1 935.77
+<none>            936.28
+- WSG:slope     1 941.46
+
+Step:  AIC=934.38
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 932.54
+- convex:slope  1 932.88
+- WSG:moist     1 932.98
+- moist:slope   1 933.93
+<none>            934.38
+- WSG:slope     1 939.61
+
+Step:  AIC=932.54
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 931.12
+- WSG:moist     1 931.28
+- moist:slope   1 932.17
+<none>            932.54
+- WSG:slope     1 937.73
+
+Step:  AIC=931.12
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- convex       1 929.51
+- WSG:moist    1 929.83
+- moist:slope  1 930.63
+<none>           931.12
+- WSG:slope    1 935.77
+
+Step:  AIC=929.51
+ab2010 ~ WSG + moist + slope + WSG:moist + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- WSG:moist    1 928.12
+- moist:slope  1 928.86
+<none>           929.51
+- WSG:slope    1 934.38
+
+Step:  AIC=928.12
+ab2010 ~ WSG + moist + slope + WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 927.16
+<none>           928.12
+- WSG:slope    1 933.30
+
+Step:  AIC=927.16
+ab2010 ~ WSG + moist + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 925.39
+<none>         927.16
+- WSG:slope  1 931.38
+
+Step:  AIC=925.39
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         925.39
+- WSG:slope  1 929.46
+[1] "######## runs i = 3 #############"
+Start:  AIC=876.77
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 874.79
+- WSG:moist     1 874.84
+- convex:slope  1 875.01
+- moist:convex  1 875.22
+- moist:slope   1 875.74
+- WSG:slope     1 875.75
+<none>            876.77
+
+Step:  AIC=874.79
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 872.85
+- convex:slope  1 873.05
+- moist:convex  1 873.22
+- WSG:slope     1 873.79
+- moist:slope   1 873.81
+<none>            874.79
+
+Step:  AIC=872.85
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 871.12
+- moist:convex  1 871.32
+- WSG:slope     1 871.80
+- moist:slope   1 871.98
+<none>            872.85
+
+Step:  AIC=871.12
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 869.40
+- WSG:slope     1 869.87
+- moist:slope   1 870.17
+<none>            871.12
+
+Step:  AIC=869.4
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- convex       1 868.05
+- WSG:slope    1 868.27
+- moist:slope  1 868.42
+<none>           869.40
+
+Step:  AIC=868.05
+ab2010 ~ WSG + moist + slope + WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 866.97
+- WSG:slope    1 867.27
+<none>           868.05
+
+Step:  AIC=866.97
+ab2010 ~ WSG + moist + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- WSG:slope  1 866.19
+<none>         866.97
+- moist      1 867.23
+
+Step:  AIC=866.19
+ab2010 ~ WSG + moist + slope + offset(log(ab1982))
+
+        Df    AIC
+- slope  1 864.30
+<none>     866.19
+- moist  1 866.57
+- WSG    1 871.56
+
+Step:  AIC=864.3
+ab2010 ~ WSG + moist + offset(log(ab1982))
+
+        Df    AIC
+<none>     864.30
+- moist  1 864.58
+- WSG    1 870.25
+[1] "######## runs i = 4 #############"
+Start:  AIC=1030.03
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1028.0
+- convex:slope  1 1028.1
+- moist:slope   1 1029.0
+<none>            1030.0
+- WSG:moist     1 1030.3
+- WSG:convex    1 1031.0
+- WSG:slope     1 1031.1
+
+Step:  AIC=1028.05
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 1026.1
+- moist:slope   1 1027.0
+<none>            1028.0
+- WSG:moist     1 1028.4
+- WSG:convex    1 1029.1
+- WSG:slope     1 1029.1
+
+Step:  AIC=1026.12
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 1025.3
+<none>           1026.1
+- WSG:moist    1 1026.4
+- WSG:slope    1 1027.3
+- WSG:convex   1 1027.4
+
+Step:  AIC=1025.28
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+<none>          1025.3
+- WSG:moist   1 1026.1
+- WSG:convex  1 1026.4
+- WSG:slope   1 1027.3
+[1] "######## runs i = 5 #############"
+Start:  AIC=1005.2
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 1003.2
+- moist:convex  1 1003.2
+- convex:slope  1 1003.4
+- moist:slope   1 1004.2
+- WSG:moist     1 1004.3
+<none>            1005.2
+- WSG:slope     1 1005.7
+
+Step:  AIC=1003.2
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1001.2
+- convex:slope  1 1001.4
+- moist:slope   1 1002.3
+- WSG:moist     1 1002.3
+<none>            1003.2
+- WSG:slope     1 1003.7
+
+Step:  AIC=1001.21
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df     AIC
+- convex:slope  1  999.37
+- moist:slope   1 1000.34
+- WSG:moist     1 1000.35
+<none>            1001.21
+- WSG:slope     1 1001.77
+
+Step:  AIC=999.37
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 998.49
+- WSG:moist    1 998.58
+<none>           999.37
+- convex       1 999.37
+- WSG:slope    1 999.79
+
+Step:  AIC=998.49
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    offset(log(ab1982))
+
+            Df    AIC
+- WSG:moist  1 997.94
+- convex     1 998.16
+<none>         998.49
+- WSG:slope  1 999.14
+
+Step:  AIC=997.94
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 995.95
+- WSG:slope  1 997.75
+- convex     1 997.94
+<none>         997.94
+
+Step:  AIC=995.95
+ab2010 ~ WSG + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- WSG:slope  1 995.75
+- convex     1 995.94
+<none>         995.95
+
+Step:  AIC=995.75
+ab2010 ~ WSG + convex + slope + offset(log(ab1982))
+
+         Df    AIC
+- slope   1 993.83
+<none>      995.75
+- convex  1 996.13
+- WSG     1 999.09
+
+Step:  AIC=993.83
+ab2010 ~ WSG + convex + offset(log(ab1982))
+
+         Df    AIC
+<none>      993.83
+- convex  1 994.26
+- WSG     1 997.50
+[1] "######## runs i = 6 #############"
+Start:  AIC=902.7
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 900.71
+- moist:convex  1 900.86
+- WSG:moist     1 900.86
+- WSG:convex    1 900.86
+- moist:slope   1 901.15
+<none>            902.70
+- WSG:slope     1 903.29
+
+Step:  AIC=900.71
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 898.86
+- WSG:convex    1 898.87
+- moist:convex  1 898.89
+- moist:slope   1 899.15
+<none>            900.71
+- WSG:slope     1 901.38
+
+Step:  AIC=898.86
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 897.04
+- WSG:convex    1 897.08
+- moist:slope   1 897.24
+<none>            898.86
+- WSG:slope     1 900.01
+
+Step:  AIC=897.04
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:convex   1 895.21
+- moist:slope  1 895.44
+<none>           897.04
+- WSG:slope    1 898.53
+
+Step:  AIC=895.21
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- convex       1 893.41
+- moist:slope  1 893.66
+<none>           895.21
+- WSG:slope    1 896.81
+
+Step:  AIC=893.41
+ab2010 ~ WSG + moist + slope + WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 891.98
+<none>           893.41
+- WSG:slope    1 894.85
+
+Step:  AIC=891.98
+ab2010 ~ WSG + moist + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 890.84
+<none>         891.98
+- WSG:slope  1 893.27
+
+Step:  AIC=890.84
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         890.84
+- WSG:slope  1 892.15
+[1] "######## runs i = 7 #############"
+Start:  AIC=943.81
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 942.23
+- WSG:moist     1 942.25
+- WSG:slope     1 942.26
+- convex:slope  1 942.42
+- moist:convex  1 942.62
+<none>            943.81
+- moist:slope   1 943.93
+
+Step:  AIC=942.23
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 940.56
+- WSG:slope     1 940.75
+- convex:slope  1 940.90
+- moist:convex  1 940.97
+<none>            942.23
+- moist:slope   1 942.79
+
+Step:  AIC=940.56
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:slope     1 938.90
+- convex:slope  1 939.17
+- moist:convex  1 939.32
+<none>            940.56
+- moist:slope   1 941.41
+
+Step:  AIC=938.9
+ab2010 ~ WSG + moist + convex + slope + moist:convex + moist:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG           1 937.29
+- moist:convex  1 937.69
+- convex:slope  1 937.94
+<none>            938.90
+- moist:slope   1 940.10
+
+Step:  AIC=937.29
+ab2010 ~ moist + convex + slope + moist:convex + moist:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 935.96
+- convex:slope  1 936.41
+<none>            937.29
+- moist:slope   1 938.60
+
+Step:  AIC=935.96
+ab2010 ~ moist + convex + slope + moist:slope + convex:slope + 
+    offset(log(ab1982))
+
+               Df    AIC
+<none>            935.96
+- moist:slope   1 937.20
+- convex:slope  1 937.82
+[1] "######## runs i = 8 #############"
+Start:  AIC=903.3
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 901.31
+- convex:slope  1 901.34
+- moist:convex  1 901.41
+- WSG:moist     1 901.65
+- moist:slope   1 901.66
+<none>            903.30
+- WSG:slope     1 906.41
+
+Step:  AIC=901.31
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 899.35
+- moist:convex  1 899.42
+- WSG:moist     1 899.65
+- moist:slope   1 899.67
+<none>            901.31
+- WSG:slope     1 904.43
+
+Step:  AIC=899.35
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 897.43
+- WSG:moist     1 897.67
+- moist:slope   1 897.70
+<none>            899.35
+- WSG:slope     1 903.00
+
+Step:  AIC=897.43
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:moist    1 895.75
+- moist:slope  1 895.76
+- convex       1 895.80
+<none>           897.43
+- WSG:slope    1 901.09
+
+Step:  AIC=895.75
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 894.01
+- convex       1 894.03
+<none>           895.75
+- WSG:slope    1 899.10
+
+Step:  AIC=894.01
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 892.01
+- convex     1 892.28
+<none>         894.01
+- WSG:slope  1 897.13
+
+Step:  AIC=892.01
+ab2010 ~ WSG + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- convex     1 890.28
+<none>         892.01
+- WSG:slope  1 895.13
+
+Step:  AIC=890.28
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         890.28
+- WSG:slope  1 893.15
+[1] "######## runs i = 9 #############"
+Start:  AIC=994.83
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 993.00
+- WSG:convex    1 993.49
+- moist:slope   1 993.77
+- convex:slope  1 994.41
+- moist:convex  1 994.57
+<none>            994.83
+- WSG:slope     1 997.86
+
+Step:  AIC=993
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 991.55
+- moist:slope   1 991.82
+- convex:slope  1 992.57
+- moist:convex  1 992.82
+<none>            993.00
+- WSG:slope     1 997.10
+
+Step:  AIC=991.55
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 990.28
+<none>            991.55
+- convex:slope  1 991.64
+- moist:convex  1 991.97
+- WSG:slope     1 995.38
+
+Step:  AIC=990.28
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 989.88
+<none>            990.28
+- moist:convex  1 990.73
+- WSG:slope     1 994.65
+
+Step:  AIC=989.88
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 989.18
+<none>            989.88
+- WSG:slope     1 992.90
+
+Step:  AIC=989.18
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         989.18
+- convex     1 989.42
+- moist      1 989.86
+- WSG:slope  1 993.28
+[1] "######## runs i = 10 #############"
+Start:  AIC=934.88
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 932.90
+- moist:convex  1 932.94
+- moist:slope   1 933.58
+- convex:slope  1 933.89
+- WSG:moist     1 934.16
+<none>            934.88
+- WSG:slope     1 936.93
+
+Step:  AIC=932.9
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 930.97
+- moist:slope   1 931.59
+- convex:slope  1 932.03
+- WSG:moist     1 932.17
+<none>            932.90
+- WSG:slope     1 935.19
+
+Step:  AIC=930.97
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 929.65
+- convex:slope  1 930.15
+- WSG:moist     1 930.21
+<none>            930.97
+- WSG:slope     1 933.27
+
+Step:  AIC=929.65
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 928.97
+<none>            929.65
+- convex:slope  1 930.06
+- WSG:slope     1 933.41
+
+Step:  AIC=928.97
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + convex:slope + 
+    offset(log(ab1982))
+
+               Df    AIC
+<none>            928.97
+- convex:slope  1 929.26
+- moist         1 929.43
+- WSG:slope     1 931.67
+[1] "######## runs i = 11 #############"
+Start:  AIC=989.15
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 987.66
+- moist:slope   1 988.49
+<none>            989.15
+- convex:slope  1 989.18
+- moist:convex  1 990.21
+- WSG:convex    1 990.86
+- WSG:slope     1 992.81
+
+Step:  AIC=987.66
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 987.40
+<none>            987.66
+- convex:slope  1 987.89
+- moist:convex  1 988.77
+- WSG:convex    1 988.93
+- WSG:slope     1 990.84
+
+Step:  AIC=987.4
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 986.99
+<none>            987.40
+- moist:convex  1 988.36
+- WSG:convex    1 989.31
+- WSG:slope     1 990.66
+
+Step:  AIC=986.99
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 986.52
+<none>            986.99
+- WSG:convex    1 988.91
+- WSG:slope     1 989.07
+
+Step:  AIC=986.52
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    offset(log(ab1982))
+
+             Df    AIC
+- moist       1 984.80
+<none>          986.52
+- WSG:convex  1 987.95
+- WSG:slope   1 989.81
+
+Step:  AIC=984.8
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+<none>          984.80
+- WSG:convex  1 986.20
+- WSG:slope   1 988.14
+[1] "######## runs i = 12 #############"
+Start:  AIC=888.47
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 886.47
+- WSG:convex    1 886.51
+- WSG:moist     1 886.66
+- convex:slope  1 887.46
+- WSG:slope     1 887.57
+- moist:slope   1 887.87
+<none>            888.47
+
+Step:  AIC=886.47
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 884.51
+- WSG:moist     1 884.66
+- WSG:slope     1 885.57
+- convex:slope  1 885.75
+- moist:slope   1 885.87
+<none>            886.47
+
+Step:  AIC=884.51
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 882.75
+- WSG:slope     1 883.62
+- convex:slope  1 883.80
+- moist:slope   1 884.01
+<none>            884.51
+
+Step:  AIC=882.75
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 882.09
+- moist:slope   1 882.15
+- WSG:slope     1 882.22
+<none>            882.75
+
+Step:  AIC=882.09
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+<none>           882.09
+- moist:slope  1 882.24
+- WSG:slope    1 883.02
+- convex       1 885.24
+[1] "######## runs i = 13 #############"
+Start:  AIC=1019.6
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 1017.6
+- convex:slope  1 1017.8
+- WSG:moist     1 1018.5
+- moist:slope   1 1018.6
+<none>            1019.6
+- moist:convex  1 1019.8
+- WSG:slope     1 1026.7
+
+Step:  AIC=1017.63
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 1015.8
+- WSG:moist     1 1016.6
+- moist:slope   1 1016.7
+<none>            1017.6
+- moist:convex  1 1017.8
+- WSG:slope     1 1024.8
+
+Step:  AIC=1015.81
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 1014.9
+- moist:slope   1 1015.0
+<none>            1015.8
+- moist:convex  1 1015.9
+- WSG:slope     1 1022.9
+
+Step:  AIC=1014.85
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 1013.7
+<none>            1014.9
+- moist:convex  1 1015.0
+- WSG:slope     1 1020.9
+
+Step:  AIC=1013.71
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1013.6
+<none>            1013.7
+- WSG:slope     1 1019.2
+
+Step:  AIC=1013.58
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- convex     1 1012.0
+- moist      1 1012.8
+<none>         1013.6
+- WSG:slope  1 1021.0
+
+Step:  AIC=1011.95
+ab2010 ~ WSG + moist + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 1011.4
+<none>         1012.0
+- WSG:slope  1 1019.7
+
+Step:  AIC=1011.4
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         1011.4
+- WSG:slope  1 1019.4
+[1] "######## runs i = 14 #############"
+Start:  AIC=948.91
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 946.93
+- WSG:moist     1 947.82
+- WSG:convex    1 948.04
+- moist:convex  1 948.74
+<none>            948.91
+- moist:slope   1 949.89
+- WSG:slope     1 953.49
+
+Step:  AIC=946.93
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 945.82
+- WSG:convex    1 946.04
+- moist:convex  1 946.79
+<none>            946.93
+- moist:slope   1 948.01
+- WSG:slope     1 951.61
+
+Step:  AIC=945.82
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 944.66
+- moist:convex  1 945.61
+<none>            945.82
+- moist:slope   1 946.36
+- WSG:slope     1 952.21
+
+Step:  AIC=944.66
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 944.22
+<none>            944.66
+- moist:slope   1 944.74
+- WSG:slope     1 951.41
+
+Step:  AIC=944.22
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- convex       1 942.23
+<none>           944.22
+- moist:slope  1 944.51
+- WSG:slope    1 949.70
+
+Step:  AIC=942.23
+ab2010 ~ WSG + moist + slope + WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+<none>           942.23
+- moist:slope  1 942.51
+- WSG:slope    1 948.07
+[1] "######## runs i = 15 #############"
+Start:  AIC=870.65
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 868.67
+- WSG:convex    1 868.83
+- moist:convex  1 868.86
+- WSG:moist     1 868.87
+<none>            870.65
+- moist:slope   1 871.33
+- WSG:slope     1 873.07
+
+Step:  AIC=868.67
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 866.87
+- WSG:convex    1 866.87
+- WSG:moist     1 866.90
+<none>            868.67
+- moist:slope   1 869.39
+- WSG:slope     1 871.18
+
+Step:  AIC=866.87
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:moist    1 865.11
+- WSG:convex   1 865.11
+<none>           866.87
+- moist:slope  1 867.88
+- WSG:slope    1 869.91
+
+Step:  AIC=865.11
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:convex   1 863.49
+<none>           865.11
+- moist:slope  1 866.30
+- WSG:slope    1 867.92
+
+Step:  AIC=863.49
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- convex       1 863.42
+<none>           863.49
+- moist:slope  1 864.41
+- WSG:slope    1 866.01
+
+Step:  AIC=863.42
+ab2010 ~ WSG + moist + slope + WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+<none>           863.42
+- moist:slope  1 864.18
+- WSG:slope    1 866.42
+[1] "######## runs i = 16 #############"
+Start:  AIC=1012.84
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 1010.8
+- WSG:moist     1 1010.9
+- moist:convex  1 1011.7
+<none>            1012.8
+- convex:slope  1 1012.9
+- WSG:convex    1 1013.3
+- WSG:slope     1 1020.1
+
+Step:  AIC=1010.84
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 1008.9
+- moist:convex  1 1009.7
+<none>            1010.8
+- convex:slope  1 1011.1
+- WSG:convex    1 1011.3
+- WSG:slope     1 1019.1
+
+Step:  AIC=1008.86
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1007.7
+<none>            1008.9
+- convex:slope  1 1009.1
+- WSG:convex    1 1009.4
+- WSG:slope     1 1018.0
+
+Step:  AIC=1007.74
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist         1 1005.8
+- convex:slope  1 1007.1
+<none>            1007.7
+- WSG:convex    1 1008.1
+- WSG:slope     1 1017.0
+
+Step:  AIC=1005.81
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + convex:slope + 
+    offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 1005.2
+<none>            1005.8
+- WSG:convex    1 1006.2
+- WSG:slope     1 1015.1
+
+Step:  AIC=1005.18
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+<none>          1005.2
+- WSG:convex  1 1005.5
+- WSG:slope   1 1013.1
+[1] "######## runs i = 17 #############"
+Start:  AIC=1002.89
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 1000.9
+- WSG:moist     1 1000.9
+- convex:slope  1 1001.3
+- moist:convex  1 1001.4
+- WSG:convex    1 1001.6
+- WSG:slope     1 1002.0
+<none>            1002.9
+
+Step:  AIC=1000.91
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + convex:slope + offset(log(ab1982))
+
+               Df     AIC
+- WSG:moist     1  998.96
+- convex:slope  1  999.32
+- moist:convex  1  999.45
+- WSG:convex    1  999.69
+- WSG:slope     1 1000.05
+<none>            1000.91
+
+Step:  AIC=998.96
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 997.34
+- moist:convex  1 997.49
+- WSG:convex    1 997.80
+- WSG:slope     1 998.26
+<none>            998.96
+
+Step:  AIC=997.34
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 995.71
+- WSG:convex    1 996.22
+- WSG:slope     1 996.33
+<none>            997.34
+
+Step:  AIC=995.71
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    offset(log(ab1982))
+
+             Df    AIC
+- moist       1 993.71
+- WSG:convex  1 994.45
+- WSG:slope   1 994.99
+<none>          995.71
+
+Step:  AIC=993.71
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+- WSG:convex  1 992.46
+- WSG:slope   1 992.99
+<none>          993.71
+
+Step:  AIC=992.46
+ab2010 ~ WSG + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- convex     1 990.57
+- WSG:slope  1 991.85
+<none>         992.46
+
+Step:  AIC=990.57
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- WSG:slope  1 990.01
+<none>         990.57
+
+Step:  AIC=990.01
+ab2010 ~ WSG + slope + offset(log(ab1982))
+
+        Df    AIC
+- WSG    1 988.03
+<none>     990.01
+- slope  1 990.36
+
+Step:  AIC=988.03
+ab2010 ~ slope + offset(log(ab1982))
+
+        Df    AIC
+<none>     988.03
+- slope  1 988.36
+[1] "######## runs i = 18 #############"
+Start:  AIC=1050.42
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 1048.4
+- WSG:convex    1 1048.4
+- moist:convex  1 1048.5
+- WSG:moist     1 1048.5
+- WSG:slope     1 1049.6
+<none>            1050.4
+- convex:slope  1 1051.4
+
+Step:  AIC=1048.43
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 1046.4
+- moist:convex  1 1046.5
+- WSG:moist     1 1046.5
+- WSG:slope     1 1047.6
+<none>            1048.4
+- convex:slope  1 1049.4
+
+Step:  AIC=1046.44
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1044.5
+- WSG:moist     1 1044.5
+- WSG:slope     1 1045.6
+<none>            1046.4
+- convex:slope  1 1047.4
+
+Step:  AIC=1044.48
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 1042.5
+- WSG:slope     1 1043.6
+<none>            1044.5
+- convex:slope  1 1045.5
+
+Step:  AIC=1042.55
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + convex:slope + 
+    offset(log(ab1982))
+
+               Df    AIC
+- moist         1 1040.8
+- WSG:slope     1 1041.6
+<none>            1042.5
+- convex:slope  1 1043.5
+
+Step:  AIC=1040.83
+ab2010 ~ WSG + convex + slope + WSG:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:slope     1 1039.9
+<none>            1040.8
+- convex:slope  1 1041.6
+
+Step:  AIC=1039.94
+ab2010 ~ WSG + convex + slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG           1 1038.6
+<none>            1039.9
+- convex:slope  1 1043.1
+
+Step:  AIC=1038.56
+ab2010 ~ convex + slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+<none>            1038.6
+- convex:slope  1 1041.8
+[1] "######## runs i = 19 #############"
+Start:  AIC=984.03
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 982.13
+- convex:slope  1 982.65
+- moist:convex  1 983.29
+- WSG:moist     1 983.66
+<none>            984.03
+- moist:slope   1 984.27
+- WSG:slope     1 984.41
+
+Step:  AIC=982.13
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 980.77
+- moist:convex  1 981.39
+- WSG:moist     1 982.02
+<none>            982.13
+- moist:slope   1 982.28
+- WSG:slope     1 982.52
+
+Step:  AIC=980.77
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 979.51
+- WSG:moist     1 980.47
+<none>            980.77
+- moist:slope   1 980.92
+- WSG:slope     1 981.89
+
+Step:  AIC=979.51
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- convex       1 977.57
+- WSG:moist    1 979.23
+<none>           979.51
+- moist:slope  1 979.73
+- WSG:slope    1 980.14
+
+Step:  AIC=977.57
+ab2010 ~ WSG + moist + slope + WSG:moist + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- WSG:moist    1 977.45
+<none>           977.57
+- moist:slope  1 977.76
+- WSG:slope    1 978.41
+
+Step:  AIC=977.45
+ab2010 ~ WSG + moist + slope + WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:slope    1 977.34
+<none>           977.45
+- moist:slope  1 978.04
+
+Step:  AIC=977.34
+ab2010 ~ WSG + moist + slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG          1 975.79
+<none>           977.34
+- moist:slope  1 978.43
+
+Step:  AIC=975.79
+ab2010 ~ moist + slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+<none>           975.79
+- moist:slope  1 977.07
+[1] "######## runs i = 20 #############"
+Start:  AIC=952.65
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 950.92
+- moist:convex  1 950.98
+- convex:slope  1 951.01
+- WSG:moist     1 951.35
+<none>            952.65
+- moist:slope   1 953.13
+- WSG:slope     1 953.84
+
+Step:  AIC=950.92
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 949.18
+- convex:slope  1 949.25
+- WSG:moist     1 949.49
+<none>            950.92
+- moist:slope   1 951.69
+- WSG:slope     1 952.25
+
+Step:  AIC=949.18
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 947.32
+- WSG:moist     1 947.80
+<none>            949.18
+- moist:slope   1 949.87
+- WSG:slope     1 950.68
+
+Step:  AIC=947.32
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- convex       1 945.33
+- WSG:moist    1 945.96
+<none>           947.32
+- moist:slope  1 947.90
+- WSG:slope    1 948.82
+
+Step:  AIC=945.33
+ab2010 ~ WSG + moist + slope + WSG:moist + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- WSG:moist    1 943.96
+<none>           945.33
+- moist:slope  1 945.98
+- WSG:slope    1 946.85
+
+Step:  AIC=943.96
+ab2010 ~ WSG + moist + slope + WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+<none>           943.96
+- moist:slope  1 944.85
+- WSG:slope    1 944.92
+[1] "######## runs i = 21 #############"
+Start:  AIC=1122.98
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1121.2
+- moist:slope   1 1121.3
+- convex:slope  1 1121.4
+- WSG:moist     1 1121.9
+<none>            1123.0
+- WSG:convex    1 1124.1
+- WSG:slope     1 1125.1
+
+Step:  AIC=1121.17
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 1119.5
+- WSG:moist     1 1120.1
+- convex:slope  1 1120.2
+<none>            1121.2
+- WSG:convex    1 1122.3
+- WSG:slope     1 1123.3
+
+Step:  AIC=1119.47
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 1118.5
+- convex:slope  1 1118.8
+<none>            1119.5
+- WSG:convex    1 1120.4
+- WSG:slope     1 1121.9
+
+Step:  AIC=1118.54
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 1117.8
+- moist         1 1118.4
+<none>            1118.5
+- WSG:slope     1 1120.3
+- WSG:convex    1 1120.8
+
+Step:  AIC=1117.8
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    offset(log(ab1982))
+
+             Df    AIC
+- moist       1 1117.4
+<none>          1117.8
+- WSG:convex  1 1119.7
+- WSG:slope   1 1122.5
+
+Step:  AIC=1117.44
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+<none>          1117.4
+- WSG:convex  1 1119.4
+- WSG:slope   1 1122.5
+[1] "######## runs i = 22 #############"
+Start:  AIC=941.87
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 940.14
+- WSG:convex    1 940.27
+- moist:convex  1 940.42
+- WSG:moist     1 940.43
+<none>            941.87
+- convex:slope  1 941.90
+- WSG:slope     1 946.13
+
+Step:  AIC=940.14
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 938.59
+- moist:convex  1 938.63
+- WSG:moist     1 938.86
+- convex:slope  1 940.03
+<none>            940.14
+- WSG:slope     1 944.41
+
+Step:  AIC=938.59
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 937.11
+- moist:convex  1 937.21
+<none>            938.59
+- convex:slope  1 938.85
+- WSG:slope     1 942.81
+
+Step:  AIC=937.11
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 935.76
+<none>            937.11
+- convex:slope  1 937.44
+- WSG:slope     1 940.86
+
+Step:  AIC=935.76
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + convex:slope + 
+    offset(log(ab1982))
+
+               Df    AIC
+- moist         1 934.30
+- convex:slope  1 935.45
+<none>            935.76
+- WSG:slope     1 939.68
+
+Step:  AIC=934.3
+ab2010 ~ WSG + convex + slope + WSG:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 934.11
+<none>            934.30
+- WSG:slope     1 938.16
+
+Step:  AIC=934.11
+ab2010 ~ WSG + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- convex     1 932.87
+<none>         934.11
+- WSG:slope  1 936.75
+
+Step:  AIC=932.87
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         932.87
+- WSG:slope  1 935.07
+[1] "######## runs i = 23 #############"
+Start:  AIC=989.84
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 987.84
+- convex:slope  1 987.99
+- WSG:slope     1 987.99
+- WSG:moist     1 988.60
+<none>            989.84
+- WSG:convex    1 991.89
+- moist:convex  1 992.14
+
+Step:  AIC=987.84
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:slope     1 985.99
+- convex:slope  1 986.00
+- WSG:moist     1 986.61
+<none>            987.84
+- WSG:convex    1 990.01
+- moist:convex  1 990.16
+
+Step:  AIC=985.99
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 984.08
+- WSG:moist     1 984.63
+<none>            985.99
+- WSG:convex    1 988.12
+- moist:convex  1 988.16
+
+Step:  AIC=984.08
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    moist:convex + offset(log(ab1982))
+
+               Df    AIC
+- slope         1 982.11
+- WSG:moist     1 982.76
+<none>            984.08
+- WSG:convex    1 986.26
+- moist:convex  1 987.11
+
+Step:  AIC=982.11
+ab2010 ~ WSG + moist + convex + WSG:moist + WSG:convex + moist:convex + 
+    offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 980.77
+<none>            982.11
+- WSG:convex    1 984.29
+- moist:convex  1 985.15
+
+Step:  AIC=980.77
+ab2010 ~ WSG + moist + convex + WSG:convex + moist:convex + offset(log(ab1982))
+
+               Df    AIC
+<none>            980.77
+- WSG:convex    1 982.39
+- moist:convex  1 984.51
+[1] "######## runs i = 24 #############"
+Start:  AIC=1016.33
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 1014.4
+- moist:slope   1 1014.4
+- convex:slope  1 1014.5
+- moist:convex  1 1014.8
+- WSG:slope     1 1015.6
+<none>            1016.3
+- WSG:convex    1 1017.2
+
+Step:  AIC=1014.36
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 1012.5
+- convex:slope  1 1012.5
+- moist:convex  1 1012.8
+- WSG:slope     1 1013.7
+<none>            1014.4
+- WSG:convex    1 1015.3
+
+Step:  AIC=1012.45
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 1010.6
+- moist:convex  1 1010.8
+- WSG:slope     1 1012.0
+<none>            1012.5
+- WSG:convex    1 1013.5
+
+Step:  AIC=1010.56
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1008.8
+- WSG:slope     1 1010.0
+<none>            1010.6
+- WSG:convex    1 1011.5
+
+Step:  AIC=1008.84
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    offset(log(ab1982))
+
+             Df    AIC
+- moist       1 1008.0
+- WSG:slope   1 1008.6
+<none>          1008.8
+- WSG:convex  1 1009.8
+
+Step:  AIC=1007.96
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + offset(log(ab1982))
+
+             Df  AIC
+- WSG:slope   1 1008
+<none>          1008
+- WSG:convex  1 1009
+
+Step:  AIC=1007.96
+ab2010 ~ WSG + convex + slope + WSG:convex + offset(log(ab1982))
+
+             Df    AIC
+<none>          1008.0
+- WSG:convex  1 1008.9
+- slope       1 1013.0
+[1] "######## runs i = 25 #############"
+Start:  AIC=886.63
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 884.74
+- WSG:convex    1 884.79
+- WSG:moist     1 884.95
+- moist:convex  1 885.44
+- moist:slope   1 886.02
+<none>            886.63
+- WSG:slope     1 886.67
+
+Step:  AIC=884.74
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 882.95
+- WSG:moist     1 883.02
+- moist:convex  1 883.53
+- moist:slope   1 884.03
+- WSG:slope     1 884.67
+<none>            884.74
+
+Step:  AIC=882.95
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 881.43
+- moist:convex  1 881.87
+- moist:slope   1 882.43
+- WSG:slope     1 882.78
+<none>            882.95
+
+Step:  AIC=881.43
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 880.24
+- moist:slope   1 880.74
+<none>            881.43
+- WSG:slope     1 881.84
+
+Step:  AIC=880.24
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- convex       1 878.25
+- moist:slope  1 879.81
+- WSG:slope    1 880.15
+<none>           880.24
+
+Step:  AIC=878.25
+ab2010 ~ WSG + moist + slope + WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 877.81
+- WSG:slope    1 878.20
+<none>           878.25
+
+Step:  AIC=877.81
+ab2010 ~ WSG + moist + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         877.81
+- WSG:slope  1 878.45
+- moist      1 879.00
+[1] "######## runs i = 26 #############"
+Start:  AIC=960.53
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 958.54
+- WSG:moist     1 958.55
+- moist:convex  1 958.61
+- convex:slope  1 958.82
+- moist:slope   1 958.99
+<none>            960.53
+- WSG:slope     1 962.25
+
+Step:  AIC=958.54
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 956.55
+- moist:convex  1 956.61
+- convex:slope  1 956.82
+- moist:slope   1 956.99
+<none>            958.54
+- WSG:slope     1 960.31
+
+Step:  AIC=956.55
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 954.63
+- convex:slope  1 954.82
+- moist:slope   1 954.99
+<none>            956.55
+- WSG:slope     1 958.81
+
+Step:  AIC=954.63
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 953.04
+- moist:slope   1 953.08
+<none>            954.63
+- WSG:slope     1 956.81
+
+Step:  AIC=953.04
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 951.50
+<none>           953.04
+- convex       1 953.09
+- WSG:slope    1 954.81
+
+Step:  AIC=951.5
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 949.61
+<none>         951.50
+- convex     1 951.70
+- WSG:slope  1 953.95
+
+Step:  AIC=949.61
+ab2010 ~ WSG + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         949.61
+- convex     1 949.71
+- WSG:slope  1 952.02
+[1] "######## runs i = 27 #############"
+Start:  AIC=1002.88
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1001.0
+- WSG:moist     1 1001.0
+- WSG:convex    1 1001.2
+- convex:slope  1 1001.3
+- WSG:slope     1 1001.7
+<none>            1002.9
+- moist:slope   1 1003.7
+
+Step:  AIC=1000.97
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df     AIC
+- WSG:moist     1  999.07
+- convex:slope  1  999.33
+- WSG:convex    1  999.33
+- WSG:slope     1  999.81
+<none>            1000.97
+- moist:slope   1 1001.71
+
+Step:  AIC=999.07
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 997.42
+- WSG:convex    1 997.54
+- WSG:slope     1 997.81
+<none>            999.07
+- moist:slope   1 999.96
+
+Step:  AIC=997.42
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:slope    1 996.01
+- WSG:convex   1 996.22
+<none>           997.42
+- moist:slope  1 998.06
+
+Step:  AIC=996.01
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- WSG:convex   1 994.64
+<none>           996.01
+- moist:slope  1 997.58
+
+Step:  AIC=994.64
+ab2010 ~ WSG + moist + convex + slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG          1 992.72
+- convex       1 993.14
+<none>           994.64
+- moist:slope  1 996.00
+
+Step:  AIC=992.72
+ab2010 ~ moist + convex + slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- convex       1 991.23
+<none>           992.72
+- moist:slope  1 994.01
+
+Step:  AIC=991.23
+ab2010 ~ moist + slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+<none>           991.23
+- moist:slope  1 992.50
+[1] "######## runs i = 28 #############"
+Start:  AIC=932.44
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 930.67
+- WSG:moist     1 931.46
+- convex:slope  1 931.64
+- moist:slope   1 932.26
+<none>            932.44
+- WSG:convex    1 932.88
+- WSG:slope     1 933.24
+
+Step:  AIC=930.67
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 929.63
+- convex:slope  1 929.66
+- moist:slope   1 930.41
+<none>            930.67
+- WSG:convex    1 930.96
+- WSG:slope     1 931.77
+
+Step:  AIC=929.63
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 928.40
+- moist:slope   1 928.86
+<none>            929.63
+- WSG:convex    1 930.87
+- WSG:slope     1 931.70
+
+Step:  AIC=928.4
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 927.37
+<none>           928.40
+- WSG:convex   1 929.77
+- WSG:slope    1 930.00
+
+Step:  AIC=927.37
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    offset(log(ab1982))
+
+             Df    AIC
+- moist       1 925.52
+<none>          927.37
+- WSG:convex  1 929.29
+- WSG:slope   1 929.54
+
+Step:  AIC=925.52
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+<none>          925.52
+- WSG:convex  1 927.45
+- WSG:slope   1 927.71
+[1] "######## runs i = 29 #############"
+Start:  AIC=946.04
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 944.09
+- moist:convex  1 944.51
+- WSG:slope     1 945.43
+- convex:slope  1 945.86
+<none>            946.04
+- moist:slope   1 946.35
+- WSG:moist     1 947.82
+
+Step:  AIC=944.09
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 942.67
+- WSG:slope     1 943.47
+<none>            944.09
+- convex:slope  1 944.12
+- moist:slope   1 944.52
+- WSG:moist     1 946.33
+
+Step:  AIC=942.67
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:slope     1 941.97
+- convex:slope  1 942.16
+<none>            942.67
+- moist:slope   1 943.18
+- WSG:moist     1 944.81
+
+Step:  AIC=941.97
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + moist:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+<none>            941.97
+- convex:slope  1 942.65
+- moist:slope   1 942.70
+- WSG:moist     1 945.58
+[1] "######## runs i = 30 #############"
+Start:  AIC=913.64
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 912.26
+- convex:slope  1 912.32
+- WSG:convex    1 912.56
+<none>            913.64
+- WSG:moist     1 915.37
+- moist:slope   1 916.54
+- WSG:slope     1 918.17
+
+Step:  AIC=912.26
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 911.03
+- convex:slope  1 911.99
+<none>            912.26
+- WSG:moist     1 913.69
+- moist:slope   1 915.30
+- WSG:slope     1 916.36
+
+Step:  AIC=911.03
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+<none>            911.03
+- convex:slope  1 911.11
+- WSG:moist     1 911.91
+- moist:slope   1 913.60
+- WSG:slope     1 917.27
+[1] "######## runs i = 31 #############"
+Start:  AIC=1025.4
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 1023.8
+- WSG:convex    1 1024.7
+<none>            1025.4
+- moist:slope   1 1026.1
+- WSG:moist     1 1026.6
+- moist:convex  1 1031.7
+- WSG:slope     1 1032.6
+
+Step:  AIC=1023.8
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 1022.9
+<none>            1023.8
+- moist:slope   1 1024.4
+- WSG:moist     1 1024.8
+- WSG:slope     1 1030.7
+- moist:convex  1 1032.6
+
+Step:  AIC=1022.86
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+<none>            1022.9
+- WSG:moist     1 1023.1
+- moist:slope   1 1023.2
+- WSG:slope     1 1030.3
+- moist:convex  1 1030.6
+[1] "######## runs i = 32 #############"
+Start:  AIC=935.59
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 933.62
+- convex:slope  1 933.95
+- moist:slope   1 934.07
+<none>            935.59
+- WSG:moist     1 935.67
+- moist:convex  1 937.39
+- WSG:slope     1 939.27
+
+Step:  AIC=933.62
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 931.97
+- moist:slope   1 932.07
+<none>            933.62
+- WSG:moist     1 933.69
+- moist:convex  1 935.46
+- WSG:slope     1 937.47
+
+Step:  AIC=931.97
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 930.53
+<none>            931.97
+- WSG:moist     1 932.13
+- moist:convex  1 933.58
+- WSG:slope     1 937.71
+
+Step:  AIC=930.53
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 930.39
+<none>            930.53
+- moist:convex  1 932.26
+- WSG:slope     1 938.76
+
+Step:  AIC=930.39
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    offset(log(ab1982))
+
+               Df    AIC
+<none>            930.39
+- moist:convex  1 931.82
+- WSG:slope     1 943.35
+[1] "######## runs i = 33 #############"
+Start:  AIC=932.4
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 930.42
+- WSG:moist     1 930.42
+- convex:slope  1 930.68
+- WSG:convex    1 930.71
+<none>            932.40
+- moist:slope   1 932.42
+- WSG:slope     1 933.24
+
+Step:  AIC=930.42
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 928.45
+- WSG:convex    1 928.71
+- convex:slope  1 928.83
+<none>            930.42
+- moist:slope   1 930.51
+- WSG:slope     1 931.25
+
+Step:  AIC=928.45
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 926.82
+- convex:slope  1 926.88
+<none>            928.45
+- moist:slope   1 928.71
+- WSG:slope     1 929.31
+
+Step:  AIC=926.82
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 925.25
+<none>            926.82
+- moist:slope   1 926.93
+- WSG:slope     1 927.48
+
+Step:  AIC=925.25
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- convex       1 923.25
+- moist:slope  1 925.11
+<none>           925.25
+- WSG:slope    1 925.58
+
+Step:  AIC=923.25
+ab2010 ~ WSG + moist + slope + WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 923.11
+<none>           923.25
+- WSG:slope    1 923.58
+
+Step:  AIC=923.11
+ab2010 ~ WSG + moist + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 921.19
+<none>         923.11
+- WSG:slope  1 925.11
+
+Step:  AIC=921.19
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         921.19
+- WSG:slope  1 923.19
+[1] "######## runs i = 34 #############"
+Start:  AIC=1031.14
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 1029.2
+- moist:convex  1 1029.9
+- WSG:convex    1 1030.2
+- WSG:slope     1 1030.6
+- moist:slope   1 1030.9
+<none>            1031.1
+- WSG:moist     1 1032.6
+
+Step:  AIC=1029.17
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1027.9
+- WSG:convex    1 1028.2
+- WSG:slope     1 1028.6
+- moist:slope   1 1029.0
+<none>            1029.2
+- WSG:moist     1 1030.6
+
+Step:  AIC=1027.9
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:convex   1 1026.8
+- WSG:slope    1 1027.8
+- moist:slope  1 1027.8
+<none>           1027.9
+- WSG:moist    1 1029.5
+
+Step:  AIC=1026.82
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 1026.5
+- convex       1 1026.6
+- WSG:slope    1 1026.6
+<none>           1026.8
+- WSG:moist    1 1027.9
+
+Step:  AIC=1026.47
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    offset(log(ab1982))
+
+            Df    AIC
+- convex     1 1026.0
+- WSG:slope  1 1026.4
+<none>         1026.5
+- WSG:moist  1 1026.8
+
+Step:  AIC=1025.95
+ab2010 ~ WSG + moist + slope + WSG:moist + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- WSG:moist  1 1025.9
+<none>         1026.0
+- WSG:slope  1 1026.2
+
+Step:  AIC=1025.93
+ab2010 ~ WSG + moist + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 1025.1
+<none>         1025.9
+- WSG:slope  1 1027.7
+
+Step:  AIC=1025.09
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         1025.1
+- WSG:slope  1 1026.9
+[1] "######## runs i = 35 #############"
+Start:  AIC=855.12
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 853.14
+- convex:slope  1 853.14
+- moist:slope   1 853.32
+- WSG:moist     1 854.24
+<none>            855.12
+- WSG:convex    1 855.18
+- WSG:slope     1 857.02
+
+Step:  AIC=853.14
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 851.20
+- moist:slope   1 851.34
+- WSG:moist     1 852.26
+<none>            853.14
+- WSG:convex    1 853.26
+- WSG:slope     1 855.03
+
+Step:  AIC=851.2
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 849.36
+- WSG:moist    1 850.41
+<none>           851.20
+- WSG:convex   1 851.41
+- WSG:slope    1 853.03
+
+Step:  AIC=849.36
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+- WSG:moist   1 848.80
+<none>          849.36
+- WSG:convex  1 849.77
+- WSG:slope   1 851.80
+
+Step:  AIC=848.8
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    offset(log(ab1982))
+
+             Df    AIC
+- WSG:convex  1 848.52
+<none>          848.80
+- moist       1 849.67
+- WSG:slope   1 850.40
+
+Step:  AIC=848.52
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- convex     1 848.17
+<none>         848.52
+- moist      1 849.25
+- WSG:slope  1 850.94
+
+Step:  AIC=848.17
+ab2010 ~ WSG + moist + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         848.17
+- moist      1 848.44
+- WSG:slope  1 850.40
+[1] "######## runs i = 36 #############"
+Start:  AIC=911.49
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 909.51
+- convex:slope  1 909.52
+- moist:slope   1 909.58
+- WSG:moist     1 909.99
+- WSG:convex    1 910.84
+<none>            911.49
+- WSG:slope     1 913.97
+
+Step:  AIC=909.51
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 907.58
+- moist:slope   1 907.61
+- WSG:moist     1 908.01
+- WSG:convex    1 908.86
+<none>            909.51
+- WSG:slope     1 911.97
+
+Step:  AIC=907.58
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 905.68
+- WSG:moist    1 906.05
+- WSG:convex   1 906.89
+<none>           907.58
+- WSG:slope    1 910.49
+
+Step:  AIC=905.68
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+- WSG:moist   1 904.09
+- WSG:convex  1 905.24
+<none>          905.68
+- WSG:slope   1 909.01
+
+Step:  AIC=904.09
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    offset(log(ab1982))
+
+             Df    AIC
+- moist       1 902.25
+- WSG:convex  1 903.89
+<none>          904.09
+- WSG:slope   1 908.95
+
+Step:  AIC=902.25
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+- WSG:convex  1 902.08
+<none>          902.25
+- WSG:slope   1 907.08
+
+Step:  AIC=902.08
+ab2010 ~ WSG + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- convex     1 900.12
+<none>         902.08
+- WSG:slope  1 907.43
+
+Step:  AIC=900.12
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         900.12
+- WSG:slope  1 905.85
+[1] "######## runs i = 37 #############"
+Start:  AIC=948.17
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 946.18
+- WSG:moist     1 946.19
+- WSG:convex    1 946.42
+- moist:convex  1 946.55
+- convex:slope  1 946.91
+<none>            948.17
+- WSG:slope     1 948.37
+
+Step:  AIC=946.18
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 944.21
+- WSG:convex    1 944.48
+- moist:convex  1 944.56
+- convex:slope  1 944.97
+<none>            946.18
+- WSG:slope     1 946.42
+
+Step:  AIC=944.21
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 942.48
+- moist:convex  1 942.59
+- convex:slope  1 943.06
+<none>            944.21
+- WSG:slope     1 944.69
+
+Step:  AIC=942.48
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 940.96
+- convex:slope  1 941.50
+<none>            942.48
+- WSG:slope     1 942.93
+
+Step:  AIC=940.96
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + convex:slope + 
+    offset(log(ab1982))
+
+               Df    AIC
+- moist         1 939.89
+- convex:slope  1 940.63
+<none>            940.96
+- WSG:slope     1 941.66
+
+Step:  AIC=939.89
+ab2010 ~ WSG + convex + slope + WSG:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 939.56
+<none>            939.89
+- WSG:slope     1 940.52
+
+Step:  AIC=939.56
+ab2010 ~ WSG + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- convex     1 938.08
+<none>         939.56
+- WSG:slope  1 942.70
+
+Step:  AIC=938.08
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         938.08
+- WSG:slope  1 941.96
+[1] "######## runs i = 38 #############"
+Start:  AIC=887.39
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 885.40
+- moist:slope   1 885.52
+- WSG:convex    1 886.27
+- WSG:moist     1 886.48
+- convex:slope  1 886.97
+<none>            887.39
+- WSG:slope     1 894.67
+
+Step:  AIC=885.4
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 883.53
+- WSG:convex    1 884.29
+- WSG:moist     1 884.48
+- convex:slope  1 885.15
+<none>            885.40
+- WSG:slope     1 892.69
+
+Step:  AIC=883.53
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 882.31
+- WSG:moist     1 882.79
+- convex:slope  1 883.23
+<none>            883.53
+- WSG:slope     1 890.91
+
+Step:  AIC=882.31
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 881.63
+- WSG:moist     1 881.98
+<none>            882.31
+- WSG:slope     1 889.41
+
+Step:  AIC=881.63
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    offset(log(ab1982))
+
+            Df    AIC
+- WSG:moist  1 881.17
+- convex     1 881.32
+<none>         881.63
+- WSG:slope  1 887.58
+
+Step:  AIC=881.17
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 880.21
+- convex     1 880.61
+<none>         881.17
+- WSG:slope  1 889.13
+
+Step:  AIC=880.21
+ab2010 ~ WSG + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- convex     1 879.46
+<none>         880.21
+- WSG:slope  1 888.04
+
+Step:  AIC=879.46
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         879.46
+- WSG:slope  1 887.78
+[1] "######## runs i = 39 #############"
+Start:  AIC=842.03
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 840.03
+- convex:slope  1 840.06
+- moist:slope   1 840.37
+- moist:convex  1 840.54
+<none>            842.03
+- WSG:convex    1 842.87
+- WSG:slope     1 844.06
+
+Step:  AIC=840.03
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 838.06
+- moist:slope   1 838.40
+- moist:convex  1 838.54
+<none>            840.03
+- WSG:convex    1 841.35
+- WSG:slope     1 842.28
+
+Step:  AIC=838.06
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 836.42
+- moist:convex  1 836.74
+<none>            838.06
+- WSG:convex    1 839.36
+- WSG:slope     1 840.91
+
+Step:  AIC=836.42
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 835.10
+<none>            836.42
+- WSG:convex    1 837.48
+- WSG:slope     1 838.92
+
+Step:  AIC=835.1
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    offset(log(ab1982))
+
+             Df    AIC
+- moist       1 834.96
+<none>          835.10
+- WSG:convex  1 835.72
+- WSG:slope   1 838.68
+
+Step:  AIC=834.96
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+<none>          834.96
+- WSG:convex  1 835.97
+- WSG:slope   1 838.43
+[1] "######## runs i = 40 #############"
+Start:  AIC=949.18
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 947.43
+- moist:slope   1 947.60
+- WSG:moist     1 947.62
+- convex:slope  1 947.73
+- WSG:slope     1 948.36
+- moist:convex  1 948.82
+<none>            949.18
+
+Step:  AIC=947.43
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 945.74
+- moist:slope   1 945.79
+- convex:slope  1 945.95
+- WSG:slope     1 946.59
+- moist:convex  1 947.04
+<none>            947.43
+
+Step:  AIC=945.74
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 944.00
+- convex:slope  1 944.23
+- WSG:slope     1 945.22
+- moist:convex  1 945.34
+<none>            945.74
+
+Step:  AIC=944
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 942.39
+- WSG:slope     1 943.36
+- moist:convex  1 943.51
+<none>            944.00
+
+Step:  AIC=942.39
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 941.51
+- WSG:slope     1 941.57
+<none>            942.39
+
+Step:  AIC=941.51
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- convex     1 939.51
+- WSG:slope  1 940.99
+<none>         941.51
+- moist      1 942.52
+
+Step:  AIC=939.51
+ab2010 ~ WSG + moist + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- WSG:slope  1 938.99
+<none>         939.51
+- moist      1 940.61
+
+Step:  AIC=938.99
+ab2010 ~ WSG + moist + slope + offset(log(ab1982))
+
+        Df    AIC
+- WSG    1 938.37
+<none>     938.99
+- moist  1 940.32
+- slope  1 942.34
+
+Step:  AIC=938.37
+ab2010 ~ moist + slope + offset(log(ab1982))
+
+        Df    AIC
+<none>     938.37
+- moist  1 939.52
+- slope  1 942.94
+[1] "######## runs i = 41 #############"
+Start:  AIC=981.48
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:slope     1 979.50
+- moist:convex  1 979.58
+- convex:slope  1 979.65
+- WSG:moist     1 979.92
+- WSG:convex    1 980.19
+- moist:slope   1 980.40
+<none>            981.48
+
+Step:  AIC=979.5
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 977.61
+- convex:slope  1 977.72
+- WSG:moist     1 978.02
+- WSG:convex    1 978.23
+- moist:slope   1 978.53
+<none>            979.50
+
+Step:  AIC=977.61
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 976.14
+- WSG:moist     1 976.16
+- WSG:convex    1 976.28
+- moist:slope   1 976.59
+<none>            977.61
+
+Step:  AIC=976.14
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:convex   1 974.86
+- WSG:moist    1 974.95
+- moist:slope  1 975.24
+<none>           976.14
+
+Step:  AIC=974.86
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- WSG:moist    1 973.40
+- moist:slope  1 973.72
+- convex       1 974.03
+<none>           974.86
+
+Step:  AIC=973.4
+ab2010 ~ WSG + moist + convex + slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 972.15
+- WSG          1 972.18
+- convex       1 972.50
+<none>           973.40
+
+Step:  AIC=972.15
+ab2010 ~ WSG + moist + convex + slope + offset(log(ab1982))
+
+         Df    AIC
+- moist   1 970.15
+- WSG     1 971.10
+- convex  1 971.24
+<none>      972.15
+- slope   1 973.70
+
+Step:  AIC=970.15
+ab2010 ~ WSG + convex + slope + offset(log(ab1982))
+
+         Df    AIC
+- WSG     1 969.11
+- convex  1 969.28
+<none>      970.15
+- slope   1 971.87
+
+Step:  AIC=969.11
+ab2010 ~ convex + slope + offset(log(ab1982))
+
+         Df    AIC
+- convex  1 968.45
+<none>      969.11
+- slope   1 971.42
+
+Step:  AIC=968.45
+ab2010 ~ slope + offset(log(ab1982))
+
+        Df    AIC
+<none>     968.45
+- slope  1 971.41
+[1] "######## runs i = 42 #############"
+Start:  AIC=943.75
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 942.17
+- WSG:slope     1 942.20
+- WSG:moist     1 942.81
+- convex:slope  1 943.32
+<none>            943.75
+- moist:slope   1 944.87
+- WSG:convex    1 949.44
+
+Step:  AIC=942.17
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:slope     1 940.68
+- WSG:moist     1 941.30
+<none>            942.17
+- moist:slope   1 943.17
+- convex:slope  1 943.40
+- WSG:convex    1 947.88
+
+Step:  AIC=940.68
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 940.62
+<none>            940.68
+- moist:slope   1 942.04
+- convex:slope  1 943.38
+- WSG:convex    1 946.86
+
+Step:  AIC=940.62
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + moist:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+<none>            940.62
+- moist:slope   1 941.65
+- convex:slope  1 945.04
+- WSG:convex    1 945.43
+[1] "######## runs i = 43 #############"
+Start:  AIC=953.19
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 951.19
+- moist:convex  1 951.20
+- WSG:convex    1 951.22
+- WSG:moist     1 951.29
+- moist:slope   1 952.30
+<none>            953.19
+- WSG:slope     1 957.59
+
+Step:  AIC=951.19
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 949.20
+- WSG:convex    1 949.22
+- WSG:moist     1 949.30
+- moist:slope   1 950.30
+<none>            951.19
+- WSG:slope     1 955.62
+
+Step:  AIC=949.2
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:convex   1 947.23
+- WSG:moist    1 947.30
+- moist:slope  1 948.30
+<none>           949.20
+- WSG:slope    1 953.80
+
+Step:  AIC=947.23
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:moist    1 945.31
+- moist:slope  1 946.43
+- convex       1 946.46
+<none>           947.23
+- WSG:slope    1 952.03
+
+Step:  AIC=945.31
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 944.60
+- convex       1 944.61
+<none>           945.31
+- WSG:slope    1 950.68
+
+Step:  AIC=944.6
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 942.92
+- convex     1 943.73
+<none>         944.60
+- WSG:slope  1 950.61
+
+Step:  AIC=942.92
+ab2010 ~ WSG + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- convex     1 941.92
+<none>         942.92
+- WSG:slope  1 948.87
+
+Step:  AIC=941.92
+ab2010 ~ WSG + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         941.92
+- WSG:slope  1 949.97
+[1] "######## runs i = 44 #############"
+Start:  AIC=957.1
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 955.41
+- WSG:moist     1 955.47
+- WSG:convex    1 956.12
+- convex:slope  1 956.31
+- moist:convex  1 956.52
+<none>            957.10
+- WSG:slope     1 960.27
+
+Step:  AIC=955.41
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 953.98
+- WSG:convex    1 954.79
+- convex:slope  1 954.86
+- moist:convex  1 954.87
+<none>            955.41
+- WSG:slope     1 958.86
+
+Step:  AIC=953.98
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 953.07
+- convex:slope  1 953.23
+- moist:convex  1 953.42
+<none>            953.98
+- WSG:slope     1 956.89
+
+Step:  AIC=953.07
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 952.14
+- moist:convex  1 952.57
+<none>            953.07
+- WSG:slope     1 956.38
+
+Step:  AIC=952.14
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 950.88
+<none>            952.14
+- WSG:slope     1 957.33
+
+Step:  AIC=950.88
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- moist      1 949.54
+<none>         950.88
+- convex     1 951.73
+- WSG:slope  1 955.34
+
+Step:  AIC=949.54
+ab2010 ~ WSG + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+<none>         949.54
+- convex     1 950.77
+- WSG:slope  1 954.10
+[1] "######## runs i = 45 #############"
+Start:  AIC=1140.6
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1139.6
+- WSG:moist     1 1139.7
+- WSG:slope     1 1140.2
+<none>            1140.6
+- moist:slope   1 1140.6
+- convex:slope  1 1141.7
+- WSG:convex    1 1144.8
+
+Step:  AIC=1139.63
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 1138.8
+- moist:slope   1 1139.4
+- WSG:slope     1 1139.5
+<none>            1139.6
+- convex:slope  1 1140.0
+- WSG:convex    1 1143.5
+
+Step:  AIC=1138.83
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 1138.0
+<none>            1138.8
+- convex:slope  1 1139.2
+- WSG:slope     1 1139.9
+- WSG:convex    1 1141.9
+
+Step:  AIC=1138.04
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist         1 1136.3
+<none>            1138.0
+- convex:slope  1 1138.2
+- WSG:slope     1 1139.9
+- WSG:convex    1 1141.0
+
+Step:  AIC=1136.33
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + convex:slope + 
+    offset(log(ab1982))
+
+               Df    AIC
+<none>            1136.3
+- convex:slope  1 1136.6
+- WSG:slope     1 1138.4
+- WSG:convex    1 1139.2
+[1] "######## runs i = 46 #############"
+Start:  AIC=896.34
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:moist     1 894.51
+- convex:slope  1 894.57
+- moist:slope   1 894.61
+<none>            896.34
+- moist:convex  1 896.45
+- WSG:convex    1 896.45
+- WSG:slope     1 899.53
+
+Step:  AIC=894.51
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 892.71
+- moist:slope   1 892.95
+- WSG:convex    1 894.48
+<none>            894.51
+- moist:convex  1 894.56
+- WSG:slope     1 897.53
+
+Step:  AIC=892.71
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:slope   1 891.23
+- WSG:convex    1 892.55
+- moist:convex  1 892.64
+<none>            892.71
+- WSG:slope     1 896.52
+
+Step:  AIC=891.23
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:convex + offset(log(ab1982))
+
+               Df    AIC
+<none>            891.23
+- WSG:convex    1 891.39
+- moist:convex  1 891.40
+- WSG:slope     1 894.86
+[1] "######## runs i = 47 #############"
+Start:  AIC=1000.69
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df     AIC
+- WSG:convex    1  999.11
+- WSG:moist     1  999.34
+- moist:slope   1  999.91
+<none>            1000.69
+- convex:slope  1 1001.02
+- moist:convex  1 1003.54
+- WSG:slope     1 1004.25
+
+Step:  AIC=999.11
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + convex:slope + offset(log(ab1982))
+
+               Df     AIC
+- WSG:moist     1  997.59
+- moist:slope   1  998.47
+<none>             999.11
+- convex:slope  1  999.64
+- moist:convex  1 1001.68
+- WSG:slope     1 1002.40
+
+Step:  AIC=997.59
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    moist:slope + convex:slope + offset(log(ab1982))
+
+               Df     AIC
+- moist:slope   1  997.35
+<none>             997.59
+- convex:slope  1  998.17
+- moist:convex  1 1000.32
+- WSG:slope     1 1000.41
+
+Step:  AIC=997.35
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    convex:slope + offset(log(ab1982))
+
+               Df     AIC
+- convex:slope  1  997.17
+<none>             997.35
+- moist:convex  1  999.95
+- WSG:slope     1 1001.25
+
+Step:  AIC=997.17
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + moist:convex + 
+    offset(log(ab1982))
+
+               Df     AIC
+<none>             997.17
+- moist:convex  1  999.31
+- WSG:slope     1 1000.08
+[1] "######## runs i = 48 #############"
+Start:  AIC=899.87
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 897.88
+- moist:convex  1 898.78
+- WSG:convex    1 898.81
+<none>            899.87
+- moist:slope   1 901.41
+- WSG:moist     1 903.04
+- WSG:slope     1 903.20
+
+Step:  AIC=897.88
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- WSG:convex    1 896.83
+- moist:convex  1 896.91
+<none>            897.88
+- moist:slope   1 899.58
+- WSG:moist     1 901.16
+- WSG:slope     1 901.23
+
+Step:  AIC=896.83
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 895.94
+<none>            896.83
+- moist:slope   1 898.16
+- WSG:slope     1 900.41
+- WSG:moist     1 900.51
+
+Step:  AIC=895.94
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- convex       1 894.62
+<none>           895.94
+- moist:slope  1 897.25
+- WSG:moist    1 899.70
+- WSG:slope    1 900.31
+
+Step:  AIC=894.62
+ab2010 ~ WSG + moist + slope + WSG:moist + WSG:slope + moist:slope + 
+    offset(log(ab1982))
+
+              Df    AIC
+<none>           894.62
+- moist:slope  1 895.78
+- WSG:moist    1 899.05
+- WSG:slope    1 899.20
+[1] "######## runs i = 49 #############"
+Start:  AIC=1012.83
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 1010.9
+- moist:convex  1 1011.0
+- WSG:moist     1 1011.1
+- moist:slope   1 1011.1
+<none>            1012.8
+- WSG:convex    1 1014.3
+- WSG:slope     1 1015.5
+
+Step:  AIC=1010.88
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 1009.0
+- WSG:moist     1 1009.1
+- moist:slope   1 1009.2
+<none>            1010.9
+- WSG:convex    1 1012.5
+- WSG:slope     1 1013.7
+
+Step:  AIC=1008.95
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- WSG:moist    1 1007.2
+- moist:slope  1 1007.3
+<none>           1009.0
+- WSG:convex   1 1010.9
+- WSG:slope    1 1011.8
+
+Step:  AIC=1007.2
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 1005.6
+<none>           1007.2
+- WSG:convex   1 1009.6
+- WSG:slope    1 1009.8
+
+Step:  AIC=1005.65
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    offset(log(ab1982))
+
+             Df    AIC
+- moist       1 1004.1
+<none>          1005.6
+- WSG:convex  1 1008.0
+- WSG:slope   1 1008.1
+
+Step:  AIC=1004.09
+ab2010 ~ WSG + convex + slope + WSG:convex + WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+<none>          1004.1
+- WSG:convex  1 1006.5
+- WSG:slope   1 1006.6
+[1] "######## runs i = 50 #############"
+Start:  AIC=958.82
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + convex:moist + slope:moist + convex:slope + offset(log(ab1982))
+
+               Df    AIC
+- convex:slope  1 956.86
+- moist:convex  1 956.88
+- moist:slope   1 956.92
+- WSG:moist     1 957.03
+- WSG:convex    1 957.05
+- WSG:slope     1 957.40
+<none>            958.82
+
+Step:  AIC=956.86
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:convex + moist:slope + offset(log(ab1982))
+
+               Df    AIC
+- moist:convex  1 954.89
+- moist:slope   1 954.95
+- WSG:moist     1 955.05
+- WSG:convex    1 955.10
+- WSG:slope     1 955.52
+<none>            956.86
+
+Step:  AIC=954.89
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + moist:slope + offset(log(ab1982))
+
+              Df    AIC
+- moist:slope  1 953.00
+- WSG:moist    1 953.07
+- WSG:convex   1 953.12
+- WSG:slope    1 953.52
+<none>           954.89
+
+Step:  AIC=953
+ab2010 ~ WSG + moist + convex + slope + WSG:moist + WSG:convex + 
+    WSG:slope + offset(log(ab1982))
+
+             Df    AIC
+- WSG:moist   1 951.12
+- WSG:convex  1 951.18
+- WSG:slope   1 951.69
+<none>          953.00
+
+Step:  AIC=951.12
+ab2010 ~ WSG + moist + convex + slope + WSG:convex + WSG:slope + 
+    offset(log(ab1982))
+
+             Df    AIC
+- WSG:convex  1 949.27
+- WSG:slope   1 949.75
+- moist       1 950.99
+<none>          951.12
+
+Step:  AIC=949.27
+ab2010 ~ WSG + moist + convex + slope + WSG:slope + offset(log(ab1982))
+
+            Df    AIC
+- WSG:slope  1 947.90
+- convex     1 948.45
+- moist      1 949.19
+<none>         949.27
+
+Step:  AIC=947.9
+ab2010 ~ WSG + moist + convex + slope + offset(log(ab1982))
+
+         Df    AIC
+- WSG     1 946.42
+- convex  1 947.12
+- moist   1 947.83
+<none>      947.90
+- slope   1 948.89
+
+Step:  AIC=946.42
+ab2010 ~ moist + convex + slope + offset(log(ab1982))
+
+         Df    AIC
+- convex  1 945.56
+- moist   1 946.28
+<none>      946.42
+- slope   1 948.07
+
+Step:  AIC=945.56
+ab2010 ~ moist + slope + offset(log(ab1982))
+
+        Df    AIC
+- moist  1 945.22
+<none>     945.56
+- slope  1 947.55
+
+Step:  AIC=945.22
+ab2010 ~ slope + offset(log(ab1982))
+
+        Df    AIC
+<none>     945.22
+- slope  1 948.29
+   user  system elapsed 
+151.050   0.391 151.974 

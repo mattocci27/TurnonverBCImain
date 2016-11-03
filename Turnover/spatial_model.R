@@ -93,8 +93,10 @@ model1 <- '
 '
 
 
-ab_t_data2 <- ab_t_data %>% filter(ab1982 > 0)
-ab_t_data3 <- ab_t_data %>% filter(ab1982 != 0 | ab2010 != 0)
+ab_t_data2 <- ab_t_data %>%
+  filter(ab1982 != 0 | ab2010 != 0) %>%
+  mutate(ab1982 = ab1982 + 1) %>%
+  mutate(ab2010 = ab2010 + 1)
 
 list_data <- list(n_sample = nrow(ab_t_data2),
   n_site = length(unique(as.character(ab_t_data2$site))),
@@ -165,17 +167,17 @@ system.time(fit <- stan(model_code = model1,
             iter = 1,
             warmup = 0,
             thin = 1,
-            chains = 1,
-            control = list(stepsize = 0.01,
-              adapt_delta = 0.9,
-              max_treedepth = 10)))
+            chains = 1))
 
 system.time(res <- stan(fit = fit,
             data = list_data,
-            iter = 10000,
-            warmup = 5000,
-            thin = 10,
-            chains = 3))
+            iter = 2000,
+            warmup = 1000,
+            thin = 1,
+            chains = 3,
+            control = list(stepsize = 0.01,
+                  adapt_delta = 0.9,
+                  max_treedepth = 10)))
 
 fit.summary <- data.frame(summary(res)$summary)
 

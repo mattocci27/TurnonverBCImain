@@ -8,6 +8,7 @@ load("gam_fig.RData")
 library(dplyr)
 library(ggplot2)
 library(grid)
+library(mgcv)
 # library(MASS)
 
 data_frame(WSG100 = WSG100, WSG20 = WSG20, WSG_ind = WSG.ind)
@@ -269,10 +270,11 @@ r1data100 %>% tidyr::gather(., "obs", "val", 2:3) %>%
 r1data100 <- data.frame(time = spline(r1_100$gam$model$Time, res1_100$fit)$x,
           mean = spline(r1_100$gam$model$Time, res1_100$fit)$y,
           upper = spline(r1_100$gam$model$Time,
-              res1_100$fit + 1.96*r1_100$se.fit)$y,
+              res1_100$fit + 1.96*res1_100$se.fit)$y,
           lower = spline(r1_100$gam$model$Time,
-              res1_100$fit - 1.96*r1_100$se.fit)$y,
+              res1_100$fit - 1.96*res1_100$se.fit)$y,
           obs = "obs")
+
 r1data100_r <- data.frame(time = spline(r1.r100$gam$model$Time, res1r100$fit)$x,
           mean = spline(r1.r100$gam$model$Time, res1r100$fit)$y,
           upper = spline(r1.r100$gam$model$Time,
@@ -397,7 +399,7 @@ temp <- bind_rows(fig_dat4, moge6) %>%
   filter(size != "52ha") %>%
   mutate(obs2 = as.factor(obs2)) %>%
   mutate(trait = factor(trait, levels = c("WSG", "Moist", "Convex", "Slope"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Convexity~(m)", "Slope~(degrees)"))) %>%
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)"))) %>%
   mutate(size = factor(size, levels = c("52ha", "1ha", "0.04ha")))
 
   # %>%
@@ -405,55 +407,332 @@ temp <- bind_rows(fig_dat4, moge6) %>%
   # # mutate(up_val = val)
   # mutate(lo_val = ifelse(est_lo == "Y", val, 0)) %>%
   # mutate(up_val = ifelse(est_up == "Y", val, 0))
+#
+#
+#
+# ggplot(filter(temp, is.na(est_mean) == TRUE)) +
+#   geom_point(aes(x = jitter(Time), y = val), alpha = 0.4) +
+#   facet_wrap(size ~ trait2, scale = "free_y", nrow = 2, labeller = labeller(trait2 = label_parsed, size = label_value)) +
+#   # geom_smooth() +
+#   theme_bw() +
+#   xlab("Time") +
+#   ylab("Trait values") +
+#   geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.5) +
+#   geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "blue") +
+#   geom_ribbon(data =  filter(temp, trait != "WSG" | size != "1ha" | obs2 != "obs"), aes(ymin = est_lo, ymax = est_up, x = Time,  fill = obs2), alpha = 0.5) +
+#   geom_line(data = filter(temp, trait != "WSG" | size != "1ha" | obs2 != "obs"), aes(x = Time, y = est_mean, colour = obs2, lty = obs2)) +
+#   scale_fill_manual(values = c("gray", "gray", "gray")) +
+#   scale_colour_manual(values = c("black", "black", "black")) +
+#   scale_linetype_manual(values = c(1, 2, 2))
+#
+# load("gam_fig201601006.RData")
+# # library(Cairo)
+# pdf("~/Dropbox/MS/TurnoverBCI/fig/moge.pdf", width = 10, height = 6)
+# # ggsave("~/Dropbox/MS/TurnoverBCI/fig/moge.eps",
+# #   width = 10, height = 6,
+# #   units = "in",
+# #   device = cairo_ps)
+# #
+# # Cairo("~/Dropbox/MS/TurnoverBCI/fig/moge.eps",
+# #   width = 10, height = 6, bg = "transparent", type = "ps", dpi = 300)
+# ggplot(filter(temp, is.na(est_mean) == TRUE)) + geom_point(aes(x = jitter(Time),
+#     y = val), size = 0.8, alpha = 0.4) +
+#     facet_wrap( ~ size + trait2, scale = "free_y", nrow = 2,
+#     labeller = labeller(trait2 = label_parsed, size = label_value),
+#     switch = NULL, dir = "h") + # geom_smooth() +
+#     theme_bw() + xlab("Time") + ylab("Trait values") +
+#     geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.5) +
+#     geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "blue") +
+#
+#     geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "tr"), aes(ymin = est_lo,
+#     ymax = est_up, x = Time), fill = "red", alpha = 0.5) +
+#     geom_line(data = filter(temp,
+#     trait == "WSG" & size == "1ha" & obs2 == "tr"), aes(x = Time, y = est_mean),
+#     colour = "red", lty = 2) +
+#
+#     geom_ribbon(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")),
+#     aes(ymin = est_lo, ymax = est_up, x = Time, fill = obs2), alpha = 0.5) +
+#     geom_line(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")), aes(x = Time, y = est_mean, colour = obs2, lty = obs2)) +
+#
+#     scale_fill_manual(values = c("gray", "gray", "gray")) +
+#     scale_colour_manual(values = c("black", "black", "black")) +
+#     scale_linetype_manual(values = c(2, 2, 2)) +
+#     guides(linetype = FALSE) +
+#     guides(colour = FALSE) +
+#     guides(fill = FALSE)
+#     # +
+#     # theme(strip.text = element_text(size = 7, lineheight = 3),
+#     # axis.title = element_text(size = 8),
+#     # axis.text.x = element_text(size = 7, angle = 45),
+#     # axis.text.y = element_text(size = 7, angle = 45))
+#
+#
+#
+#     # g <- ggplotGrob(d)
+#     # g$heights[[3]] = unit(3,"in")
+#     #
+#     # grid.newpage()
+#     # grid.draw(g)
+# dev.off()
+#
+# ## use cowplot
+# library(cowplot)
+#
+# # pdf("~/Dropbox/MS/TurnoverBCI/fig/moge.pdf", width = 4.33, height = 6)
+#
+# pdf("~/Dropbox/MS/TurnoverBCI/fig/moge.pdf", width = 5, height = 10)
+#
+# before <- proc.time()
+# # ylab(expression(paste("Wood density (g ",cm^-3,")"))) +
+#
+# theme <- theme(axis.text.x = element_text(size = 10.5, angle = 0),
+#   axis.text.y = element_text(size = 10.5),
+#   axis.title.y = element_text(size = 12, margin = margin(0, 0, 0, 0)),
+#   axis.title.x = element_text(size = 12, margin = margin(-10, 0, 0, 0)),
+#   plot.margin = unit(c(0.2, 0.2, 0, 0.05), units = "lines")
+#   # panel.margin = unit(0, "lines")
+#   )
+#
+# p1 <- temp %>%
+#   filter(size == "1ha" & trait == "WSG" & obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.5) +
+#   geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "blue") +
+#
+#   geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "tr"), aes(ymin = est_lo,
+#       ymax = est_up, x = Time), fill = "red", alpha = 0.5) +
+#   geom_line(data = filter(temp,
+#       trait == "WSG" & size == "1ha" & obs2 == "tr"), aes(x = Time, y = est_mean),
+#       colour = "red", lty = 2) +
+#   theme_bw() +
+#   xlab("") +
+#   ylab("") +
+#   theme +
+#   theme(axis.text.x = element_blank()) +
+#   theme(plot.margin = unit(c(2, 2, 0, 0), units = "lines"))
+#
+# p2 <- temp %>%
+#   filter(size == "1ha", trait == "Moist", obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   geom_ribbon(data = filter(temp, trait == "Moist" & size == "1ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "gray", alpha = 0.5) +
+#   geom_line(data = filter(temp, trait == "Moist" & size == "1ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "black") +
+#   theme_bw() +
+#   xlab("") +
+#   # ylab("Moisture") +
+#   ylab("") +
+#   theme +
+#   theme(axis.text.x = element_blank())
+#
+#
+# p3 <- temp %>%
+#   filter(size == "1ha", trait == "Convex", obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   geom_ribbon(data = filter(temp, trait == "Convex" & size == "1ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "gray", alpha = 0.5) +
+#   geom_line(data = filter(temp, trait == "Convex" & size == "1ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "black") +
+#   theme_bw() +
+#   xlab("") +
+#   # ylab("Convexity (m)") +
+#   ylab("") +
+#   theme +
+#   theme(axis.text.x = element_blank())
+#
+# p4 <- temp %>%
+#   filter(size == "1ha", trait == "Slope", obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   geom_ribbon(data = filter(temp, trait == "Slope" & size == "1ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "gray", alpha = 0.5) +
+#   geom_line(data = filter(temp, trait == "Slope" & size == "1ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "black") +
+#   theme_bw() +
+#   # ylab("Slope (degrees)") +
+#   ylab("") +
+#   theme +
+#   theme(axis.title.x = element_text(size = 12, margin = margin(5, 0, 0, 0)))
+#
+# p5 <- temp %>%
+#   filter(size == "0.04ha" & trait == "WSG" & obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   geom_ribbon(data = filter(temp, trait == "WSG" & size == "0.04ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.5) +
+#   geom_line(data = filter(temp, trait == "WSG" & size == "0.04ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "blue") +
+#
+#   geom_ribbon(data = filter(temp, trait == "WSG" & size == "0.04ha" & obs2 == "tr"), aes(ymin = est_lo,
+#   ymax = est_up, x = Time), fill = "red", alpha = 0.5) +
+#   geom_line(data = filter(temp,
+#   trait == "WSG" & size == "0.04ha" & obs2 == "tr"), aes(x = Time, y = est_mean),
+#   colour = "red", lty = 2) +
+#   theme_bw() +
+#   xlab("") +
+#   ylab("") +
+#   theme +
+#   theme(axis.text.x = element_blank())
+#
+# p6 <- temp %>%
+#   filter(size == "0.04ha", trait == "Moist", obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   theme_bw() +
+#   theme(axis.text.x = element_blank()) +
+#   xlab("") +
+#   ylab("") +
+#   theme +
+#   theme(axis.text.x = element_blank())
+#
+#
+# p7 <- temp %>%
+#   filter(size == "0.04ha", trait == "Convex", obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   theme_bw() +
+#   theme(axis.text.x = element_blank()) +
+#   xlab("") +
+#   ylab("") +
+#   theme +
+#   theme(axis.text.x = element_blank())
+#
+# p8 <- temp %>%
+#   filter(size == "0.04ha", trait == "Slope", obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   theme_bw() +
+#   ylab("") +
+#   theme +
+#   theme(axis.title.x = element_text(size = 12, margin = margin(5, 0, 0, 0)))
+#
+#
+#
+# xoff <- .27 # relative x position of label, within one plot
+# yoff <- .93 # relative y position of label, within one plot
+#
+# plot_grid(p1, p5,
+#       p2, p6,
+#       p3, p7,
+#       p4, p8,
+#       # p1, p4, p7, p10,
+#       # p1, p4, p7, p10,
+#       ncol = 2,
+#       align = "hv"
+#     ) +
+# draw_plot_label(label = paste("(", letters[1:8], ")", sep = ""),
+#         x = rep((xoff + 0 +  0:1)/2, 4),
+#         y = 1 - (1 - yoff + rep(0:3, each = 2))/4,
+#         hjust = .5,
+#         vjust = .5,
+#         size = 12,
+#         fontface = 1)
+# after <- proc.time()
+# dev.off()
+# after - before
+#
+#
+#
+# ##
+# pdf("~/Dropbox/MS/TurnoverBCI/fig/moge.pdf", width = 4.33, height = 6)
+# small <- temp %>%
+#   filter(size == "0.04ha" & obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   facet_grid(trait ~ ., scale = "free") +
+#   theme(strip.text.y = element_blank())
+#
+# large <- temp %>%
+#   filter(size == "1ha" & obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   facet_grid(trait ~ ., scale = "free") +
+#   theme(strip.text.y = element_blank())
+#
+# plot_grid(small, large,
+#   ncol = 2,
+#   align = "hv")
+# dev.off()
+#
+#
+#
+# xoff <- .27 # relative x position of label, within one plot
+# yoff <- .93 # relative y position of label, within one plot
+#
+# pdf("~/Dropbox/MS/TurnoverBCI/fig/moge.pdf", width = 5, height = 10)
+# temp %>%
+#   filter(obs2 == "dat") %>%
+#   ggplot(.) +
+#   geom_point(aes(x = Time, y = val), alpha = 0.4, size = 0.8) +
+#   facet_grid(trait ~ size, scale = "free", switch = "y")
+# dev.off()
 
 
-
+#last version
+pdf("~/Dropbox/MS/TurnoverBCI/fig/moge.pdf", width = 4, height = 8)
 ggplot(filter(temp, is.na(est_mean) == TRUE)) +
-  geom_point(aes(x = jitter(Time), y = val), alpha = 0.4) +
-  facet_wrap(size ~ trait2, scale = "free_y", nrow = 2, labeller = labeller(trait2 = label_parsed, size = label_value)) +
-  # geom_smooth() +
-  theme_bw() +
-  xlab("Time") +
-  ylab("Trait values") +
-  geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.5) +
-  geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "blue") +
-  geom_ribbon(data =  filter(temp, trait != "WSG" | size != "1ha" | obs2 != "obs"), aes(ymin = est_lo, ymax = est_up, x = Time,  fill = obs2), alpha = 0.5) +
-  geom_line(data = filter(temp, trait != "WSG" | size != "1ha" | obs2 != "obs"), aes(x = Time, y = est_mean, colour = obs2, lty = obs2)) +
-  scale_fill_manual(values = c("gray", "gray", "gray")) +
-  scale_colour_manual(values = c("black", "black", "black")) +
-  scale_linetype_manual(values = c(1, 1, 2))
-
-  #
-
-# pdf("~/Dropbox/MS/TurnoverBCI/fig/moge.pdf", width = 5.9, height = 3.5)
-ggsave("~/Dropbox/MS/TurnoverBCI/fig/moge.eps",
-  width = 5.9, height = 3.6,
-  units = "in",
-  device = cairo_ps)
-
-ggplot(filter(temp, is.na(est_mean) == TRUE)) + geom_point(aes(x = jitter(Time),
+    geom_point(aes(x = jitter(Time),
     y = val), size = 0.8, alpha = 0.4) +
-    facet_wrap(size ~ trait2, scale = "free_y", nrow = 2,
-    labeller = labeller(trait2 = label_parsed, size = label_value)) + # geom_smooth() +
-
-    theme_bw() + xlab("Time") + ylab("Trait values") +
+    facet_grid(trait2 ~ size, scale = "free",
+    labeller = labeller(trait2 = label_parsed, size = label_value),
+    switch = "y") + # geom_smooth() +
+    theme_bw() +
+    xlab("Time") +
+    ylab("") +
     geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.5) +
     geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "blue") +
 
     geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "tr"), aes(ymin = est_lo,
-    ymax = est_up, x = Time), fill = "gray", alpha = 0.5) + geom_line(data = filter(temp,
+    ymax = est_up, x = Time), fill = "red", alpha = 0.5) +
+    geom_line(data = filter(temp,
     trait == "WSG" & size == "1ha" & obs2 == "tr"), aes(x = Time, y = est_mean),
-    colour = "black", lty = 2) +
-geom_ribbon(data = filter(temp, trait != "WSG" | size != "1ha" | obs2 != "obs"),
-    aes(ymin = est_lo, ymax = est_up, x = Time, fill = obs2), alpha = 0.5) + geom_line(data = filter(temp,
-    trait != "WSG" & obs2 == "obs"), aes(x = Time, y = est_mean, colour = obs2, lty = obs2)) +
-    scale_fill_manual(values = c("gray", "gray", "gray")) + scale_colour_manual(values = c("black",
-    "black", "black")) + scale_linetype_manual(values = c(1, 1, 2)) + guides(linetype = FALSE) +
-    theme(strip.text = element_text(size = 7.5, lineheight = 0.2))
-    # guides(colour = FALSE) + guides(fill = FALSE) +
-    # theme(strip.text = element_text(size = 7.5),
-    # axis.title = element_text(size = 8),
-    # axis.text.x = element_text(size = 7.5),
-    # axis.text.y = element_text(size = 7.5))
+    colour = "red", lty = 2) +
+
+    geom_ribbon(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")),
+    aes(ymin = est_lo, ymax = est_up, x = Time, fill = obs2), alpha = 0.5) +
+    geom_line(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")), aes(x = Time, y = est_mean, colour = obs2, lty = obs2)) +
+
+    scale_fill_manual(values = c("gray", "gray", "gray")) +
+    scale_colour_manual(values = c("black", "black", "black")) +
+    scale_linetype_manual(values = c(2, 2, 2)) +
+    guides(linetype = FALSE) +
+    guides(colour = FALSE) +
+    guides(fill = FALSE) +
+    theme(axis.text.x = element_text(angle = 45),
+      plot.margin = unit(c(0.2, 0.2, 0.2 , -1), units = "lines")
+      )
+
+dev.off()
+
+
+
+
+pdf("~/Dropbox/MS/TurnoverBCI/fig/moge2.pdf", width = 6, height = 12)
+ggplot(filter(temp, is.na(est_mean) == TRUE)) +
+    geom_point(aes(x = jitter(Time),
+    y = val), size = 0.8, alpha = 0.4) +
+    facet_wrap( ~ trait2 + size, scale = "free",
+    labeller = labeller(trait2 = label_parsed, size = label_value),
+    switch = NULL, ncol = 2) + # geom_smooth() +
+    theme_bw() +
+    xlab("Time") +
+    ylab("Trait values") +
+    geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.5) +
+    geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "blue") +
+
+    geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "tr"), aes(ymin = est_lo,
+    ymax = est_up, x = Time), fill = "red", alpha = 0.5) +
+    geom_line(data = filter(temp,
+    trait == "WSG" & size == "1ha" & obs2 == "tr"), aes(x = Time, y = est_mean),
+    colour = "red", lty = 2) +
+
+    geom_ribbon(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")),
+    aes(ymin = est_lo, ymax = est_up, x = Time, fill = obs2), alpha = 0.5) +
+    geom_line(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")), aes(x = Time, y = est_mean, colour = obs2, lty = obs2)) +
+
+    scale_fill_manual(values = c("gray", "gray", "gray")) +
+    scale_colour_manual(values = c("black", "black", "black")) +
+    scale_linetype_manual(values = c(2, 2, 2)) +
+    guides(linetype = FALSE) +
+    guides(colour = FALSE) +
+    guides(fill = FALSE) +
+    theme(axis.text.x = element_text(angle = 45),
+      plot.margin = unit(c(0.2, 0.2, 0.2 , 0), units = "lines")
+      )
 
 dev.off()

@@ -153,89 +153,6 @@ write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list.csv")
 
 
 
-
-postscript("~/Dropbox/MS/TurnoverBCI/fig/ab_change.eps",width=3,height=6)
-par(lwd=1)
-barplot(as.numeric(na.omit(WSGab$index)), main = "WSG",ylab="", xlab= "Contribution index",col=ifelse(WSGab$delta_ab>0,"gray","black"),border=ifelse(WSGab$delta_ab>0,"gray","black"),horiz=T)
-par(lwd=1)
-dev.off()
-
-
-p0 <- barplot(as.numeric(na.omit(slopeab$index)),
-  main = "Slope",
-  col = ifelse(slopeab$delta_ab>0,"gray","black"),
-  border = ifelse(slopeab$delta_ab>0,"gray","black"),
-  horiz = T,
-  xlab= "Contribution index",
-  ylim = c(0, 360))
-
-postscript("~/Dropbox/MS/TurnoverBCI/fig_current/ab_change.eps", width = 6, height = 6, paper = "special")
-
-par(mfrow=c(1, 4), mar = c(4, 4, 2, 2))
-
-p <- barplot(as.numeric(na.omit(WSGab$index)),
-  main = "Wood density",
-  ylab = "Species ranked by contribution index",
-  xlab = "Contribution index",
-  col = ifelse(WSGab$delta_ab>0,"gray","black"),
-  border = ifelse(WSGab$delta_ab>0,"gray","black"),
-  horiz = T,
-  ylim = c(0, 360))
-  # axis(2, tick = FALSE,line = -0.8, cex.axis = 0.9)
-  axis(2, tcl = 0.2, labels = FALSE, at = p0)
-
-barplot(as.numeric(na.omit(moistab$index)),
-  main = "Moisture",
-  col = ifelse(moistab$delta_ab>0,"gray","black"),
-  border = ifelse(moistab$delta_ab>0,"gray","black"),
-  horiz = T,
-  xlab= "Contribution index",
-  ylim = c(0, 360))
-
-barplot(as.numeric(na.omit(convexab$index)),
-  main = "Convexity",
-  col = ifelse(convexab$delta_ab>0,"gray","black"),
-  border = ifelse(convexab$delta_ab>0,"gray","black"),
-  horiz = T,
-  xlab= "Contribution index",
-  ylim = c(0, 360))
-
-barplot(as.numeric(na.omit(slopeab$index)),
-  main = "Slope",
-  col = ifelse(slopeab$delta_ab>0,"gray","black"),
-  border = ifelse(slopeab$delta_ab>0,"gray","black"),
-  horiz = T,
-  xlab= "Contribution index",
-  ylim = c(0, 360))
-
-par(mfrow=c(1,1))
-
-dev.off()
-
-
-moge <- full_join(WSGab, moistab, by = "sp")
-
-ggplot(WSGab, x = index, fill = sp) + geom_bar()
-
-
-
-par(mfrow=c(1,2))
-barplot()
-barplot(1:5,loremwd=1)
-
-write.csv(WSGab, "~/Dropbox/MS/TurnoverBCI/fig0/WSGab.csv")
-write.csv(moistab, "~/Dropbox/MS/TurnoverBCI/fig0/moistab.csv")
-write.csv(convexab, "~/Dropbox/MS/TurnoverBCI/fig0/convexab.csv")
-write.csv(slope100ab, "~/Dropbox/MS/TurnoverBCI/fig0/slope100ab.csv")
-
-
-
-
-barplot(as.numeric(na.omit(WSGab$index)), main = "WSG",ylab="", xlab= "Contribution index",col=ifelse(WSGab$delta_ab>0,"gray","black"),border=ifelse(WSGab$delta_ab>0,"gray","black"),horiz=T)
-
-moge <- na.omit(WSGab$index) %>% as.numeric
-
-
 # ========================================
 WSGab <- WSGab %>%
   mutate(WSG_index = index)
@@ -302,6 +219,7 @@ cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
 
 sp_vec2 <- c("PIPECO", "POULAR", "TET2PA", "SWARS1", "ALSEBL", "HYBAPR")
 
+sp_vec2 <- c("PIPECO", "POULAR", "TET2PA", "SWARS1", "ALSEBL", "HYBAPR", "FARAOC")
 
 fig_dat2 <- full_join(fig_dat, temp, by = "trait_sig") %>%
   arrange(val2) %>%
@@ -314,35 +232,30 @@ fig_dat2 <- full_join(fig_dat, temp, by = "trait_sig") %>%
   mutate(sp2 = ifelse(sp %in% sp_vec, as.character(sp), "Other species")) %>%
   mutate(sp3 = ifelse(sp %in% sp_vec2, as.character(sp), "Other species")) %>%
   mutate(sp2 = factor(sp2, levels = c("FARAOC", "HYBAPR", "PIPECA", "PIPECO", "POULAR", "PSYCLI", "Other species"))) %>%
-  mutate(sp3 = factor(sp3, levels = c("ALSEBL", "HYBAPR", "PIPECO", "POULAR", "SWARS1", "TET2PA", "Other species")))
+  mutate(sp3 = factor(sp3, levels = c("ALSEBL", "FARAOC", "HYBAPR", "PIPECO", "POULAR", "SWARS1", "TET2PA", "Other species")))
 
 
 
 
 
-  lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
-      y = 20,
-      x = rep(c(0.21, -1.9, -0.29, 0.5),  3),
-      size = rep(c("50ha", "1ha", "0.04ha"), each = 4),
-      trait = rep(c("WSG", "moist", "convex", "slope"), 3),
-      sp2 = "Other species") %>%
-      mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
-      mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
-      mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)")))
-
-
-
-postscript("~/Dropbox/MS/TurnoverBCI/fig/ab_change_pi.eps", width = 6, height = 3, paper = "special")
+lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
+    y = 20,
+    x = rep(c(0.21, -1.9, -0.29, 0.5),  3),
+    size = rep(c("50ha", "1ha", "0.04ha"), each = 4),
+    trait = rep(c("WSG", "moist", "convex", "slope"), 3),
+    sp2 = "Other species") %>%
+    mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
+    mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
+    mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)")))
 
 pdf("~/Dropbox/MS/TurnoverBCI/fig/ab_change_pi.pdf", width = 6, height = 3.6)
-
 lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
   mutate(x = 1.4, y = 0.8) %>%
   mutate(n2 = paste("n =", n, sep = " "))
 
   ggplot(fig_dat2) +
   geom_bar(aes(y = val2, x = mean2/2,
-    fill = as.factor(sp2), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
+    fill = as.factor(col), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
   geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
     size = 4, vjust = 0) +
   coord_polar(theta="y") +
@@ -366,54 +279,36 @@ dev.off()
 
 
 
-val <- fig_dat %>% filter(sp == "PIPECO" | sp == "POULAR") %>%
-.$val
+pdf("~/Dropbox/MS/TurnoverBCI/fig/pie_7_species.pdf", width = 6, height = 3.6)
+# 6 species
+n <- 6
+hues <- seq(15, 375, length=n+1)
+cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
 
-arrow_pos <- data.frame(
-  trait2 = rep(c("Wood density", "Slope", "Moisture", "Convexity"), each = 2),
-  sp = rep(c("PIPECO", "POULAR"), 4),
-  val = val
-  )
 
-# Calculate the y positions for the labels and arrows
-# For the myd data frame, obtain counts within each bin, but separately for each class
-bwidth <- 30   # Set binwidth
-Min <- floor(min(fig_dat$val)/bwidth) * bwidth
-Max <- ceiling(max(fig_dat$val)/bwidth) * bwidth
+lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
+  mutate(x = 1.4, y = 0.8) %>%
+  mutate(n2 = paste("n =", n, sep = " "))
 
-Min <- -0.5
-Max <- 0.5
-
-# Function to do the counting
-# func <- function(df) {
-#    tab = as.data.frame(table(cut(df$val, breaks = seq(Min, Max, bwidth), right = FALSE)))
-#    tab$upper = Min + bwidth * (as.numeric(rownames(tab)))
-#    return(tab)
-#    }
-#
-# # Apply the function to each class in myd data frame
-# TableOfCounts <- plyr::ddply(fig_dat2, .(trait2), function(df) func(df))
-#
-# # Transfer counts of arrow_pos
-# arrow_pos$upper <- (floor(arrow_pos$val/bwidth) * bwidth) + bwidth
-# arrow_pos <- merge(arrow_pos, TableOfCounts, by = c("trait2", "upper"))
-# arrow_pos$xvar <- (arrow_pos$upper - .5 * bwidth)      # x position of the arrow is at the midpoint of the bin
-# # arrow_pos$trait2=factor(as.character(arrow_pos$trait),
-    # levels=c("1", "2", "3", "4")) # Gets rid of warnings.
-
-arrow_pos$Freq2 <- rep(c(30,60), 4)
-
-pdf("~/Dropbox/MS/TurnoverBCI/fig/ab_change_hist.pdf", width = 6, height = 6, paper = "special")
-ggplot(fig_dat2, aes(x = val)) +
-  geom_histogram() +
-  facet_wrap( ~ trait2, scale = "free") +
+  ggplot(fig_dat2) +
+  geom_bar(aes(y = val2, x = mean2/2,
+    fill = as.factor(sp3), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
+  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
+    size = 4, vjust = 0) +
+  coord_polar(theta="y") +
+  facet_grid(sig ~ trait2) +
+  # scale_fill_gradient(low = "blue", high = "red") +
+  # guides(fill = FALSE) +
+  # scale_fill_manual(values = ifelse(levels(fig_dat2$sp) == "POULAR", "red", "gray")) +
+  # scale_fill_manual(values = c("PIPECO" = "#F8766D", "POULAR" = "#00C0AF", "Other species" = "gray"), name = "") +
+  scale_fill_manual(values = c(cols_hex, "gray"),
+    guide = guide_legend(title.position = "top",
+      title = "Species",)) +
   theme_bw() +
-  ylab("No. of spcies") +
-  xlab("Contribution index") +
-
-  geom_text(data = arrow_pos, aes(label=sp, x=val, y=Freq2 + 30, colour = sp), size=4) +
-  geom_segment(data=arrow_pos,
-     aes(x=val, xend=val, y=Freq2 + 20, yend=5, colour = sp),
-     arrow=arrow(length=unit(2, "mm"))) +
-  guides(colour = FALSE)
+  theme(axis.text.x = element_blank(),
+     axis.text.y = element_blank(),
+     axis.ticks = element_blank()) +
+  xlab("") + ylab("") +
+  theme(legend.position = "bottom",
+    legend.margin = unit(-0.2, "cm"))
 dev.off()

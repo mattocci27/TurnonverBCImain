@@ -18,7 +18,7 @@ n_model <- argv[1]
 plot_size <- argv[2]
 # n_model <- "model5"
 # plot_size <- "100m"
-save_name <- paste(n_model, plot_size, sep = "_")
+save_name <- paste(n_model, plot_size,"simple", sep = "_")
 
 
 print(n_model)
@@ -71,18 +71,18 @@ model1 <- '
   parameters{
     vector[n_para] beta;
     real<lower=0> phi;
-    vector[n_para] r[n_site];
-    vector<lower=0>[n_para] sigma;
+    vector[n_site] r;
+    real<lower=0> sigma;
   }
   transformed parameters{
     vector<lower=0>[n_sample] mu;
-    for (i in 1:n_sample) mu[i] = exp(dot_product(beta + r[site[i]], TR[i, ]) + log(ab1982[i]));
+    for (i in 1:n_sample) mu[i] = exp(dot_product(beta, TR[i, ]) + r[site[i]] + log(ab1982[i]));
   }
   model{
     ab2010 ~ neg_binomial_2(mu, phi);
     phi ~ cauchy(0, 2.5);
     beta ~ normal(0, 10);
-    for (i in 1:n_para) r[i] ~ normal(0, sigma[i]);
+    r ~ normal(0, sigma);
     sigma ~ cauchy(0, 2.5);
   }
   generated quantities{
@@ -93,8 +93,10 @@ model1 <- '
 '
 
 
-ab_t_data2 <- ab_t_data %>% filter(ab1982 > 0)
-ab_t_data3 <- ab_t_data %>% filter(ab1982 != 0 | ab2010 != 0)
+ab_t_data2 <- ab_t_data %>%
+  filter(ab1982 != 0 | ab2010 != 0) %>%
+  mutate(ab1982 = ab1982 + 1) %>%
+  mutate(ab2010 = ab2010 + 1)
 
 list_data <- list(n_sample = nrow(ab_t_data2),
   n_site = length(unique(as.character(ab_t_data2$site))),
@@ -165,17 +167,18 @@ system.time(fit <- stan(model_code = model1,
             iter = 1,
             warmup = 0,
             thin = 1,
-            chains = 1,
-            control = list(stepsize = 0.01,
-              adapt_delta = 0.9,
-              max_treedepth = 10)))
+            chains = 1))
 
 system.time(res <- stan(fit = fit,
             data = list_data,
-            iter = 10000,
-            warmup = 5000,
-            thin = 10,
-            chains = 3))
+            iter = 2000,
+            warmup = 1000,
+            thin = 1,
+            chains = 3,
+            control = list(stepsize = 0.01,
+                  adapt_delta = 0.9,
+                  max_treedepth = 10)))
+
 
 fit.summary <- data.frame(summary(res)$summary)
 
