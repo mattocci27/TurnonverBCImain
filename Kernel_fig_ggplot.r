@@ -157,14 +157,6 @@ dummy <- bind_rows(dummy0, dummy1, dummy2, dummy3, dummy4, dummy5) %>%
   mutate(size2 = factor(size, labels = c("1ha", "0.04ha", "Individual"))) %>%
   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Convexity~(m)", "Slope~(degrees)")))
 
-# dummy6 <- fig_dat2 %>% filter(., trait == "convex" & size == "0.04ha") %>%
-#
-# dummy7 <- fig_dat2 %>% filter(., trait != "convex" & size != "0.04ha")  %>%
-#   bind_rows(., dummy6)
-
-
-# postscript("~/Dropbox/MS/TurnoverBCI/fig/mogemoge.eps",
-#   width = 10, height = 6.66, paper = "special")
 
 pdf("~/Dropbox/MS/TurnoverBCI/fig/mogemoge.pdf",
   width = 10, height = 6.66, paper = "special")
@@ -180,93 +172,5 @@ ggplot(dummy0, aes(x = val)) +
   # theme(strip.text.x = element_text(hjust = 0.5, vjust = 0.5),
   #   panel.margin.x = unit(0.5, "lines"))
   theme(panel.margin.x = unit(0.5, "lines"))
-
-dev.off()
-
-
-aa <- rnorm(1000, 0, 0.1)
-plot(density(aa))
-
-levels(diamonds$color) <- paste0(" \n", levels(diamonds$color) , "\n ")
-
-
-P <- ggplot(diamonds, aes(carat, price, fill = ..x..)) +
-      xlim(0, 2) + stat_binhex(na.rm = TRUE)+
-      facet_wrap(~ color + cut)
-P +  theme(strip.text = element_text(size=9, lineheight=0, hjust = 1))
-
-
-
-###use grid again ==================================
-library(cowplot)
-
-
-postscript("~/Dropbox/MS/TurnoverBCI/fig/mogemoge.eps",
-  width = 6, height = 4)
-
-  theme <- theme(axis.text.x = element_text(size = 7, angle = 45),
-    axis.text.y = element_text(size = 7),
-    axis.title.y = element_text(size = 8, margin = margin(0, -5, 0, 0)),
-    axis.title.x = element_text(size = 8, margin = margin(-10, 0, 0, 0)),
-    plot.margin = unit(c(0.1, 0.5, 0.1, 0.1), units = "lines")
-    # panel.margin = unit(0, "lines")
-    )
-
-  p1 <- ggplot(kernel.100, aes(x=WSG))
-  p1 <- p1 + geom_density(aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(0.55,0.65) + labs(y="Denstiy (1ha)", x="") + theme
-
-  p2 <- ggplot(kernel.20, aes(x=WSG))
-  p2 <- p2 + geom_density(aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(0.53,0.68)  + labs(y="Denstiy (0.04ha)",x="")+ theme
-
-  p3 <- ggplot(k.ind.WSG, aes(x=WSG))
-  p3 <- p3 + geom_density(adjust=4, aes(colour=as.factor(time)))  + labs(y="Density (each tree)",x = expression(paste("Wood density (g ",cm^-3,")")))+ theme(legend.position=c(0.22,0.6)) + guides(colour=FALSE)+ theme
-
-  p4 <- ggplot(kernel.100, aes(x=moist))
-  p4 <- p4 + geom_density(aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(0.3,0.9)  + guides(colour=FALSE)  + labs(y="",x="")+ theme
-
-  p5 <- ggplot(kernel.20, aes(x=moist))
-  p5 <- p5 + geom_density(aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(0,1.2)  + guides(colour=FALSE)  + labs(y="",x="")+ theme
-
-  p6 <- ggplot(k.ind.moist, aes(x=moist))
-  p6 <- p6 + geom_density(adjust=4, aes(colour=as.factor(time))) + labs(y="",x="Moisture") + guides(colour=FALSE) + xlim(-2.1,4)+ theme
-
-  p7 <- ggplot(kernel.100, aes(x=convex))
-  p7 <- p7 + geom_density(adjust=1,aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(0.03,0.09)  + guides(colour=FALSE) + labs(y="",x="")+ theme
-
-
-  p8 <- ggplot(kernel.20, aes(x=convex))
-  p8 <- p8 + geom_density(adjust=1,aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(0.03,0.09)  + guides(colour=FALSE) + labs(y="",x="")+ theme
-
-
-  p9 <- ggplot(k.ind.convex, aes(x=convex))
-  p9 <- p9 + geom_density(adjust=4, aes(colour=as.factor(time))) + labs(y="",x="Convexity (m)") + guides(colour=FALSE) + xlim(-0.15,0.25)+ theme
-
-  p10 <- ggplot(kernel.100, aes(x=slope))
-  p10 <- p10 + geom_density(adjust=1,aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(4,6)  + guides(colour=FALSE)+ labs(y="",x="")+ theme
-
-  p11 <- ggplot(kernel.20, aes(x=slope))
-  p11 <- p11 + geom_density(aes(colour=as.factor(time))) + guides(colour=FALSE) + xlim(4,6)  + guides(colour=FALSE)+ labs(y="",x="")+ theme
-
-  p12 <- ggplot(k.ind.slope, aes(x=slope))
-  p12 <- p12 + geom_density(adjust=4, aes(colour=as.factor(time))) + xlim(2,8)+ labs(y=" ",x="Slope (degrees)") + guides(colour=FALSE)+ theme
-
-  xoff <- .25 # relative x position of label, within one plot
-  yoff <- .93 # relative y position of label, within one plot
-
-  plot_grid(p1, p4, p7, p10,
-        p2, p5, p8, p11,
-        p3, p6, p9, p12,
-        # p1, p4, p7, p10,
-        # p1, p4, p7, p10,
-        ncol = 4,
-        align = "hv"
-      ) +
-  draw_plot_label(label = paste("(", letters[1:12], ")", sep = ""),
-          x = rep((xoff + 0:3)/4, 3),
-          y = 1 - (1 - yoff + rep(0:2, each = 4))/3,
-          hjust = .5,
-          vjust = .5,
-          size = 9,
-          fontface = 1)
 
 dev.off()
