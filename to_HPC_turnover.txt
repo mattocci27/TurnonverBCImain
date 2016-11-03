@@ -1,5 +1,0 @@
-rsync -av ~/Dropbox/BCI_Turnover/BCI_turnover20141213.RData mattocci27@rsync.rc.ufl.edu:~
-
-mkdir $UFHPC_SCRATCH/mattocci27/BCI_Turnover
-
-mv BCI_turnover20141213.RData $UFHPC_SCRATCH/mattocci27/BCI_Turnover/BCI_turnover20141213.RData
