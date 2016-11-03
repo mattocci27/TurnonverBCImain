@@ -199,7 +199,7 @@ lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
   #  ggplot(ds, aes(x = data)) +
   #     geom_point(aes(y = Linear, fill = "Linear"), size = 3, alpha = 0.5)
 
-pdf("~/Dropbox/MS/TurnoverBCI/fig/fig_glm_col.pdf", width = 6, height = 6, paper = "special")
+pdf("~/Dropbox/MS/TurnoverBCI/fig/fig3_new.pdf", width = 6, height = 4, paper = "special")
 
 n <- 2
 hues <- seq(15, 375, length=n+1)
