@@ -117,14 +117,39 @@ fig_dat2 <- bind_rows(fig_dat, temp1, temp2, temp3, temp4) %>%
   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Convexity~(m)", "Slope~(degrees)")))
 
 
+dummy1 <- data_frame(time = 1982,
+    size = "1ha",
+    trait = "WSG",
+    val = c(0.55, 0.65))
+dummy2 <- data_frame(time = 1982,
+    size = "1ha",
+    trait = "moist",
+    val = c(0.3, 0.9))
+
+dummy3 <- data_frame(time = 1982,
+    size = "individual",
+    trait = "moist",
+    val = c(-2, 4))
+
+dummy4 <- data_frame(time = 1982,
+    size = "1ha",
+    trait = "slope",
+    val = c(4, 6))
+
+dummy5 <- data_frame(time = 1982,
+    size = "0.04ha",
+    trait = "slope",
+    val = c(4, 6))
+
+
 dummy0 <- fig_dat2 %>%
     filter(., size != "0.04ha" | trait != "convex" | (val > 0.035 & val < 0.085)) %>%
     filter(., size != "individual" | trait != "convex" | (val > -0.15 & val < 0.25)) %>%
     filter(., size != "0.04ha" | trait != "slope" | (val > 4 & val < 6)) %>%
     filter(., size != "individual" | trait != "slope" | (val > 2 & val < 8)) %>%
     filter(size != "0.04ha") %>%# new
-    mutate(size = factor(size, levels = c("1ha", "individual")))
-    mutate(size2 = factor(size, levels = c("1ha", "Individual")))
+    mutate(size = factor(size, levels = c("1ha", "individual"))) %>%
+    mutate(size2 = factor(size, labels = c("1ha", "Individual")))
 
 dummy <- bind_rows(dummy0, dummy1, dummy2, dummy3, dummy4, dummy5) %>%
   filter(size != "0.04ha") %>%# new
@@ -147,7 +172,7 @@ ggplot(dummy0, aes(x = val)) +
   guides(colour = guide_legend(title = NULL)) +
   # guides(fill = guide_legend(override.aes = list(fille = as.factor(time)))) +
   theme(panel.margin.x = unit(0.5, "lines"),
-  legend.position = c(1, 0.4), legend.justification = c(1,1),
+  legend.position = c(1.1, 0.4), legend.justification = c(1,1),
   legend.text = element_text(size = 7),
   legend.background = element_rect(fill=alpha('blue', 0)),
   legend.key.size = unit(0.4, "cm"),
