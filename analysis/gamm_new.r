@@ -15,37 +15,14 @@ unlist(slope.100.rare[10])
 unlist(convex.100.rare[10])
 
 time <- c(1982,1985,1990,1995,2000,2005,2010)
-Time=c(rep(1982,50),
-                           rep(1985,50),
-                           rep(1990,50),
-                           rep(1995,50),
-                           rep(2000,50),
-                           rep(2005,50),
-                           rep(2010,50))
+  Time=c(rep(1982,50),
+         rep(1985,50),
+         rep(1990,50),
+         rep(1995,50),
+         rep(2000,50),
+         rep(2005,50),
+         rep(2010,50))
 #
-#
-# temp.ab <- data.frame(SP = colnames(D100m[[1]]),
-#                       ab10_3 = D100m[[1]][3,],
-#                       ab10_4 = D100m[[1]][3,])
-# rownames(temp.ab) <- NULL
-#
-#
-# temp <- merge(temp.ab,trait, by="SP")
-#
-# temp$moge1 <- (temp$ab10_3 * temp$convex_size_100)/temp$ab10_3
-# temp$moge2 <- (temp$ab10_4 * temp$convex_size_100)/temp$ab10_4
-#
-# moge <- data.frame(temp$SP,temp$moge1)
-#
-# moge3 <- as.character(na.omit(moge[moge[,2] < -0.2,][,1]))
-#
-#
-#
-#
-# ab.t.data[(rownames(ab.t.data) %in% moge3),"census_1982"]
-# ab.t.data[(rownames(ab.t.data) %in% moge3),"census_2010"]
-#
-# unlist(convex.100.rare[10])[1:50]
 
 WSG100.rm <-list()
 Moist100.rm <-list()
@@ -120,10 +97,13 @@ r4_100 <- gamm(slope ~  s(Time,k=4), random = list(site=~1), data=moge, correlat
 ##############################################################
 #original R2
 ##############################################################
-moge$temp <- rnorm(nrow(moge))
-moge100r <- moge100r %>% mutate(temp = rnorm(nrow(.)))
-moge.cross <- moge100r[order(moge100r$temp),]
-rownames(moge.cross) <- NULL
+
+cross_site <- data.frame(site = 1:50, temp = rnorm(50)) %>%
+  arrange(temp)
+
+moge %>% filter(site %in% cross_site[1:5, "site"])
+# 1:5 vs 6:50
+# 6:10 vs 1:5, 11:50
 k <- 10
 
 
@@ -132,50 +112,51 @@ k <- 10
   SS <- NULL
   PREDS <- NULL
   i <- 1
-  r2.1 <- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data=moge.cross[(35*i+1):350,], correlation = corCAR1(form=~Time))
+  r2.1 <- gamm(Moist ~  s(Time,k=4), random = list(site=~1), data = moge %>% filter(site %in% cross_site[6:50, "site"]), correlation = corCAR1(form=~Time))
   res <- data.frame(fitted = r2.1$gam$fitted.values, Time= r2.1$gam$model$Time)
 
-  # res <- data.frame(fitted = r2.1$gam$fitted.values,
-                    # res = r2.1$gam$residuals,
-                    # res2 = r2.1$gam$y - r2.1$gam$fitted.values -r2.1$gam$residuals,
-                    # Time= r2.1$gam$model$Time)
-
+  temp_pre <- moge %>% filter(site %in% cross_site[1:5, "site"])
 
   res2 <- unique(res[order(res$Time),])
-  res3 <- merge(moge.cross[1:35,],res2,by="Time")
+  res3 <- merge(temp_pre, res2, by = "Time")
 
-  SS[i] <- sum((moge.cross[1:35,"WSG"] - mean(moge.cross[1:35,"WSG"]))^2)
-  PREDS[i] <- sum((res3$fitted - res3$WSG)^2)
+  SS[i] <- sum((res3$Moist - mean(res3$Moist))^2)
+  PREDS[i] <- sum((res3$fitted - res3$Moist)^2)
   # res.cv[i] <- 1 - mean(PREDS)/mean(SS)
 
   # r2.1$lme$residuals$site
 
 
 for (i in 2:(k-1)){
-  temp.data <- rbind(moge.cross[1:(35*(i-1)),],
-                     moge.cross[(35*i+1):350,])
-  r2.1 <- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data=temp.data, correlation = corCAR1(form=~Time))
+  temp_train1 <- moge %>% filter(site %in% cross_site[1:(5*(i-1)), "site"])
+  temp_train2 <- moge %>% filter(site %in% cross_site[(5*i +1):50, "site"])
+
+  temp.data <- bind_rows(temp_train1, temp_train2)
+  r2.1 <- gamm(Moist ~  s(Time,k=4), random = list(site=~1), data = temp.data, correlation = corCAR1(form=~Time))
   res <- data.frame(fitted = r2.1$gam$fitted.values, Time= r2.1$gam$model$Time)
   res2 <- unique(res[order(res$Time),])
 
-  K1 <- 35*(i-1) +1
-  K2 <- 35*i
-  res3 <- merge(moge.cross[K1:K2,],res2,by="Time")
-  SS[i] <- sum((moge.cross[K1:K2,"WSG"] - mean(moge.cross[K1:K2,"WSG"]))^2)
-  PREDS[i] <- sum((res3$fitted - res3$WSG)^2)
+  temp_pre <- moge %>% filter(site %in% cross_site[(5*(i-1) + 1):(5*i), "site"])
+
+  res3 <- merge(temp_pre, res2, by = "Time")
+  SS[i] <- sum((res3$Moist - mean(res3$Moist))^2)
+  PREDS[i] <- sum((res3$fitted - res3$Moist)^2)
   # res.cv[i] <- 1 - mean(PREDS)/mean(SS)
 }
 
 i <- 10
-  r2.1 <- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data=moge.cross[1:35*k,], correlation = corCAR1(form=~Time))
+temp_train1 <- moge %>% filter(site %in% cross_site[1:45, "site"])
+temp_pre <- moge %>% filter(site %in% cross_site[46:50, "site"])
+
+  r2.1 <- gamm(Moist ~  s(Time,k=4), random = list(site=~1), data=temp_train1, correlation = corCAR1(form=~Time))
   res <- data.frame(fitted = r2.1$gam$fitted.values, Time= r2.1$gam$model$Time)
   res2 <- unique(res[order(res$Time),])
-  res3 <- merge(moge.cross[316:350,],res2,by="Time")
-  SS[i] <- sum((moge.cross[316:350,"WSG"] - mean(moge.cross[316:350,"WSG"]))^2)
-  PREDS[i] <- sum((res3$fitted - res3$WSG)^2)
+  res3 <- merge(temp_pre, res2, by = "Time")
+  SS[i] <- sum((res3$Moist - mean(res3$Moist))^2)
+  PREDS[i] <- sum((res3$fitted - res3$Moist)^2)
   # res.cv[i] <- 1 - mean(PREDS)/(SS)
 
-1 - mean(PREDS,na.rm=T)/mean(SS,na.rm=T)
+1 - mean(PREDS, na.rm=T)/mean(SS,na.rm=T)
 ########################################
 #convex
 # [1] -0.0003082712
