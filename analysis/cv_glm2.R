@@ -183,6 +183,19 @@ ab_t_data2 <- ab_t_data %>%
 #####
 #rate
 ####
+res_ori <- lm(rate ~ WSG
+            + moist
+            + convex
+            + slope
+            + WSG:moist
+            + WSG:convex
+            + WSG:slope
+            + convex:slope
+            + moist:slope
+            + convex:moist, ab_t_data2)
+
+stepAIC(res_ori)
+
 res_cv <- NULL
 SS <- NULL
 PREDS <- NULL
