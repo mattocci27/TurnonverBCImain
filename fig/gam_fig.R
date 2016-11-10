@@ -33,6 +33,20 @@ fig_dat <- data_frame(WSG = c(unlist(WSG100) - WSG100[[1]],
     rep(time, each = 1250)),
   size = rep(c("1ha", "0.04ha"), c(50*7, 1250*7)))
 
+
+# fig_dat <- data_frame(WSG = c(unlist(WSG100) / WSG100[[1]],
+#   unlist(WSG20) / WSG20[[1]]),
+#   Moist = c(unlist(Moist100) / Moist100[[1]],
+#     unlist(Moist20) / Moist20[[1]]),
+#   Convex = c(unlist(convex100) / convex100[[1]],
+#     unlist(convex20) / convex20[[1]]),
+#   Slope = c(unlist(slope100) / slope100[[1]],
+#     unlist(slope20) / slope20[[1]]),
+#   Time = c(rep(time, each = 50),
+#     rep(time, each = 1250)),
+#   size = rep(c("1ha", "0.04ha"), c(50*7, 1250*7)))
+
+
 fig_dat2 <- fig_dat %>%
   tidyr::gather(., "trait", "val", 1:4)
 
@@ -97,6 +111,23 @@ moge100r <- data.frame(WSG = unlist(WSG100.rm) - WSG100.rm[[1]],
                    convex = unlist(convex100.rm) - convex100.rm[[1]],
                    site = rep(1:50,7),
                    Time)
+
+# diffenet  ================ 
+# moge <- data.frame(WSG = unlist(WSG100) / WSG100[[1]],
+#                   Moist = unlist(Moist100) / Moist100[[1]],
+#                   slope = unlist(slope100) / slope100[[1]],
+#                   convex = unlist(convex100) / convex100[[1]],
+#                   site = as.factor(rep(1:50,7)),
+#                   Time)
+#
+#
+#
+# moge100r <- data.frame(WSG = unlist(WSG100.rm) / WSG100.rm[[1]],
+#                   Moist = unlist(Moist100.rm) / Moist100.rm[[1]],
+#                   slope = unlist(slope100.rm) / slope100.rm[[1]],
+#                   convex = unlist(convex100.rm) / convex100.rm[[1]],
+#                   site = rep(1:50,7),
+#                   Time)
 
 
 r1.r100<- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data=moge100r, correlation = corAR1(form = ~Time))
@@ -327,7 +358,7 @@ temp <- bind_rows(fig_dat4, moge6) %>%
 # temp2 <- temp %>% filter(size == "1ha")
 
 #last version
-pdf("~/Dropbox/MS/TurnoverBCI/fig/fig2_new.pdf", width = 6, height = 12)
+pdf("~/Dropbox/MS/TurnoverBCI/fig/fig2_1.pdf", width = 6, height = 12)
 ggplot(filter(temp, is.na(est_mean) == TRUE)) +
     geom_point(aes(x = jitter(Time),
     y = val), size = 0.8, alpha = 0.4) +
@@ -336,7 +367,7 @@ ggplot(filter(temp, is.na(est_mean) == TRUE)) +
     switch = NULL, ncol = 2) + # geom_smooth() +
     theme_bw() +
     xlab("Time") +
-    ylab("Trait values") +
+    ylab("Deviaiton from initial trait values") +
     geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.5) +
     geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs"), aes(x = Time, y = est_mean), colour = "blue") +
 
