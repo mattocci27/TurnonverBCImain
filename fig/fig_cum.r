@@ -181,22 +181,28 @@ sp_list <- WSGab %>%
 # abline(h = 100, lty = 2)
 # par(mfrow = c(1,1))
 
+
+## don't use %
 fig_dat <- sp_list %>%
   arrange(desc(Wood_density)) %>%
   mutate(wsg_sp = 1:nrow(sp_list)) %>%
   mutate(wsg_posi = cumsum(Wood_density) /sum(Wood_density, na.rm = T) * 100) %>%
+  mutate(wsg_posi = cumsum(Wood_density)) %>%
 
   arrange(desc(Moisture)) %>%
   mutate(moist_sp = 1:nrow(sp_list)) %>%
   mutate(moist_posi = cumsum(Moisture) /sum(Moisture, na.rm = T) * 100) %>%
+  mutate(moist_posi = cumsum(Moisture)) %>%
 
   arrange(desc(Convexity)) %>%
   mutate(convex_sp = 1:nrow(sp_list)) %>%
   mutate(convex_posi = cumsum(Convexity) /sum(Convexity, na.rm = T) * 100) %>%
+  mutate(convex_posi = cumsum(Convexity)) %>%
 
   arrange(Slope) %>%
   mutate(slope_sp = 1:nrow(sp_list)) %>%
-  mutate(slope_nega = cumsum(Slope) /sum(Slope, na.rm = T) * 100)
+  mutate(slope_nega = cumsum(Slope) /sum(Slope, na.rm = T) * 100) %>%
+  mutate(slope_nega = cumsum(Slope))
 
 temp1 <- fig_dat %>%
   tidyr::gather("trait", "val", c(wsg_posi, moist_posi, convex_posi, slope_nega))
@@ -234,20 +240,30 @@ dummy <- bind_rows(dummy1, dummy2, dummy3, dummy4) %>%
   mutate(n_sp =1) %>%
   mutate(trait2 = factor(trait2, levels = c("Wood density", "Moisture", "Convexity", "Slope")))
 
-postscript("~/Dropbox/MS/TurnoverBCI/fig/fig4.eps", width = 6, height = 6)
+dummy_line <- data_frame(x = 1,
+    trait2 = c("Wood density", "Moisture", "Convexity", "Slope"),
+    n_sp = 1,
+    h = c(sum(fig_dat$Wood_density, na.rm = T),
+      sum(fig_dat$Moisture, na.rm = T),
+      sum(fig_dat$Convexity, na.rm = T),
+      sum(fig_dat$Slope, na.rm = T))) %>%
+        mutate(trait2 = factor(trait2, levels = c("Wood density", "Moisture", "Convexity", "Slope")))
+
+postscript("~/Dropbox/MS/TurnoverBCI/fig/fig4_abs.eps", width = 6, height = 6)
 ggplot(fig_dat3, aes(x = n_sp, y= val)) +
   geom_point() +
   facet_wrap(~ trait2, scale = "free") +
   geom_line() +
   theme_bw() +
   geom_blank(data = dummy) +
-  geom_hline(yintercept = 100, lty = 2) +
-  ylab("Cumulative contributoin index (%)") +
+  geom_hline(data = dummy_line, aes(yintercept = h), lty = 2) +
+  # geom_hline(yintercept = 100, lty = 2) +
+  ylab("Cumulative contributoin index") +
   xlab("Number of species") +
   geom_text(data = fig_dat3 %>% filter(n_sp <6),
     aes(label = species), hjust= -0.2, vjust = 1,
     fontface="italic", size = 3) +
   geom_segment(data = fig_dat3 %>% filter(n_sp <6),
-    mapping = aes(x = n_sp + 10, y = val - 5, xend = n_sp + 2, yend= val),
+    mapping = aes(x = n_sp + 10, y = val - 0.05, xend = n_sp + 2, yend= val),
     arrow=arrow(length = unit(0.05, "inches")), size=0.25)
 dev.off()
