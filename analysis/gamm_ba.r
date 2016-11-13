@@ -14,6 +14,14 @@ unlist(Moist100)
 unlist(slope.100.rare[10])
 unlist(convex.100.rare[10])
 
+D100ba <- list()
+for (i in 1:7){
+  D100ba[[i]] <- tapply(pi*(D[,dbh.temp[i]]/10/2)^2/100^2, list(D$quad100,D$sp), sum)
+  D100ba[[i]][is.na(D100ba[[i]])] <- 0
+  D100ba[[i]] <- D100ba[[i]][-51,]
+}
+
+
 time <- c(1982,1985,1990,1995,2000,2005,2010)
 Time=c(rep(1982,50),
                            rep(1985,50),
@@ -24,9 +32,9 @@ Time=c(rep(1982,50),
                            rep(2010,50))
 
 
-temp.ab <- data.frame(SP = colnames(D100m[[1]]),
-                      ab10_3 = D100m[[1]][3,],
-                      ab10_4 = D100m[[1]][3,])
+temp.ab <- data.frame(SP = colnames(D100ba[[1]]),
+                      ab10_3 = D100ba[[1]][3,],
+                      ab10_4 = D100ba[[1]][3,])
 rownames(temp.ab) <- NULL
 
 
@@ -57,11 +65,11 @@ convex100.rm <-list()
 
 ###use convex mean
 for (i in 1:7){
-  WSG100.rm[[i]] <- com.mean.ab(D100m[[i]][,!(colnames(D100m[[1]]) %in% c("PIPECO","POULAR", ))],trait,"WSG")
-  Moist100.rm[[i]] <- com.mean.ab(D100m[[i]][,!(colnames(D100m[[1]]) %in% c("PIPECO"))],trait,"Moist")
-  slope100.rm[[i]] <- com.mean.ab(D100m[[i]][,!(colnames(D100m[[1]]) %in% c("FARAOC","POULAR"))],trait,"sp.slope.mean")
-  # convex100.rm[[i]] <- com.mean.ab(D100m[[i]][,!(colnames(D100m[[1]]) %in% c("ALSEBL","SWARS1"))],trait,"sp.convex.mean")
-  convex100.rm[[i]] <- com.mean.ab(D100m[[i]][,!(colnames(D100m[[1]]) %in% c("SWARS1", "ALSEBL", "FARAOC"))],trait,"sp.convex.mean")
+  WSG100.rm[[i]] <- com.mean.ab(D100ba[[i]][,!(colnames(D100ba[[1]]) %in% c("PIPECO","POULAR", ))],trait,"WSG")
+  Moist100.rm[[i]] <- com.mean.ab(D100ba[[i]][,!(colnames(D100ba[[1]]) %in% c("PIPECO"))],trait,"Moist")
+  slope100.rm[[i]] <- com.mean.ab(D100ba[[i]][,!(colnames(D100ba[[1]]) %in% c("FARAOC","POULAR"))],trait,"sp.slope.mean")
+  # convex100.rm[[i]] <- com.mean.ab(D100ba[[i]][,!(colnames(D100ba[[1]]) %in% c("ALSEBL","SWARS1"))],trait,"sp.convex.mean")
+  convex100.rm[[i]] <- com.mean.ab(D100ba[[i]][,!(colnames(D100ba[[1]]) %in% c("SWARS1", "ALSEBL", "FARAOC"))],trait,"sp.convex.mean")
 }
 
 

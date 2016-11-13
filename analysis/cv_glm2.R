@@ -65,6 +65,7 @@ SS <- NULL
 PREDS <- NULL
 K <- 10
 r2_lm0 <- NULL
+before <- proc.time()
 for (j in 1:100){
   temp <- cvFolds(nrow(data), K = 10, type = "random")
   temp <- data.frame(ID = temp$subsets, gr = temp$which) %>%
@@ -85,9 +86,11 @@ for (j in 1:100){
   r2_lm0[j] <- 1 - mean(PREDS, na.rm = T) / mean(SS, na.rm = T)
 
 }
+after <- proc.time()
+after - before
 
-quantile(r2_lm0, 0.05)
-quantile(r2_lm0, 0.95)
+quantile(r2_lm0, 0.025)
+quantile(r2_lm0, 0.975)
 mean(r2_lm0)
 
 #bootstrap
@@ -96,7 +99,7 @@ for (i in 1:1000){
     temp2 <- temp %>% sample_n(10, replace = T)
     r2[i] <- 1 - mean(temp2$PREDS) / mean(temp2$SS)
 }
-quantile(r2, 0.05)
+quantile(r2, 0.025)
 
 
 ######
@@ -156,8 +159,8 @@ for (j in 1:100){
 
 }
 
-quantile(r2_glm0, 0.05)
-quantile(r2_glm0, 0.95)
+quantile(r2_glm0, 0.025)
+quantile(r2_glm0, 0.975)
 mean(r2_glm0)
 
 #######
@@ -222,8 +225,8 @@ for (j in 1:100){
 
 }
 
-quantile(r2_lm1, 0.05)
-quantile(r2_lm1, 0.95)
+quantile(r2_lm1, 0.025)
+quantile(r2_lm1, 0.975)
 mean(r2_lm1)
 
 # #bootstrap
@@ -232,7 +235,7 @@ mean(r2_lm1)
 #     temp2 <- temp %>% sample_n(10, replace = T)
 #     r2[i] <- 1 - mean(temp2$PREDS) / mean(temp2$SS)
 # }
-# quantile(r2, 0.05)
+# quantile(r2, 0.025)
 
 
 ######
@@ -296,8 +299,8 @@ for (j in 1:100){
 
 }
 
-quantile(r2_glm1, 0.05)
-quantile(r2_glm1, 0.95)
+quantile(r2_glm1, 0.025)
+quantile(r2_glm1, 0.975)
 mean(r2_glm1)
 
-save.images("glm1ha.RData")
+save.image("glm1ha.RData")

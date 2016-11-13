@@ -12,6 +12,18 @@ library(gridExtra)
 library(dplyr)
 theme_set(theme_bw())
 
+
+WSG100 <- lapply(D100ba, function(x)com.mean.ab(x, trait, "WSG"))
+Moist100 <- lapply(D100ba, function(x)com.mean.ab(x, trait, "Moist"))
+slope100 <- lapply(D100ba, function(x)com.mean.ab(x, trait, "sp.slope.mean"))
+convex100 <- lapply(D100ba, function(x)com.mean.ab(x, trait, "sp.convex.mean"))
+
+
+WSG20 <- lapply(D20ba, function(x)com.mean.ab(x, trait, "WSG"))
+Moist20 <- lapply(D20ba, function(x)com.mean.ab(x, trait, "Moist"))
+slope20 <- lapply(D20ba, function(x)com.mean.ab(x, trait, "sp.slope.mean"))
+convex20 <- lapply(D20ba, function(x)com.mean.ab(x, trait, "sp.convex.mean"))
+
 kernel.20 <- data.frame(WSG=unlist(WSG20),
              convex=unlist(convex20),
              slope=unlist(slope20),
@@ -124,7 +136,7 @@ dummy1 <- data_frame(time = 1982,
 dummy2 <- data_frame(time = 1982,
     size = "1ha",
     trait = "moist",
-    val = c(0.3, 0.9))
+    val = c(-2, 4))
 
 dummy3 <- data_frame(time = 1982,
     size = "individual",
@@ -146,31 +158,42 @@ dummy0 <- fig_dat2 %>%
     filter(., size != "0.04ha" | trait != "convex" | (val > 0.035 & val < 0.085)) %>%
     filter(., size != "individual" | trait != "convex" | (val > -0.15 & val < 0.25)) %>%
     filter(., size != "0.04ha" | trait != "slope" | (val > 4 & val < 6)) %>%
-    filter(., size != "individual" | trait != "slope" | (val > 2 & val < 8))
-
-
-dummy0 %>% filter(., trait == "convex" & size == "0.04ha") %>% summary
+    filter(., size != "individual" | trait != "slope" | (val > 2 & val < 8)) %>%
+    filter(size != "0.04ha") %>%# new
+    mutate(size = factor(size, levels = c("1ha", "individual"))) %>%
+    mutate(size2 = factor(size, labels = c("1ha", "Individual")))
 
 dummy <- bind_rows(dummy0, dummy1, dummy2, dummy3, dummy4, dummy5) %>%
-  mutate(size = factor(size, levels = c("1ha", "0.04ha", "individual"))) %>%
+  filter(size != "0.04ha") %>%# new
+  mutate(size = factor(size, levels = c("1ha","individual"))) %>%
   mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
-  mutate(size2 = factor(size, labels = c("1ha", "0.04ha", "Individual"))) %>%
+  mutate(size2 = factor(size, labels = c("1ha", "Individual"))) %>%
   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Convexity~(m)", "Slope~(degrees)")))
 
 
-pdf("~/Dropbox/MS/TurnoverBCI/fig/mogemoge.pdf",
-  width = 10, height = 6.66, paper = "special")
+
+before <- proc.time()
+pdf("~/Dropbox/MS/TurnoverBCI/fig/fig1_BA.pdf",
+  width = 8, height = 5, paper = "special")
 
 ggplot(dummy0, aes(x = val)) +
-  facet_wrap(~ size2 + trait2, scale = "free",
-  labeller = labeller(trait2 = label_parsed, size2 = label_value)) +
-  geom_density(data = filter(dummy0, size != "individual"),adjust = 1,  aes(colour = as.factor(time))) +
+  facet_wrap(~ size2 + trait2, nrow = 2, scale = "free",
+  labeller = labeller(trait2 = label_parsed, sizes = label_value)) +
+  geom_density(data = filter(dummy0, size == "1ha"), adjust = 1,
+    aes(colour = as.factor(time))) +
+  guides(colour = guide_legend(title = NULL)) +
+  # guides(fill = guide_legend(override.aes = list(fille = as.factor(time)))) +
+  theme(panel.margin.x = unit(0.5, "lines"),
+  legend.position = c(1, 0.4), legend.justification = c(1,1),
+  legend.text = element_text(size = 7),
+  legend.background = element_rect(fill=alpha('blue', 0)),
+  legend.key.size = unit(0.4, "cm"),
+  axis.text.x = element_text(angle = 45)) +
+
   geom_blank(data = dummy) +
   geom_density(data = filter(dummy0, size == "individual"), adjust = 4, aes(colour = as.factor(time))) +
   ylab("Density") +
-  xlab("Trait values") +
-  # theme(strip.text.x = element_text(hjust = 0.5, vjust = 0.5),
-  #   panel.margin.x = unit(0.5, "lines"))
-  theme(panel.margin.x = unit(0.5, "lines"))
-
+  xlab("Trait values")
 dev.off()
+after <- proc.time()
+after - before

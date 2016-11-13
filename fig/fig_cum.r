@@ -238,7 +238,9 @@ dummy4 <- data_frame(x = 1,
 
 dummy <- bind_rows(dummy1, dummy2, dummy3, dummy4) %>%
   mutate(n_sp =1) %>%
-  mutate(trait2 = factor(trait2, levels = c("Wood density", "Moisture", "Convexity", "Slope")))
+  mutate(trait2 = factor(trait2, levels = c("Wood density", "Moisture", "Convexity", "Slope"))) %>%
+  mutate(census_1982 = 1) %>%
+  mutate(inc = "Increased")
 
 dummy_line <- data_frame(x = 1,
     trait2 = c("Wood density", "Moisture", "Convexity", "Slope"),
@@ -247,23 +249,56 @@ dummy_line <- data_frame(x = 1,
       sum(fig_dat$Moisture, na.rm = T),
       sum(fig_dat$Convexity, na.rm = T),
       sum(fig_dat$Slope, na.rm = T))) %>%
-        mutate(trait2 = factor(trait2, levels = c("Wood density", "Moisture", "Convexity", "Slope")))
+        mutate(trait2 = factor(trait2, levels = c("Wood density", "Moisture", "Convexity", "Slope"))) %>%
+    mutate(census_1982 = 1) %>%
+    mutate(inc = "Increased")
 
-postscript("~/Dropbox/MS/TurnoverBCI/fig/fig4_abs.eps", width = 6, height = 6)
-ggplot(fig_dat3, aes(x = n_sp, y= val)) +
-  geom_point() +
-  facet_wrap(~ trait2, scale = "free") +
-  geom_line() +
-  theme_bw() +
-  geom_blank(data = dummy) +
-  geom_hline(data = dummy_line, aes(yintercept = h), lty = 2) +
-  # geom_hline(yintercept = 100, lty = 2) +
-  ylab("Cumulative contributoin index") +
-  xlab("Number of species") +
-  geom_text(data = fig_dat3 %>% filter(n_sp <6),
-    aes(label = species), hjust= -0.2, vjust = 1,
-    fontface="italic", size = 3) +
-  geom_segment(data = fig_dat3 %>% filter(n_sp <6),
-    mapping = aes(x = n_sp + 10, y = val - 0.05, xend = n_sp + 2, yend= val),
-    arrow=arrow(length = unit(0.05, "inches")), size=0.25)
+fig_dat4 <- left_join(fig_dat3, ab.data, by = "sp") %>%
+  mutate(inc = ifelse(census_2010 - census_1982 > 0, "Increased", "Decreased"))
+
+##ver colour
+postscript("~/Dropbox/MS/TurnoverBCI/fig/fig4_abs.eps", width = 6, height = 6.5)
+
+  ggplot(fig_dat4, aes(x = n_sp, y= val, colour = inc)) +
+    geom_line(col = "black") +
+    geom_point() +
+    facet_wrap(~ trait2, scale = "free") +
+    theme_bw() +
+    geom_blank(data = dummy) +
+    geom_hline(data = dummy_line, aes(yintercept = h), lty = 2) +
+    # geom_hline(yintercept = 100, lty = 2) +
+    ylab("Cumulative contributoin index") +
+    xlab("Number of species") +
+    geom_text(data = fig_dat4 %>% filter(n_sp <6),
+      aes(label = species), hjust= -0.2, vjust = 1,
+      fontface="italic", size = 3) +
+    geom_segment(data = fig_dat4 %>% filter(n_sp <6),
+      mapping = aes(x = n_sp + 10, y = val - 0.05, xend = n_sp + 2, yend= val),
+      arrow=arrow(length = unit(0.05, "inches")), size=0.25) +
+    theme(legend.position = "bottom") +
+    scale_colour_manual(values = c("red4", "blue")) +
+    guides(colour = guide_legend(title = "Abundance"))
+
+dev.off()
+
+##ver white
+postscript("~/Dropbox/MS/TurnoverBCI/fig/fig4_abs.eps", width = 6, height = 6.5)
+
+  ggplot(fig_dat4, aes(x = n_sp, y= val)) +
+    geom_line(col = "black") +
+    geom_point() +
+    facet_wrap(~ trait2, scale = "free") +
+    theme_bw() +
+    geom_blank(data = dummy) +
+    geom_hline(data = dummy_line, aes(yintercept = h), lty = 2) +
+    # geom_hline(yintercept = 100, lty = 2) +
+    ylab("Cumulative contributoin index") +
+    xlab("Number of species") +
+    geom_text(data = fig_dat4 %>% filter(n_sp <6),
+      aes(label = species), hjust= -0.2, vjust = 1,
+      fontface="italic", size = 3) +
+    geom_segment(data = fig_dat4 %>% filter(n_sp <6),
+      mapping = aes(x = n_sp + 10, y = val - 0.05, xend = n_sp + 2, yend= val),
+      arrow=arrow(length = unit(0.05, "inches")), size=0.25)
+
 dev.off()

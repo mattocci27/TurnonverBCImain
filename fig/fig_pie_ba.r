@@ -7,7 +7,7 @@ setwd("~/Dropbox/BCI_Turnover")
 load("BCI_turnover20150611.RData")
 source("TurnoverSource20150611.r")
 # prepare data set
-ab.data <- as.data.frame(sapply(D20m,function(x)apply(x,2,sum)))
+ab.data <- as.data.frame(sapply(D20ba,function(x)apply(x,2,sum)))
 ab.data$sp <- rownames(ab.data)
 trait.temp <- data.frame(sp=rownames(trait),
            moist=trait$Moist,
@@ -149,7 +149,7 @@ sp_list <- WSGab %>%
   mutate(species = paste(genus, species)) %>%
   select(-genus)
 
-write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list.csv")
+write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list_ba.csv")
 
 
 
@@ -219,7 +219,7 @@ cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
 
 sp_vec2 <- c("PIPECO", "POULAR", "TET2PA", "SWARS1", "ALSEBL", "HYBAPR")
 
-sp_vec2 <- c("PIPECO", "POULAR", "TET2PA", "SWARS1", "ALSEBL", "HYBAPR", "FARAOC")
+sp_vec2 <- c("PIPECO", "POULAR", "QUARAS", "CAVAPL", "TET2PA", "HYBAPR", "FARAOC")
 
 fig_dat2 <- full_join(fig_dat, temp, by = "trait_sig") %>%
   arrange(val2) %>%
@@ -232,7 +232,7 @@ fig_dat2 <- full_join(fig_dat, temp, by = "trait_sig") %>%
   mutate(sp2 = ifelse(sp %in% sp_vec, as.character(sp), "Other species")) %>%
   mutate(sp3 = ifelse(sp %in% sp_vec2, as.character(sp), "Other species")) %>%
   mutate(sp2 = factor(sp2, levels = c("FARAOC", "HYBAPR", "PIPECA", "PIPECO", "POULAR", "PSYCLI", "Other species"))) %>%
-  mutate(sp3 = factor(sp3, levels = c("ALSEBL", "FARAOC", "HYBAPR", "PIPECO", "POULAR", "SWARS1", "TET2PA", "Other species")))
+   mutate(sp3 = factor(sp3, levels = c("PIPECO", "POULAR", "QUARAS", "CAVAPL", "TET2PA", "HYBAPR", "FARAOC", "Other species")))
 
 
 
@@ -248,7 +248,7 @@ lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
     mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
     mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)")))
 
-pdf("~/Dropbox/MS/TurnoverBCI/fig/ab_change_pi.pdf", width = 6, height = 3.6)
+pdf("~/Dropbox/MS/TurnoverBCI/fig/fig4_BA.pdf", width = 6, height = 3.6)
 lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
   mutate(x = 1.4, y = 0.8) %>%
   mutate(n2 = paste("n =", n, sep = " "))
@@ -279,9 +279,9 @@ dev.off()
 
 
 
-pdf("~/Dropbox/MS/TurnoverBCI/fig/pie_7_species.pdf", width = 6, height = 3.6)
+pdf("~/Dropbox/MS/TurnoverBCI/fig/BA_pie.pdf", width = 6, height = 3.6)
 # 6 species
-n <- 6
+n <- 7
 hues <- seq(15, 375, length=n+1)
 cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
 
