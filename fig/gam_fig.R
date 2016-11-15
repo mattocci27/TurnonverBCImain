@@ -110,6 +110,13 @@ moge <- data.frame(WSG = unlist(WSG100) - WSG100[[1]],
                    Time)
 
 
+moge20 <- data.frame(WSG = unlist(WSG20) - WSG20[[1]],
+                  Moist = unlist(Moist20) - Moist20[[1]],
+                  slope = unlist(slope20) - slope20[[1]],
+                  convex = unlist(convex20) - convex20[[1]],
+                  site = as.factor(rep(1:1250,7)),
+                  Time)
+
 
 moge100r <- data.frame(WSG = unlist(WSG100.rm) - WSG100.rm[[1]],
                    Moist = unlist(Moist100.rm) - Moist100.rm[[1]],
@@ -165,6 +172,17 @@ r2_50 <- gam(Moist ~  s(Time,k=4),data=moge50,
 r3_50 <- gam(convex ~  s(Time,k=4),data=moge50,
   correlation = corAR1(form = ~Time))
 r4_50 <- gam(slope ~  s(Time,k=4),data=moge50,
+  correlation = corAR1(form = ~Time))
+
+
+
+r1_20 <- gam(WSG ~  s(Time,k=4),data=moge20,
+  correlation = corAR1(form = ~Time))
+r2_20 <- gam(Moist ~  s(Time,k=4),data=moge20,
+  correlation = corAR1(form = ~Time))
+r3_20 <- gam(convex ~  s(Time,k=4),data=moge20,
+  correlation = corAR1(form = ~Time))
+r4_20 <- gam(slope ~  s(Time,k=4),data=moge20,
   correlation = corAR1(form = ~Time))
 
 
