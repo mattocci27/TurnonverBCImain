@@ -5,6 +5,7 @@ setwd("~/Dropbox/BCI_Turnover")
 load("BCI_turnover20141213.RData")
 library(dplyr)
 library(cvTools)
+library(MASS)
 ab_data <- as.data.frame(sapply(D100m,function(x)apply(x,2,sum)))
 ab_data$sp <- rownames(ab_data)
 
@@ -134,7 +135,9 @@ SS <- NULL
 PREDS <- NULL
 K <- 10
 r2_glm0 <- NULL
-for (j in 1:100){
+
+set.seed(615)
+for (j in 1:1){ # one ten folds
   temp <- cvFolds(nrow(data), K = 10, type = "random")
   temp <- data.frame(ID = temp$subsets, gr = temp$which) %>%
     arrange(ID)
@@ -158,6 +161,19 @@ for (j in 1:100){
   r2_glm0[j] <- 1 - mean(PREDS, na.rm = T) / mean(SS, na.rm = T)
 
 }
+
+mean_ <-mean(1 - PREDS/SS)
+se_ <- sd(1 - PREDS/SS) / sqrt(10)
+mean_
+mean_ - se_ * 1.96
+mean_ + se_ * 1.96
+
+> mean_
+[1] -0.09340514
+> mean_ - se_ * 1.96
+[1] -0.2536208
+> mean_ + se_ * 1.96
+[1] 0.0668105
 
 quantile(r2_glm0, 0.025)
 quantile(r2_glm0, 0.975)
@@ -272,7 +288,8 @@ SS <- NULL
 PREDS <- NULL
 K <- 10
 r2_glm1 <- NULL
-for (j in 1:100){
+set.seed(615)
+for (j in 1:1){
   temp <- cvFolds(nrow(data), K = 10, type = "random")
   temp <- data.frame(ID = temp$subsets, gr = temp$which) %>%
     arrange(ID)
@@ -299,6 +316,17 @@ for (j in 1:100){
 
 }
 
+mean_ <-mean(1 - PREDS/SS)
+se_ <- sd(1 - PREDS/SS) / sqrt(10)
+mean_
+mean_ - se_ * 1.96
+mean_ + se_ * 1.96
+
+[1] -0.09575124
+> mean_ - se_ * 1.96
+[1] -0.2476846
+> mean_ + se_ * 1.96
+[1] 0.05618216
 quantile(r2_glm1, 0.025)
 quantile(r2_glm1, 0.975)
 mean(r2_glm1)
