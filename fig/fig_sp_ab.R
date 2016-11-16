@@ -135,8 +135,8 @@ p20m_dat <- bind_rows(p20m_2, p20m_mean) %>%
 
 p_dat <- bind_rows(p20m_dat, p100m_dat, ab_sp) %>%
   mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
-  filter(size != "0.04ha") %>%
-  mutate(size = factor(size, levels = c("50ha", "1ha"))) %>%
+  # filter(size != "0.04ha") %>%
+  mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)")))
 
 my_breaks <- function(...){
@@ -190,10 +190,11 @@ lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
     trait = rep(c("WSG", "moist", "convex", "slope"), 3),
     sp2 = "Other species",
     sp3 = "Other species") %>%
-    filter(size != "0.04ha") %>%
-    mutate(size = factor(size, levels = c("50ha", "1ha"))) %>%
+    # filter(size != "0.04ha") %>%
+    mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
     mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
-    mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)")))
+    mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)"))) %>%
+    mutate(cat = "mean")
 
 
   #  ggplot(ds, aes(x = data)) +
@@ -217,11 +218,11 @@ ggplot(dat_mean %>% arrange(desc(ab1982)) %>% arrange(desc(sp2)), aes(y = ab2010
     # guide = guide_legend(title = "Abundance in 1982")) +
   scale_size_continuous(range = c(0.1, 15),
     guide = FALSE) +
-  geom_point(aes(size = census_1982, alpha = sp2), pch = 21, colour = "black", stroke = 0.5) +
+  geom_point(aes(size = census_1982, alpha = sp2), pch = 21, fill = "black", stroke = 0.5) +
   # scale_size_manual(values = c(1, 2, 4, 8, 10)) +
-  scale_fill_manual(values = c(cols_hex[1:2], "black", "gray"),
+  scale_fill_manual(values = c("black", "black", "black", "gray"),
     guide = guide_legend(title = "Species means",
-      override.aes = list(size = 4, alpha = c(0.8, 0.8, 0.5)),
+      override.aes = list(size = 4, alpha = c(0.5, 0.5, 0.5)),
       title.position = "top",
       order = 1)) +
   scale_alpha_manual(values = c(0.8, 0.8, 0.5, 1.2),
@@ -243,4 +244,41 @@ ggplot(dat_mean %>% arrange(desc(ab1982)) %>% arrange(desc(sp2)), aes(y = ab2010
   theme(legend.position = "bottom",
     legend.key.size = unit(0.2, "cm"))
   # theme(legend.justification=c(1,0), legend.position=c(1,0))
+dev.off()
+
+
+
+pdf("~/Dropbox/MS/TurnoverBCI/fig/fig3_new.pdf", width = 6, height = 5, paper = "special")
+
+  ggplot(p_dat2 %>% arrange(cat), aes(y = ab2010/ab1982, x = val, shape = cat, fill = cat, alpha = cat, colour = cat)) +
+    geom_point() +
+    facet_grid(size ~ trait2, scale = "free_x", labeller = labeller(trait2 = label_parsed, size = label_value)) +
+    scale_shape_manual(values = c(4, 21), guide = F) +
+    scale_fill_manual(values = c("gray", "black"), guide = F) +
+    scale_colour_manual(values = c("gray", "black"), guide = F) +
+    scale_alpha_manual(values = c(0.5, 0.8),
+      labels = c(each = "Species-subplot combination", mean = "Species mean"),
+      guide = guide_legend(override.aes =
+        list(alpha = c(0.5, 0.8),
+          fill = c("gray", "black"),
+          colour = c("gray", "black"),
+          shape = c(4, 21))))+
+    scale_y_log10(breaks = my_breaks()) +
+    theme_bw() +
+    geom_hline(yintercept = 1, lty = 2) +
+    # theme(legend.position = "none") +
+    ylab("(No. of individual in 2010 + 1) / \n (No. of individual in 1982 + 1)") +
+    xlab("Trait values") +
+    geom_text(data = lab_dat, aes(label = lab, x = x, y = y),
+     hjust = 0, show.legend = FALSE) +
+    theme(legend.position = "bottom",
+      legend.key.size = unit(0.2, "cm"),
+      legend.title = element_blank()) +
+    theme(
+      strip.text = element_text(size = 8),
+      axis.title = element_text(size = 11),
+      axis.text.x = element_text(size = 7.5, angle = 45),
+      axis.text.y = element_text(size = 7.5),
+      legend.text = element_text(size = 8))
+
 dev.off()
