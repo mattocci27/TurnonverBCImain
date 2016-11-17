@@ -259,7 +259,7 @@ pdf("~/Dropbox/MS/TurnoverBCI/fig/fig3_new.pdf", width = 6, height = 5, paper = 
     scale_alpha_manual(values = c(0.5, 0.8),
       labels = c(each = "Species-subplot combination", mean = "Species mean"),
       guide = guide_legend(override.aes =
-        list(alpha = c(0.5, 0.8),
+        list(alpha = c(1, 1),
           fill = c("gray", "black"),
           colour = c("gray", "black"),
           shape = c(4, 21))))+
