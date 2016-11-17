@@ -34,7 +34,6 @@ subplots <- paste(0, 0:4, 0, rep(0:4, each=5), sep = "")
 # function to make names of local communites
 Quad.func <- function(data, size = 20){
   # return(temp.x)
-
   data2 <- data %>% mutate(temp.x = as.integer(gx / size) + 1) %>%
   mutate(temp.y = as.integer(gy / size) + 1) %>%
   mutate(temp.quad = paste(temp.x, temp.y, sep = "_"))
@@ -53,31 +52,39 @@ Quad.func <- function(data, size = 20){
 # moge <- lapply(bci.full, function(x) Quad.func(x, size = 20) %>%
 #   Quad.func(., size = 100))
 
-moge <- list()
-for (i in 1:7){
-  moge[[i]] <- bci.full[[i]] %>% Quad.func(., size = 20) %>% Quad.func(., size = 100)
-}
-
 quad100 <-D$quad100 %>% unique
-j <- 5
+quad100 <- quad100[quad100!= "NA_NA"] %>% as.character
+
 temp20m <- list()
 a.temp <- paste("a",1:7,sep="")
 
-for (i in 1:7){
-  temp <- D %>%
-    filter(quad100 == quad100[j])
-  temp20m[[i]] <- tapply(temp[,a.temp[i]], list(temp$quadrat,temp$sp), sum, na.rm=T)
-	temp20m[[i]][is.na(temp20m[[i]])] <- 0
-	temp20m[[i]] <- temp20m[[i]][-1,]
-}
+before <- proc.time()
+for (j in 1:50){
+  for (i in 1:7){
+    temp <- D %>%
+      filter(quad100 == quad100[j])
+    temp20m[[i]] <- tapply(temp[,a.temp[i]], list(temp$quadrat,temp$sp), sum, na.rm=T)
+    temp20m[[i]][is.na(temp20m[[i]])] <- 0
+    temp20m[[i]] <- temp20m[[i]][-1,]
+  }
 
-temp20m.all <- rbind(temp20m[[1]],
-  temp20m[[2]],
-  temp20m[[3]],
-  temp20m[[4]],
-  temp20m[[5]],
-  temp20m[[6]],
-  temp20m[[7]])
+  temp20m.all <- rbind(temp20m[[1]],
+    temp20m[[2]],
+    temp20m[[3]],
+    temp20m[[4]],
+    temp20m[[5]],
+    temp20m[[6]],
+    temp20m[[7]])
+
+    pdf(paste("~/Desktop/", quad100[j], ".pdf", sep = ""), width = 8, height = 3)
+    plot.nmds(D20m.all, range = "all", n.census=7, engine="monoMDS",k=3,trymax=50, parallel = 4)
+    dev.off()
+}
+after <- proc.time()
+after - before
+
+
+
 
 plot.nmds(temp20m.all,range="all",axis="1-2",n.census=7, engine="monoMDS",k=3,trymax=50, parallel = 4)
 
@@ -128,52 +135,54 @@ arrow.col <- gray.colors(7)
 
 save.image("nmds_20_GCE.RData")
 
-samp <- temp20m.all
-range <- "all"
-engine <- "monoMDS"
-k <- 3
-trymax <- 50
-n.census <- 7
-axis <-"1-2"
-parallel <- 4
+# samp <- temp20m.all
+# range <- "all"
+# engine <- "monoMDS"
+# k <- 3
+# trymax <- 50
+# n.census <- 7
+# axis <-"1-2"
+# parallel <- 4
 
 arrow.col <- gray.colors(12)
 
-plot.nmds <- function(samp, range=c("north","south","all"), axis = c("1-2","1-3","2-3"), engine, k = 3, trymax =50, n.census = 7, parallel = 4){
+plot.nmds <- function(samp, range=c("north","south","all"), engine, k = 3, trymax =50, n.census = 7, parallel = 4){
 
   com.nmds <- metaMDS(samp,engine=engine,k=k, trymax=trymax, parallel = parallel)
-  if (axis == "1-2") {
-      axis1 <- "MDS1"
-      axis2 <- "MDS2"
-      lab1 <- "NMDS axis1"
-      lab2 <- "NMDS axis2"
-    } else if (axis == "1-3") {
-      axis1 <- "MDS1"
-      axis2 <- "MDS3"
-      lab1 <- "NMDS axis1"
-      lab2 <- "NMDS axis3"
-    } else if (axis == "2-3") {
-      axis1 <- "MDS2"
-      axis2 <- "MDS3"
-      lab1 <- "NMDS axis2"
-      lab2 <- "NMDS axis3"
-    }
 
-  if (range=="north"){
-      range2 <- grep("_4$|_5$",rownames(samp))
-    } else if(range=="south"){
-      range2 <- grep("_1$|_2$",rownames(samp))
-    } else if(range=="all") {range2 <- 1:nrow(samp)}
+  # if (axis == "1-2") {
+  #     axis1 <- "MDS1"
+  #     axis2 <- "MDS2"
+  #     lab1 <- "NMDS axis1"
+  #     lab2 <- "NMDS axis2"
+  #   } else if (axis == "1-3") {
+  #     axis1 <- "MDS1"
+  #     axis2 <- "MDS3"
+  #     lab1 <- "NMDS axis1"
+  #     lab2 <- "NMDS axis3"
+  #   } else if (axis == "2-3") {
+  #     axis1 <- "MDS2"
+  #     axis2 <- "MDS3"
+  #     lab1 <- "NMDS axis2"
+  #     lab2 <- "NMDS axis3"
+  #   }
+  #
+  # if (range=="north"){
+  #     range2 <- grep("_4$|_5$",rownames(samp))
+  #   } else if(range=="south"){
+  #     range2 <- grep("_1$|_2$",rownames(samp))
+  #   } else if(range=="all") {range2 <- 1:nrow(samp)}
+  #
+  # # plot(com.nmds$points[range2,] ~ com.nmds$points[range2,],
+  # #   xlim=c(-0.5, 0.5),
+  # #   ylim=c(-0.5, 0.5),
+  # #   type="n",
+  # #   xlab=paste(lab1),
+  # #   ylab=paste(lab2),
+  # #   main = paste(range))
 
-  # plot(com.nmds$points[range2,] ~ com.nmds$points[range2,],
-  #   xlim=c(-0.5, 0.5),
-  #   ylim=c(-0.5, 0.5),
-  #   type="n",
-  #   xlab=paste(lab1),
-  #   ylab=paste(lab2),
-  #   main = paste(range))
-
-  plot(com.nmds$points[range2,] ~ com.nmds$points[range2,],
+  plot_func <- function(range2, axis1, axis2, lab1, lab2){
+    plot(com.nmds$points[range2,] ~ com.nmds$points[range2,],
     xlim=c(-0.5, 0.5),
     ylim=c(-0.5, 0.5),
     type="n",
@@ -195,9 +204,23 @@ plot.nmds <- function(samp, range=c("north","south","all"), axis = c("1-2","1-3"
       y2 <- com.nmds$points[range2,paste(axis2)][N2:N2.2]
 
       arrows(x1,y1,x2,y2,length=0.05,col=arrow.col[i])
+      }
     }
 
+  par(mfrow = c(1,3))
+  plot_func(range2, axis1 = "MDS1", axis2 = "MDS2",
+    lab1 = "NMDS axis1", lab2 = "NMDS axis2")
+  plot_func(range2, axis1 = "MDS1", axis2 = "MDS3",
+    lab1 = "NMDS axis1", lab2 = "NMDS axis3")
+  plot_func(range2, axis1 = "MDS2", axis2 = "MDS3",
+    lab1 = "NMDS axis2", lab2 = "NMDS axis3")
+  par(mfrow = c(1,1))
 }
+
+plot.nmds(D20m.all, range = "all", n.census=7, engine="monoMDS",k=3,trymax=50, parallel = 4)
+
+
+
 
 par(mfrow = c(1,3))
 plot.nmds(D20m.all,range="all",axis="1-2",n.census=7, engine="monoMDS",k=3,trymax=50, parallel = 4)
