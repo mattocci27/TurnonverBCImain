@@ -135,23 +135,23 @@ taxa <- read.csv("~/Dropbox/MS/TurnoverBCI/nomenclature_R_20120305_Rready-2.csv"
 sp_list <- WSGab %>%
   mutate(Wood_density = round(index, 4)) %>%
   mutate(Abundance_change = round(delta_ab, 4)) %>%
-  select(sp, Abundance_change, Wood_density, -index) %>%
+  dplyr::select(sp, Abundance_change, Wood_density, -index) %>%
   full_join(., moistab, by = "sp") %>%
   mutate(Moisture = round(index, 4)) %>%
-  select(-index) %>%
+  dplyr::select(-index) %>%
   full_join(., convexab, by = "sp") %>%
   mutate(Convexity = round(index, 4)) %>%
-  select(-index) %>%
+  dplyr::select(-index) %>%
   full_join(., slopeab, by = "sp") %>%
   mutate(Slope = round(index, 4), sp6 = sp) %>%
   left_join(., taxa, by = "sp6") %>%
-  select(sp, family, genus, species,
+  dplyr::select(sp, family, genus, species,
     Abundance_change, Wood_density, Moisture, Convexity, Slope) %>%
   arrange(sp) %>%
   mutate(species = paste(genus, species)) %>%
-  select(-genus)
+  dplyr::select(-genus)
 
-# write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list.csv")
+write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list.csv")
 
 
 
@@ -276,10 +276,22 @@ postscript("~/Dropbox/MS/TurnoverBCI/fig/fig4_abs.eps", width = 6, height = 6.5)
       mapping = aes(x = n_sp + 10, y = val - 0.05, xend = n_sp + 2, yend= val),
       arrow=arrow(length = unit(0.05, "inches")), size=0.25) +
     theme(legend.position = "bottom") +
-    scale_colour_manual(values = c("red4", "blue")) +
+    scale_colour_manual(values = c("red3", "royalblue2")) +
     guides(colour = guide_legend(title = "Abundance"))
 
 dev.off()
+
+###
+# WSG
+# Mean   :0.5586
+
+yy<-dnorm(seq(-0.2,0.8, length=100), mean = 0.399, sd = 0.128)
+xx <- seq(-0.2,0.8, length=100)
+plot(yy ~ xx , type = "l")
+
+yy<-dnorm(seq(-0.2,0.8, length=100), mean = 0.399 + 0.003, sd = 0.128)
+xx <- seq(-0.2,0.8, length=100)
+points(yy ~ xx , type = "l", col = "blue")
 
 ##ver white
 postscript("~/Dropbox/MS/TurnoverBCI/fig/fig4_abs.eps", width = 6, height = 6.5)
