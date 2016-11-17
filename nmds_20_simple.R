@@ -49,100 +49,6 @@ Quad.func <- function(data, size = 20){
 
 }
 
-# moge <- lapply(bci.full, function(x) Quad.func(x, size = 20) %>%
-#   Quad.func(., size = 100))
-
-quad100 <-D$quad100 %>% unique
-quad100 <- quad100[quad100!= "NA_NA"] %>% as.character
-
-temp20m <- list()
-a.temp <- paste("a",1:7,sep="")
-
-before <- proc.time()
-for (j in 1:50){
-  for (i in 1:7){
-    temp <- D %>%
-      filter(quad100 == quad100[j])
-    temp20m[[i]] <- tapply(temp[,a.temp[i]], list(temp$quadrat,temp$sp), sum, na.rm=T)
-    temp20m[[i]][is.na(temp20m[[i]])] <- 0
-    temp20m[[i]] <- temp20m[[i]][-1,]
-  }
-
-  temp20m.all <- rbind(temp20m[[1]],
-    temp20m[[2]],
-    temp20m[[3]],
-    temp20m[[4]],
-    temp20m[[5]],
-    temp20m[[6]],
-    temp20m[[7]])
-
-    pdf(paste("~/Desktop/", quad100[j], ".pdf", sep = ""), width = 8, height = 3)
-    plot.nmds(D20m.all, range = "all", n.census=7, engine="monoMDS",k=3,trymax=50, parallel = 4)
-    dev.off()
-}
-after <- proc.time()
-after - before
-
-
-
-
-plot.nmds(temp20m.all,range="all",axis="1-2",n.census=7, engine="monoMDS",k=3,trymax=50, parallel = 4)
-
-
-D20m.all <- rbind(D20m[[1]][subplots,],
-    D20m[[2]][subplots,],
-    D20m[[3]][subplots,],
-    D20m[[4]][subplots,],
-    D20m[[5]][subplots,],
-    D20m[[6]][subplots,],
-    D20m[[7]][subplots,])
-
-par(mfrow = c(1,3))
-plot.nmds(D20m.all,range="all",axis="1-2",n.census=7, engine="monoMDS",k=3,trymax=50, parallel = 4)
-plot.nmds(D20m.all,range="all",axis="1-3",n.census=7, engine="monoMDS",k=3,trymax=50, parallel = 4)
-plot.nmds(D20m.all,range="all",axis="2-3",n.census=7, engine="monoMDS",k=3,trymax=50, parallel = 4)
-par(mfrow = c(1,1))
-
-
-D20m.all <- rbind(D20m[[1]][subplots,],
-    D20m[[2]][subplots,],
-    D20m[[3]][subplots,],
-    D20m[[4]][subplots,],
-    D20m[[5]][subplots,],
-    D20m[[6]][subplots,],
-    D20m[[7]][subplots,])
-
-###PIPECO and POULAR do not change their abundance
-D20m.all.r <- D20m.all
-D20m.all.r[,"PIPECO"] <- rep(D20m[[1]][,"PIPECO"],7)
-D20m.all.r[,"POULAR"] <- rep(D20m[[1]][,"POULAR"],7)
-
-# D20m.all <- rbind(D20m[[1]])
-# cl <- makeCluster(4)
-# clusterEvalQ(cl, library(vegan))
-# clusterExport(cl, varlist = "D20m.all")
-system.time(com.nmds.all <- metaMDS(D20m.all,engine="monoMDS",k=3, trymax=50, parallel = 4))
-
-com.nmds.all$points[1:50,1]
-
-
-# com.nmds.south.r <- metaMDS(D20m.south.r,engine="monoMDS",k=3, trymax=50)
-# com.nmds.north.r <- metaMDS(D20m.north.r,engine="monoMDS",k=3, trymax=50)
-# com.nmds.all.r <- metaMDS(D20m.all.r,engine="monoMDS",k=3, trymax=50)
-#
-
-arrow.col <- gray.colors(7)
-
-save.image("nmds_20_GCE.RData")
-
-# samp <- temp20m.all
-# range <- "all"
-# engine <- "monoMDS"
-# k <- 3
-# trymax <- 50
-# n.census <- 7
-# axis <-"1-2"
-# parallel <- 4
 
 arrow.col <- gray.colors(12)
 
@@ -187,7 +93,8 @@ plot.nmds <- function(samp, range=c("north","south","all"), engine, k = 3, tryma
     ylim=c(-0.5, 0.5),
     type="n",
     xlab=paste(lab1),
-    ylab=paste(lab2))
+    ylab=paste(lab2),
+    main = paste(temp_quad))
 
     n.samp <- length(range2)/n.census
 
@@ -216,6 +123,145 @@ plot.nmds <- function(samp, range=c("north","south","all"), engine, k = 3, tryma
     lab1 = "NMDS axis2", lab2 = "NMDS axis3")
   par(mfrow = c(1,1))
 }
+
+
+# moge <- lapply(bci.full, function(x) Quad.func(x, size = 20) %>%
+#   Quad.func(., size = 100))
+
+quad100 <-D$quad100 %>% unique
+quad100 <- quad100[quad100!= "NA_NA"] %>% as.character
+
+temp20m <- list()
+a.temp <- paste("a",1:7,sep="")
+D <- D %>% mutate(quad100_2 = as.character(quad100))
+
+before <- proc.time()
+for (j in 1:50){
+  for (i in 1:7){
+    temp_quad <- quad100[j]
+    temp <- D %>%
+      filter(quad100_2 == temp_quad)
+
+    temp20m[[i]] <- tapply(temp[,a.temp[i]], list(temp$quadrat,temp$sp), sum, na.rm=T)
+    temp20m[[i]][is.na(temp20m[[i]])] <- 0
+    # temp20m[[i]] <- temp20m[[i]][-1,]
+  }
+
+  temp20m.all <- rbind(temp20m[[1]],
+    temp20m[[2]],
+    temp20m[[3]],
+    temp20m[[4]],
+    temp20m[[5]],
+    temp20m[[6]],
+    temp20m[[7]])
+
+    pdf(paste("~/Desktop/20mNMDS/", temp_quad, ".pdf", sep = ""), width = 8, height = 3)
+    plot.nmds(temp20m.all, range = "all", n.census=7, engine="monoMDS", k = 3, trymax = 100, parallel = 8)
+    dev.off()
+}
+after <- proc.time()
+after - before
+
+
+
+## random
+samp <- D20m.all
+plot.nmds2 <- function(samp, range=c("north","south","all"), engine, k = 3, trymax = 200, n.census = 7, parallel = 8){
+
+  com.nmds <- metaMDS(samp,engine=engine,k=k, trymax=trymax, parallel = parallel)
+
+
+  plot_func <- function(range2, axis1, axis2, lab1, lab2){
+    plot(1 , 1,
+    xlim=c(-0.5, 0.5),
+    ylim=c(-0.5, 0.5),
+    type="n",
+    xlab=paste(lab1),
+    ylab=paste(lab2))
+
+    range2 <- 1:nrow(samp)
+    n.samp <- length(range2)/n.census
+
+    for (i in 1:(n.census-1)) {
+      N1 <- n.samp * (i-1) + 1
+      N1.2 <- n.samp * i
+
+      N2 <- n.samp * i + 1
+      N2.2 <- n.samp * (i+1)
+
+      x1 <- com.nmds$points[range2,paste(axis1)][N1:N1.2]
+      y1 <- com.nmds$points[range2,paste(axis2)][N1:N1.2]
+      x2 <- com.nmds$points[range2,paste(axis1)][N2:N2.2]
+      y2 <- com.nmds$points[range2,paste(axis2)][N2:N2.2]
+
+      arrows(x1,y1,x2,y2,length=0.05,col=arrow.col[i])
+      }
+    }
+
+  par(mfrow = c(1,3))
+  plot_func(range2, axis1 = "MDS1", axis2 = "MDS2",
+    lab1 = "NMDS axis1", lab2 = "NMDS axis2")
+  plot_func(range2, axis1 = "MDS1", axis2 = "MDS3",
+    lab1 = "NMDS axis1", lab2 = "NMDS axis3")
+  plot_func(range2, axis1 = "MDS2", axis2 = "MDS3",
+    lab1 = "NMDS axis2", lab2 = "NMDS axis3")
+  par(mfrow = c(1,1))
+}
+
+subplots <- sample(rownames(D20m[[1]]), 50)
+
+D20m.all <- rbind(D20m[[1]][subplots,],
+    D20m[[2]][subplots,],
+    D20m[[3]][subplots,],
+    D20m[[4]][subplots,],
+    D20m[[5]][subplots,],
+    D20m[[6]][subplots,],
+    D20m[[7]][subplots,])
+
+par(mfrow = c(1,3))
+plot.nmds2(D20m.all, range = "all", n.census = 7, engine="monoMDS", k = 3, trymax = 50, parallel = 8)
+par(mfrow = c(1,1))
+
+
+D20m.all <- rbind(D20m[[1]][subplots,],
+    D20m[[2]][subplots,],
+    D20m[[3]][subplots,],
+    D20m[[4]][subplots,],
+    D20m[[5]][subplots,],
+    D20m[[6]][subplots,],
+    D20m[[7]][subplots,])
+
+###PIPECO and POULAR do not change their abundance
+D20m.all.r <- D20m.all
+D20m.all.r[,"PIPECO"] <- rep(D20m[[1]][,"PIPECO"],7)
+D20m.all.r[,"POULAR"] <- rep(D20m[[1]][,"POULAR"],7)
+
+# D20m.all <- rbind(D20m[[1]])
+# cl <- makeCluster(4)
+# clusterEvalQ(cl, library(vegan))
+# clusterExport(cl, varlist = "D20m.all")
+system.time(com.nmds.all <- metaMDS(D20m.all,engine="monoMDS",k=3, trymax=50, parallel = 4))
+
+com.nmds.all$points[1:50,1]
+
+
+# com.nmds.south.r <- metaMDS(D20m.south.r,engine="monoMDS",k=3, trymax=50)
+# com.nmds.north.r <- metaMDS(D20m.north.r,engine="monoMDS",k=3, trymax=50)
+# com.nmds.all.r <- metaMDS(D20m.all.r,engine="monoMDS",k=3, trymax=50)
+#
+
+arrow.col <- gray.colors(7)
+
+save.image("nmds_20_GCE.RData")
+
+# samp <- temp20m.all
+# range <- "all"
+# engine <- "monoMDS"
+# k <- 3
+# trymax <- 50
+# n.census <- 7
+# axis <-"1-2"
+# parallel <- 4
 
 plot.nmds(D20m.all, range = "all", n.census=7, engine="monoMDS",k=3,trymax=50, parallel = 4)
 
@@ -383,6 +429,8 @@ nmds.south <- nmds.boot(com.nmds.south, n.census=7, n.rep=5000)
 
 nmds.north <- nmds.boot(com.nmds.north, n.census=7, n.rep=5000)
 
+
+
 nmds.boot(com.nmds.all, n.census=7, n.rep=5000)
 
 
@@ -396,7 +444,34 @@ nmds.south.r <- nmds.boot(com.nmds.south.r, n.census=7, n.rep=5000)
 
 nmds.north.r <- nmds.boot(com.nmds.north.r, n.census=7, n.rep=5000)
 
-nmds.all.r <- nmds.boot(com.nmds.all.r, n.census=7, n.rep=5000)
+before <- proc.time()
+for (j in 1:50){
+  for (i in 1:7){
+    temp_quad <- quad100[j]
+    temp <- D %>%
+      filter(quad100_2 == temp_quad)
+
+    temp20m[[i]] <- tapply(temp[,a.temp[i]], list(temp$quadrat,temp$sp), sum, na.rm=T)
+    temp20m[[i]][is.na(temp20m[[i]])] <- 0
+    # temp20m[[i]] <- temp20m[[i]][-1,]
+  }
+
+  temp20m.all <- rbind(temp20m[[1]],
+    temp20m[[2]],
+    temp20m[[3]],
+    temp20m[[4]],
+    temp20m[[5]],
+    temp20m[[6]],
+    temp20m[[7]])
+
+    com.nmds <- metaMDS(temp20m.all,engine="monoMDS",k=3, trymax=50, parallel = 4)
+    res <- nmds.boot(com.nmds, n.census=7, n.rep=5000)
+    write.csv(res, paste("~/Desktop/", temp_quad, ".csv", sep = ""))
+  }
+after <- proc.time()
+after - before
+
+
 write.csv(nmds.south.r,"s_r.csv")
 write.csv(nmds.north.r,"n_r.csv")
 write.csv(nmds.all.r,"all_r.csv")
