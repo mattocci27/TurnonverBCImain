@@ -102,6 +102,15 @@ for (i in 1:7){
   convex20.rm[[i]] <- com.mean.ab(D20m[[i]][,!(colnames(D20m[[1]]) %in% c("PIPECO","POULAR"))],trait,"sp.convex.mean")
 }
 
+# apply(D100m[[1]], 2, sum)
+#
+# moge <- sapply(D100m, function(x)apply(x,2,sum)) %>% t
+# com.mean.ab(moge, trait, "WSG") - 0.5933383
+#
+# moge <- data.frame(a = com.mean.ab(moge, trait, "WSG"), b = sapply(WSG100, mean))
+
+
+
 moge <- data.frame(WSG = unlist(WSG100) - WSG100[[1]],
                    Moist = unlist(Moist100) - Moist100[[1]],
                    slope = unlist(slope100) - slope100[[1]],
