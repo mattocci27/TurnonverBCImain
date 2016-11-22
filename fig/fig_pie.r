@@ -2,6 +2,7 @@ rm(list = ls()) # This clears everything from memory.
 
 library(dplyr)
 library(ggplot2)
+library(cowplot)
 
 setwd("~/Dropbox/BCI_Turnover")
 load("BCI_turnover20150611.RData")
@@ -40,6 +41,7 @@ trait.temp <- data.frame(sp=rownames(trait),
 ab.t.data <- merge(ab.data,trait.temp,by="sp")
 rownames(ab.t.data) <- ab.t.data$sp
 ab.t.data2 <- na.omit(ab.t.data)
+
 
 #this may be useful way to detect species.
 #using the product of delta abundance and deviaiton from mean (or median) trait for each species
@@ -92,7 +94,9 @@ slopeab <- slopeab[order(slopeab$index),]
 WSGab <- data.frame(sp = ab.t.data$sp,
                     delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) - ab.t.data$census_1982/sum(ab.t.data$census_1982),
                     WSG = ab.t.data$WSG,
-                    WSG_delta =ab.t.data$WSG - mean(ab.t.data$WSG,na.rm=T))
+                    WSG_delta =ab.t.data$WSG - mean(WSG100[[1]])) %>%
+                    mutate(WSG_delta2 = WSG - mean(WSG, na.rm = T))
+
 WSGab$index <- WSGab$delta_ab * WSGab$WSG_delta*100
 
 WSGab <- WSGab[order(WSGab$index),]
@@ -101,7 +105,7 @@ WSGab <- WSGab[order(WSGab$index),]
 moistab <- data.frame(sp = ab.t.data$sp,
                     delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) - ab.t.data$census_1982/sum(ab.t.data$census_1982),
                     moist = ab.t.data$moist,
-                    moist_delta =ab.t.data$moist - mean(ab.t.data$moist,na.rm=T))
+                    moist_delta = ab.t.data$moist - mean(Moist100[[1]]))
 moistab$index <- moistab$delta_ab * moistab$moist_delta*100
 
 moistab <- moistab[order(moistab$index),]
@@ -110,7 +114,7 @@ moistab <- moistab[order(moistab$index),]
 convexab <- data.frame(sp = ab.t.data$sp,
                     delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) - ab.t.data$census_1982/sum(ab.t.data$census_1982),
                     convex = ab.t.data$convex,
-                    convex_delta =ab.t.data$convex - mean(ab.t.data$convex,na.rm=T))
+                    convex_delta =ab.t.data$convex - mean(convex100[[1]]))
 convexab$index <- convexab$delta_ab * convexab$convex_delta*100
 
 convexab <- convexab[order(convexab$index),]
@@ -120,11 +124,10 @@ convexab <- convexab[order(convexab$index),]
 slopeab <- data.frame(sp = ab.t.data$sp,
                     delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) - ab.t.data$census_1982/sum(ab.t.data$census_1982),
                     slope = ab.t.data$slope,
-                    slope_delta =ab.t.data$slope - mean(ab.t.data$slope,na.rm=T))
+                    slope_delta =ab.t.data$slope - mean(slope100[[1]]))
 slopeab$index <- slopeab$delta_ab * slopeab$slope_delta*100
 
 slopeab <- slopeab[order(slopeab$index),]
-
 
 # sp list for appendix ====================================================
 
@@ -149,7 +152,7 @@ sp_list <- WSGab %>%
   mutate(species = paste(genus, species)) %>%
   select(-genus)
 
-write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list.csv")
+# write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list.csv")
 
 
 
@@ -219,7 +222,15 @@ cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
 
 sp_vec2 <- c("PIPECO", "POULAR", "TET2PA", "SWARS1", "ALSEBL", "HYBAPR")
 
-sp_vec2 <- c("PIPECO", "POULAR", "TET2PA", "SWARS1", "ALSEBL", "HYBAPR", "FARAOC")
+sp_vec2 <- c("FARAOC", "HYBAPR", "PIPECO", "POULAR")
+
+#sp
+sp1 <- sp_list %>% arrange(desc(Wood_density)) %>% head(6) %>% .$sp %>% as.character
+sp2 <- sp_list %>% arrange(desc(Moisture)) %>% head(1) %>% .$sp %>% as.character
+sp3 <- sp_list %>% arrange(desc(Convexity)) %>% head(6) %>% .$sp %>% as.character
+sp4 <- sp_list %>% arrange((Slope)) %>% head(3) %>% .$sp %>% as.character
+
+sp_vec3 <- c(sp1,sp2,sp3,sp4) %>% unique
 
 fig_dat2 <- full_join(fig_dat, temp, by = "trait_sig") %>%
   arrange(val2) %>%
@@ -232,9 +243,9 @@ fig_dat2 <- full_join(fig_dat, temp, by = "trait_sig") %>%
   mutate(sp2 = ifelse(sp %in% sp_vec, as.character(sp), "Other species")) %>%
   mutate(sp3 = ifelse(sp %in% sp_vec2, as.character(sp), "Other species")) %>%
   mutate(sp2 = factor(sp2, levels = c("FARAOC", "HYBAPR", "PIPECA", "PIPECO", "POULAR", "PSYCLI", "Other species"))) %>%
-  mutate(sp3 = factor(sp3, levels = c("ALSEBL", "FARAOC", "HYBAPR", "PIPECO", "POULAR", "SWARS1", "TET2PA", "Other species")))
-
-
+  mutate(sp3 = factor(sp3, levels = c("FARAOC", "HYBAPR", "PIPECO", "POULAR", "Other species"))) %>%
+  mutate(sp4 = ifelse(sp %in% sp_vec3, as.character(sp), "Other species")) %>%
+  mutate(sp4 = factor(sp4, levels = c(sort(sp_vec3), "Other species")))
 
 
 
@@ -311,4 +322,193 @@ lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
   xlab("") + ylab("") +
   theme(legend.position = "bottom",
     legend.margin = unit(-0.2, "cm"))
+
 dev.off()
+
+####
+# 4 species
+pdf("/Users/mattocci/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/pie_4_species.pdf", width = 6, height = 3.6)
+
+n <- 4
+hues <- seq(15, 375, length=n+1)
+cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
+
+
+lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
+  mutate(x = 1.4, y = 0.8) %>%
+  mutate(n2 = paste("n =", n, sep = " "))
+
+# lab_dat2 <- lab_dat %>% dplyr::select(trait2, sig) %>%
+#   mutate(temp = paste("(", letters[1:8], ")", sep = "")) %>%
+#   mutate(x = 1.0, y = 0.2)
+
+  ggplot(fig_dat2) +
+  geom_bar(aes(y = val2, x = mean2/2,
+    fill = as.factor(sp3), width = mean2), position = "fill", stat="identity", color = "black", size = 0.05) +
+  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
+    size = 4, vjust = 0) +
+  # geom_text(data = lab_dat2, aes(label = temp, x = 2, y = 0.1),
+  #     size = 4, vjust = 0) +
+  facet_grid(sig ~ trait2) +
+  coord_polar(theta="y") +
+  # scale_fill_gradient(low = "blue", high = "red") +
+  # guides(fill = FALSE) +
+  # scale_fill_manual(values = ifelse(levels(fig_dat2$sp) == "POULAR", "red", "gray")) +
+  # scale_fill_manual(values = c("PIPECO" = "#F8766D", "POULAR" = "#00C0AF", "Other species" = "gray"), name = "") +
+  scale_fill_manual(values = c(cols_hex, "gray"),
+    guide = guide_legend(title.position = "top",
+      title = "Species",)) +
+  theme_bw() +
+  theme(axis.text.x = element_blank(),
+     axis.text.y = element_blank(),
+     axis.ticks = element_blank()) +
+  xlab("") + ylab("") +
+  theme(legend.position = "bottom",
+    legend.margin = unit(-0.2, "cm"),
+    panel.grid = element_blank())
+
+dev.off()
+
+
+
+## Re-level the cars by mpg
+# mtcars3$car <-factor(mtcars2$car, levels=mtcars2[order(mtcars$mpg), "car"])
+#
+# x <-ggplot(mtcars3, aes(y=car, x=mpg)) +
+#     geom_point(stat="identity")
+#
+# y <-ggplot(mtcars3, aes(x=car, y=mpg)) +
+#     geom_bar(stat="identity") +
+#     coord_flip()
+#
+# grid.arrange(x, y, ncol=2)
+
+# install.packages("/Users/mattocci/Dropbox/Download/ggplot2_2.1.0.tar", repos = NULL, type = "source")
+
+
+temp <- fig_dat2 %>% filter(trait == "WSG_index") %>%
+  filter(sig == "Positive") %>% arrange(val2) %>% .$sp4 %>% as.character
+
+temp2 <- fig_dat2 %>% filter(trait == "WSG_index") %>%
+    filter(sig == "Positive") %>%
+    mutate(sp5 = factor(sp4, levels = temp)) %>%
+    mutate(sp6 = factor(sp, levels = sp))
+
+    n <- 10
+    hues <- seq(15, 375, length=n+1)
+    cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
+
+  temp2 %>%
+  arrange(desc(val2)) %>%
+  ggplot(.) +
+  geom_col(aes(y = val2, x = 1,
+   fill = sp6),
+   color = "white", size = 0.01) +
+  coord_polar(theta="y") +
+  guides(fill = F) +
+  scale_fill_manual(values = c(cols_hex, rep("pink", 121)), name = "")
+
+
+  reorder_size(temp2$sp4)
+
+     +
+  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
+    size = 4, vjust = 0) +
+  coord_polar(theta="y")
+
+
+
+p1 <- fig_dat2 %>% filter(trait == "WSG_index") %>%
+  filter(sig == "Positive") %>%
+  mutate(sp4 = factor(sp4, levels = temp)) %>%
+  ggplot(.) +
+  geom_bar(aes(y = val2, x = mean2/2,
+    fill = as.factor(sp4), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
+  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
+    size = 4, vjust = 0) +
+  coord_polar(theta="y") +
+  guides(fill = F)
+p1
+
+
+
+p2 <- fig_dat2 %>% filter(trait == "moist_index") %>% filter(sig == "Positive") %>% arrange((val2)) %>%
+  ggplot(.) +
+  geom_bar(aes(y = val2, x = mean2/2,
+    fill = as.factor(sp4), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
+  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
+    size = 4, vjust = 0) +
+  coord_polar(theta="y") +
+  guides(fill = F)
+
+p3 <- fig_dat2 %>% filter(trait == "convex_index") %>% filter(sig == "Positive") %>% arrange((val2)) %>%
+  ggplot(.) +
+  geom_bar(aes(y = val2, x = mean2/2,
+    fill = as.factor(sp4), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
+  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
+    size = 4, vjust = 0) +
+  coord_polar(theta="y") +
+  guides(fill = F)
+
+
+plot_grid(p1, p2, p3 , labels = c("A", "B", "C"), align = "hv", ncol = 3)
+
+
+# To change plot order of bars, change levels in underlying factor
+reorder_size <- function(x) {
+  factor(x, levels = names(sort(table(x))))
+}
+
+ggplot(mpg, aes(y = hwy, reorder_size(class))) + geom_col()
+
+
+ggplot(mpg, aes(class)) + geom_bar()
+
+
+
+p1 <- fig_dat2 %>%
+  filter(trait == "WSG_index" & sig == "Positive") %>%
+  tail(6) %>%
+  mutate(sig = "Contributoin to the observed shift")
+
+
+p2 <- fig_dat2 %>%
+  filter(trait == "moist_index" & sig == "Positive") %>%
+  tail(1) %>%
+  mutate(sig = "Contributoin to the observed shift")
+
+p3 <- fig_dat2 %>%
+  filter(trait == "convex_index" & sig == "Positive") %>%
+  tail(6) %>%
+  mutate(sig = "Contributoin to the observed shift")
+
+p4 <- fig_dat2 %>%
+  filter(trait == "slope_index" & sig == "Negative") %>%
+  tail(3) %>%
+  mutate(sig = "Contributoin to the observed shift")
+
+
+fig_dat3 <- bind_rows(fig_dat2, p1, p2, p3, p4)
+
+
+ggplot(fig_dat3) +
+geom_bar(aes(y = val2, x = mean2/2,
+  fill = as.factor(sp4), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
+geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
+  size = 4, vjust = 0) +
+facet_grid(sig ~ trait2) +
+coord_polar(theta="y") +
+# scale_fill_gradient(low = "blue", high = "red") +
+# guides(fill = FALSE) +
+# scale_fill_manual(values = ifelse(levels(fig_dat2$sp) == "POULAR", "red", "gray")) +
+# scale_fill_manual(values = c("PIPECO" = "#F8766D", "POULAR" = "#00C0AF", "Other species" = "gray"), name = "") +
+scale_fill_manual(values = c(cols_hex, "gray"),
+  guide = guide_legend(title.position = "top",
+    title = "Species",)) +
+theme_bw() +
+theme(axis.text.x = element_blank(),
+   axis.text.y = element_blank(),
+   axis.ticks = element_blank()) +
+xlab("") + ylab("") +
+theme(legend.position = "bottom",
+  legend.margin = unit(-0.2, "cm"))
