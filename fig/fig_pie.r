@@ -14,7 +14,7 @@ trait.temp <- data.frame(sp=rownames(trait),
            moist=trait$Moist,
            slope=trait$sp.slope.mean,
            slope.sd = trait$sp.slope.sd,
-           convex=trait$sp.convex.mean,
+           convex= -trait$sp.convex.mean, # convavity
            convex.sd=trait$sp.convex.sd,
            WSG=trait$WSG,
            slope10=trait$slope_size_10,
@@ -114,7 +114,7 @@ moistab <- moistab[order(moistab$index),]
 convexab <- data.frame(sp = ab.t.data$sp,
                     delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) - ab.t.data$census_1982/sum(ab.t.data$census_1982),
                     convex = ab.t.data$convex,
-                    convex_delta =ab.t.data$convex - mean(convex100[[1]]))
+                    convex_delta =ab.t.data$convex + mean(convex100[[1]])) # concave
 convexab$index <- convexab$delta_ab * convexab$convex_delta*100
 
 convexab <- convexab[order(convexab$index),]
@@ -141,18 +141,18 @@ sp_list <- WSGab %>%
   mutate(Moisture = round(index, 4)) %>%
   select(-index) %>%
   full_join(., convexab, by = "sp") %>%
-  mutate(Convexity = round(index, 4)) %>%
+  mutate(Concavity = round(index, 4)) %>%
   select(-index) %>%
   full_join(., slopeab, by = "sp") %>%
   mutate(Slope = round(index, 4), sp6 = sp) %>%
   left_join(., taxa, by = "sp6") %>%
   select(sp, family, genus, species,
-    Abundance_change, Wood_density, Moisture, Convexity, Slope) %>%
+    Abundance_change, Wood_density, Moisture, Concavity, Slope) %>%
   arrange(sp) %>%
   mutate(species = paste(genus, species)) %>%
   select(-genus)
 
-# write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list.csv")
+write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list.csv")
 
 
 
@@ -227,7 +227,7 @@ sp_vec2 <- c("FARAOC", "HYBAPR", "PIPECO", "POULAR")
 #sp
 sp1 <- sp_list %>% arrange(desc(Wood_density)) %>% head(6) %>% .$sp %>% as.character
 sp2 <- sp_list %>% arrange(desc(Moisture)) %>% head(1) %>% .$sp %>% as.character
-sp3 <- sp_list %>% arrange(desc(Convexity)) %>% head(6) %>% .$sp %>% as.character
+sp3 <- sp_list %>% arrange(desc(Concavity)) %>% head(6) %>% .$sp %>% as.character
 sp4 <- sp_list %>% arrange((Slope)) %>% head(3) %>% .$sp %>% as.character
 
 sp_vec3 <- c(sp1,sp2,sp3,sp4) %>% unique
@@ -235,7 +235,7 @@ sp_vec3 <- c(sp1,sp2,sp3,sp4) %>% unique
 fig_dat2 <- full_join(fig_dat, temp, by = "trait_sig") %>%
   arrange(val2) %>%
   mutate(trait = factor(trait, levels = c("WSG_index", "moist_index", "convex_index", "slope_index"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood density", "Moisture", "Convexity", "Slope"))) %>%
+  mutate(trait2 = factor(trait, labels = c("Wood density", "Moisture", "Concavity", "Slope"))) %>%
   mutate(sig = factor(sig, levels = c("Positive", "Negative"))) %>%
   mutate(col = ifelse(sp == "POULAR", "POULAR",
     ifelse(sp == "PIPECO", "PIPECO", "Other species"))) %>%
@@ -257,73 +257,8 @@ lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
     sp2 = "Other species") %>%
     mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
     mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
-    mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)")))
+    mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Concavity~(m)", "Slope~(degrees)")))
 
-pdf("~/Dropbox/MS/TurnoverBCI/fig/ab_change_pi.pdf", width = 6, height = 3.6)
-lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
-  mutate(x = 1.4, y = 0.8) %>%
-  mutate(n2 = paste("n =", n, sep = " "))
-
-  ggplot(fig_dat2) +
-  geom_bar(aes(y = val2, x = mean2/2,
-    fill = as.factor(col), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
-  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
-    size = 4, vjust = 0) +
-  coord_polar(theta="y") +
-  facet_grid(sig ~ trait2) +
-  # scale_fill_gradient(low = "blue", high = "red") +
-  # guides(fill = FALSE) +
-  # scale_fill_manual(values = ifelse(levels(fig_dat2$sp) == "POULAR", "red", "gray")) +
-  # scale_fill_manual(values = c("PIPECO" = "#F8766D", "POULAR" = "#00C0AF", "Other species" = "gray"), name = "") +
-  scale_fill_manual(values = c(cols_hex, "gray"),
-    guide = guide_legend(title.position = "top",
-      title = "Species",)) +
-  theme_bw() +
-  theme(axis.text.x = element_blank(),
-     axis.text.y = element_blank(),
-     axis.ticks = element_blank()) +
-  xlab("") + ylab("") +
-  theme(legend.position = "bottom",
-    legend.margin = unit(-0.2, "cm"))
-
-dev.off()
-
-
-
-pdf("~/Dropbox/MS/TurnoverBCI/fig/pie_7_species.pdf", width = 6, height = 3.6)
-# 6 species
-n <- 6
-hues <- seq(15, 375, length=n+1)
-cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
-
-
-lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
-  mutate(x = 1.4, y = 0.8) %>%
-  mutate(n2 = paste("n =", n, sep = " "))
-
-  ggplot(fig_dat2) +
-  geom_bar(aes(y = val2, x = mean2/2,
-    fill = as.factor(sp3), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
-  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
-    size = 4, vjust = 0) +
-  coord_polar(theta="y") +
-  facet_grid(sig ~ trait2) +
-  # scale_fill_gradient(low = "blue", high = "red") +
-  # guides(fill = FALSE) +
-  # scale_fill_manual(values = ifelse(levels(fig_dat2$sp) == "POULAR", "red", "gray")) +
-  # scale_fill_manual(values = c("PIPECO" = "#F8766D", "POULAR" = "#00C0AF", "Other species" = "gray"), name = "") +
-  scale_fill_manual(values = c(cols_hex, "gray"),
-    guide = guide_legend(title.position = "top",
-      title = "Species",)) +
-  theme_bw() +
-  theme(axis.text.x = element_blank(),
-     axis.text.y = element_blank(),
-     axis.ticks = element_blank()) +
-  xlab("") + ylab("") +
-  theme(legend.position = "bottom",
-    legend.margin = unit(-0.2, "cm"))
-
-dev.off()
 
 ####
 # 4 species
@@ -344,8 +279,8 @@ lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
 
   ggplot(fig_dat2) +
   geom_bar(aes(y = val2, x = mean2/2,
-    fill = as.factor(sp3), width = mean2), position = "fill", stat="identity", color = "black", size = 0.05) +
-  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
+    fill = as.factor(sp3), width = mean2), position = "fill", stat="identity", color = "white", size = 0.02) +
+  geom_text(data = lab_dat, aes(label = n2, x = 1.25, y = 1),
     size = 4, vjust = 0) +
   # geom_text(data = lab_dat2, aes(label = temp, x = 2, y = 0.1),
   #     size = 4, vjust = 0) +
@@ -369,146 +304,9 @@ lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
 
 dev.off()
 
+fig_dat2 %>% group_by(trait) %>%
+  summarise(shift = sum(val))
 
-
-## Re-level the cars by mpg
-# mtcars3$car <-factor(mtcars2$car, levels=mtcars2[order(mtcars$mpg), "car"])
-#
-# x <-ggplot(mtcars3, aes(y=car, x=mpg)) +
-#     geom_point(stat="identity")
-#
-# y <-ggplot(mtcars3, aes(x=car, y=mpg)) +
-#     geom_bar(stat="identity") +
-#     coord_flip()
-#
-# grid.arrange(x, y, ncol=2)
-
-# install.packages("/Users/mattocci/Dropbox/Download/ggplot2_2.1.0.tar", repos = NULL, type = "source")
-
-
-temp <- fig_dat2 %>% filter(trait == "WSG_index") %>%
-  filter(sig == "Positive") %>% arrange(val2) %>% .$sp4 %>% as.character
-
-temp2 <- fig_dat2 %>% filter(trait == "WSG_index") %>%
-    filter(sig == "Positive") %>%
-    mutate(sp5 = factor(sp4, levels = temp)) %>%
-    mutate(sp6 = factor(sp, levels = sp))
-
-    n <- 10
-    hues <- seq(15, 375, length=n+1)
-    cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
-
-  temp2 %>%
-  arrange(desc(val2)) %>%
-  ggplot(.) +
-  geom_col(aes(y = val2, x = 1,
-   fill = sp6),
-   color = "white", size = 0.01) +
-  coord_polar(theta="y") +
-  guides(fill = F) +
-  scale_fill_manual(values = c(cols_hex, rep("pink", 121)), name = "")
-
-
-  reorder_size(temp2$sp4)
-
-     +
-  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
-    size = 4, vjust = 0) +
-  coord_polar(theta="y")
-
-
-
-p1 <- fig_dat2 %>% filter(trait == "WSG_index") %>%
-  filter(sig == "Positive") %>%
-  mutate(sp4 = factor(sp4, levels = temp)) %>%
-  ggplot(.) +
-  geom_bar(aes(y = val2, x = mean2/2,
-    fill = as.factor(sp4), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
-  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
-    size = 4, vjust = 0) +
-  coord_polar(theta="y") +
-  guides(fill = F)
-p1
-
-
-
-p2 <- fig_dat2 %>% filter(trait == "moist_index") %>% filter(sig == "Positive") %>% arrange((val2)) %>%
-  ggplot(.) +
-  geom_bar(aes(y = val2, x = mean2/2,
-    fill = as.factor(sp4), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
-  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
-    size = 4, vjust = 0) +
-  coord_polar(theta="y") +
-  guides(fill = F)
-
-p3 <- fig_dat2 %>% filter(trait == "convex_index") %>% filter(sig == "Positive") %>% arrange((val2)) %>%
-  ggplot(.) +
-  geom_bar(aes(y = val2, x = mean2/2,
-    fill = as.factor(sp4), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
-  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
-    size = 4, vjust = 0) +
-  coord_polar(theta="y") +
-  guides(fill = F)
-
-
-plot_grid(p1, p2, p3 , labels = c("A", "B", "C"), align = "hv", ncol = 3)
-
-
-# To change plot order of bars, change levels in underlying factor
-reorder_size <- function(x) {
-  factor(x, levels = names(sort(table(x))))
-}
-
-ggplot(mpg, aes(y = hwy, reorder_size(class))) + geom_col()
-
-
-ggplot(mpg, aes(class)) + geom_bar()
-
-
-
-p1 <- fig_dat2 %>%
-  filter(trait == "WSG_index" & sig == "Positive") %>%
-  tail(6) %>%
-  mutate(sig = "Contributoin to the observed shift")
-
-
-p2 <- fig_dat2 %>%
-  filter(trait == "moist_index" & sig == "Positive") %>%
-  tail(1) %>%
-  mutate(sig = "Contributoin to the observed shift")
-
-p3 <- fig_dat2 %>%
-  filter(trait == "convex_index" & sig == "Positive") %>%
-  tail(6) %>%
-  mutate(sig = "Contributoin to the observed shift")
-
-p4 <- fig_dat2 %>%
-  filter(trait == "slope_index" & sig == "Negative") %>%
-  tail(3) %>%
-  mutate(sig = "Contributoin to the observed shift")
-
-
-fig_dat3 <- bind_rows(fig_dat2, p1, p2, p3, p4)
-
-
-ggplot(fig_dat3) +
-geom_bar(aes(y = val2, x = mean2/2,
-  fill = as.factor(sp4), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
-geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
-  size = 4, vjust = 0) +
-facet_grid(sig ~ trait2) +
-coord_polar(theta="y") +
-# scale_fill_gradient(low = "blue", high = "red") +
-# guides(fill = FALSE) +
-# scale_fill_manual(values = ifelse(levels(fig_dat2$sp) == "POULAR", "red", "gray")) +
-# scale_fill_manual(values = c("PIPECO" = "#F8766D", "POULAR" = "#00C0AF", "Other species" = "gray"), name = "") +
-scale_fill_manual(values = c(cols_hex, "gray"),
-  guide = guide_legend(title.position = "top",
-    title = "Species",)) +
-theme_bw() +
-theme(axis.text.x = element_blank(),
-   axis.text.y = element_blank(),
-   axis.ticks = element_blank()) +
-xlab("") + ylab("") +
-theme(legend.position = "bottom",
-  legend.margin = unit(-0.2, "cm"))
+fig_dat2 %>% filter(trait == "slope_index") %>%
+  filter(sig == "Negative") %>% tail(2) %>%
+  .$val2 %>% sum
