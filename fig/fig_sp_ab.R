@@ -31,7 +31,7 @@ make_dat <- function(plot_size = "plot20m"){
       sp = rownames(trait),
       moist = trait$Moist,
       slope = trait$sp.slope.mean,
-      convex = trait$sp.convex.mean,
+      convex = - trait$sp.convex.mean, # Concavity
       WSG = trait$WSG)
 
     moge <- full_join(ab_data, trait_temp, by = "sp") %>%
@@ -58,7 +58,7 @@ trait.temp <- data.frame(sp=rownames(trait),
   moist=trait$Moist,
   slope=trait$sp.slope.mean,
   slope.sd = trait$sp.slope.sd,
-  convex=trait$sp.convex.mean,
+  convex= - trait$sp.convex.mean, # Concavity
   convex.sd=trait$sp.convex.sd,
   WSG=trait$WSG)
 
@@ -137,7 +137,7 @@ p_dat <- bind_rows(p20m_dat, p100m_dat, ab_sp) %>%
   mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
   # filter(size != "0.04ha") %>%
   mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)")))
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Concavity~(m)", "Slope~(degrees)")))
 
 my_breaks <- function(...){
   c(0.05, 0.1, 0.5, 1, 5, 10)
@@ -145,7 +145,7 @@ my_breaks <- function(...){
 
 
 moge <- data.frame(temp = letters[1:12],
-    trait2 = rep(c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)"), 3),
+    trait2 = rep(c("Wood~density ~(g~cm^{-3})", "Moisture", "Concavity~(m)", "Slope~(degrees)"), 3),
     size = rep(c("50ha", "1ha", "0.04ha"), each = 4),
     x = rep(c(0.2, -2, -0.25, -3), 3),
     y = 11)
@@ -185,7 +185,7 @@ dat_mean %>% filter(ab2010/ab1982 == 0 & cat == "mean")
 
 lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
     y = 20,
-    x = rep(c(0.21, -1.9, -0.29, 0.5),  3),
+    x = rep(c(0.21, -1.9, -0.47, 0.5),  3),
     size = rep(c("50ha", "1ha", "0.04ha"), each = 4),
     trait = rep(c("WSG", "moist", "convex", "slope"), 3),
     sp2 = "Other species",
@@ -193,63 +193,62 @@ lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
     # filter(size != "0.04ha") %>%
     mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
     mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
-    mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)"))) %>%
+    mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Concavity~(m)", "Slope~(degrees)"))) %>%
     mutate(cat = "mean")
 
 
   #  ggplot(ds, aes(x = data)) +
   #     geom_point(aes(y = Linear, fill = "Linear"), size = 3, alpha = 0.5)
+#
+# pdf("~/Dropbox/MS/TurnoverBCI/fig/fig3_new.pdf", width = 6, height = 5, paper = "special")
+#
+# n <- 2
+# hues <- seq(15, 375, length=n+1)
+# cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
+#
+# ggplot(dat_mean %>% arrange(desc(ab1982)) %>% arrange(desc(sp2)), aes(y = ab2010/ab1982, x = val, fill = sp2))  +
+#   geom_point(data = dat_each,
+#       aes(y = ab2010/ab1982, x = val, shape = "Species-subplot combination"), colour = "gray", size = 0.8, alpha = 0.8) +
+#   scale_shape_manual(values = 4,
+#     guide = guide_legend(title = "",
+#       override.aes = list(size = 5, stroke = 1),
+#       title.position = "left",
+#       order = 2)) +
+#   # scale_size_continuous(range = c(0.1, 15),
+#     # guide = guide_legend(title = "Abundance in 1982")) +
+#   scale_size_continuous(range = c(0.1, 15),
+#     guide = FALSE) +
+#   geom_point(aes(size = census_1982, alpha = sp2), pch = 21, fill = "black", stroke = 0.5) +
+#   # scale_size_manual(values = c(1, 2, 4, 8, 10)) +
+#   scale_fill_manual(values = c("black", "black", "black", "gray"),
+#     guide = guide_legend(title = "Species means",
+#       override.aes = list(size = 4, alpha = c(0.5, 0.5, 0.5)),
+#       title.position = "top",
+#       order = 1)) +
+#   scale_alpha_manual(values = c(0.8, 0.8, 0.5, 1.2),
+#     guide = FALSE) +
+#   scale_y_log10(breaks = my_breaks()) +
+#   facet_grid(size ~ trait2, scale = "free_x", labeller = labeller(trait2 = label_parsed, size = label_value)) +
+#   theme_bw() +
+#   geom_hline(yintercept = 1, lty = 2) +
+#   # theme(legend.position = "none") +
+#   ylab("(No. of individual in 2010 + 1) / \n (No. of individual in 1982 + 1)") +
+#   xlab("Trait values") +
+#   theme(axis.text.x = element_text(angle = 45),
+#     strip.text = element_text(size = 8),
+#     axis.title = element_text(size = 11),
+#     axis.text.x = element_text(size = 7.5),
+#     axis.text.y = element_text(size = 7.5),
+#     legend.text = element_text(size = 8)) +
+#   geom_text(data = lab_dat, aes(label = lab, x = x, y = y), hjust = 0) +
+#   theme(legend.position = "bottom",
+#     legend.key.size = unit(0.2, "cm"))
+#   # theme(legend.justification=c(1,0), legend.position=c(1,0))
+# dev.off()
+#
 
-pdf("~/Dropbox/MS/TurnoverBCI/fig/fig3_new.pdf", width = 6, height = 5, paper = "special")
 
-n <- 2
-hues <- seq(15, 375, length=n+1)
-cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
-
-ggplot(dat_mean %>% arrange(desc(ab1982)) %>% arrange(desc(sp2)), aes(y = ab2010/ab1982, x = val, fill = sp2))  +
-  geom_point(data = dat_each,
-      aes(y = ab2010/ab1982, x = val, shape = "Species-subplot combination"), colour = "gray", size = 0.8, alpha = 0.8) +
-  scale_shape_manual(values = 4,
-    guide = guide_legend(title = "",
-      override.aes = list(size = 5, stroke = 1),
-      title.position = "left",
-      order = 2)) +
-  # scale_size_continuous(range = c(0.1, 15),
-    # guide = guide_legend(title = "Abundance in 1982")) +
-  scale_size_continuous(range = c(0.1, 15),
-    guide = FALSE) +
-  geom_point(aes(size = census_1982, alpha = sp2), pch = 21, fill = "black", stroke = 0.5) +
-  # scale_size_manual(values = c(1, 2, 4, 8, 10)) +
-  scale_fill_manual(values = c("black", "black", "black", "gray"),
-    guide = guide_legend(title = "Species means",
-      override.aes = list(size = 4, alpha = c(0.5, 0.5, 0.5)),
-      title.position = "top",
-      order = 1)) +
-  scale_alpha_manual(values = c(0.8, 0.8, 0.5, 1.2),
-    guide = FALSE) +
-  scale_y_log10(breaks = my_breaks()) +
-  facet_grid(size ~ trait2, scale = "free_x", labeller = labeller(trait2 = label_parsed, size = label_value)) +
-  theme_bw() +
-  geom_hline(yintercept = 1, lty = 2) +
-  # theme(legend.position = "none") +
-  ylab("(No. of individual in 2010 + 1) / \n (No. of individual in 1982 + 1)") +
-  xlab("Trait values") +
-  theme(axis.text.x = element_text(angle = 45),
-    strip.text = element_text(size = 8),
-    axis.title = element_text(size = 11),
-    axis.text.x = element_text(size = 7.5),
-    axis.text.y = element_text(size = 7.5),
-    legend.text = element_text(size = 8)) +
-  geom_text(data = lab_dat, aes(label = lab, x = x, y = y), hjust = 0) +
-  theme(legend.position = "bottom",
-    legend.key.size = unit(0.2, "cm"))
-  # theme(legend.justification=c(1,0), legend.position=c(1,0))
-dev.off()
-
-
-
-pdf("~/Dropbox/MS/TurnoverBCI/fig/fig3_new.pdf", width = 6, height = 5, paper = "special")
-
+pdf("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/fig3_new.pdf", width = 6, height = 5, paper = "special")
   ggplot(p_dat2 %>% arrange(cat), aes(y = ab2010/ab1982, x = val, shape = cat, fill = cat, alpha = cat, colour = cat)) +
     geom_point() +
     facet_grid(size ~ trait2, scale = "free_x", labeller = labeller(trait2 = label_parsed, size = label_value)) +
@@ -275,10 +274,17 @@ pdf("~/Dropbox/MS/TurnoverBCI/fig/fig3_new.pdf", width = 6, height = 5, paper = 
       legend.key.size = unit(0.2, "cm"),
       legend.title = element_blank()) +
     theme(
-      strip.text = element_text(size = 8),
-      axis.title = element_text(size = 11),
-      axis.text.x = element_text(size = 7.5, angle = 45),
-      axis.text.y = element_text(size = 7.5),
-      legend.text = element_text(size = 8))
+      strip.text = element_text(size = 7),
+      axis.title = element_text(size = 7),
+      axis.text.x = element_text(size = 6, angle = 45),
+      axis.text.y = element_text(size = 6),
+      legend.text = element_text(size = 7))
 
 dev.off()
+
+theme(
+  strip.text = element_text(size = 7),
+  axis.title = element_text(size = 7),
+  axis.text.x = element_text(size = 6, angle = 45),
+  axis.text.y = element_text(size = 6),
+  legend.text = element_text(size = 7))
