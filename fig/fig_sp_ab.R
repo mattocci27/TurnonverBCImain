@@ -281,10 +281,10 @@ pdf("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/fig3_new.pdf", width = 6, heigh
       legend.text = element_text(size = 7))
 
 dev.off()
-
-theme(
-  strip.text = element_text(size = 7),
-  axis.title = element_text(size = 7),
-  axis.text.x = element_text(size = 6, angle = 45),
-  axis.text.y = element_text(size = 6),
-  legend.text = element_text(size = 7))
+#
+# theme(
+#   strip.text = element_text(size = 7),
+#   axis.title = element_text(size = 7),
+#   axis.text.x = element_text(size = 6, angle = 45),
+#   axis.text.y = element_text(size = 6),
+#   legend.text = element_text(size = 7))
