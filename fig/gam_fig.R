@@ -20,12 +20,12 @@ str(WSG.ind)
 time <- c(1982, 1985, 1990, 1995, 2000, 2005, 2010)
 # rep_ind <- sapply(WSG.ind, length)
 
-
+#Concavity = - Convexity
 fig_dat <- data_frame(WSG = c(unlist(WSG100) - WSG100[[1]],
   unlist(WSG20) - WSG20[[1]]),
   Moist = c(unlist(Moist100) - Moist100[[1]],
     unlist(Moist20) - Moist20[[1]]),
-  Convex = c(unlist(convex100) - convex100[[1]],
+  Convex = -c(unlist(convex100) - convex100[[1]],
     unlist(convex20) - convex20[[1]]),
   Slope = c(unlist(slope100) - slope100[[1]],
     unlist(slope20) - slope20[[1]]),
@@ -63,7 +63,7 @@ fig_dat3 <- data_frame(Time = fig_dat3$Time,
 fig_dat4 <- bind_rows(fig_dat2, fig_dat3) %>%
   mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
   mutate(trait = factor(trait, levels = c("WSG", "Moist", "Convex", "Slope"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Convexity~(m)", "Slope~(degrees)")))
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
 
 temp <- fig_dat3 %>% filter(trait == "WSG")
 
@@ -114,7 +114,7 @@ for (i in 1:7){
 moge <- data.frame(WSG = unlist(WSG100) - WSG100[[1]],
                    Moist = unlist(Moist100) - Moist100[[1]],
                    slope = unlist(slope100) - slope100[[1]],
-                   convex = unlist(convex100) - convex100[[1]],
+                   convex = -unlist(convex100) + convex100[[1]],
                    site = as.factor(rep(1:50,7)),
                    Time)
 
@@ -122,7 +122,7 @@ moge <- data.frame(WSG = unlist(WSG100) - WSG100[[1]],
 moge20 <- data.frame(WSG = unlist(WSG20) - WSG20[[1]],
                   Moist = unlist(Moist20) - Moist20[[1]],
                   slope = unlist(slope20) - slope20[[1]],
-                  convex = unlist(convex20) - convex20[[1]],
+                  convex = -unlist(convex20) + convex20[[1]],
                   site = as.factor(rep(1:1250,7)),
                   Time)
 
@@ -130,21 +130,21 @@ moge20 <- data.frame(WSG = unlist(WSG20) - WSG20[[1]],
 moge100r <- data.frame(WSG = unlist(WSG100.rm) - WSG100.rm[[1]],
                    Moist = unlist(Moist100.rm) - Moist100.rm[[1]],
                    slope = unlist(slope100.rm) - slope100.rm[[1]],
-                   convex = unlist(convex100.rm) - convex100.rm[[1]],
+                   convex = -unlist(convex100.rm) + convex100.rm[[1]],
                    site = rep(1:50,7),
                    Time)
 
 moge50 <- data.frame(WSG = sapply(WSG100, mean) - mean(WSG100[[1]]),
                    Moist = sapply(Moist100, mean) - mean(Moist100[[1]]),
                    slope = sapply(slope100, mean) - mean(slope100[[1]]),
-                   convex = sapply(convex100, mean) - mean(convex100[[1]]),
+                   convex = -sapply(convex100, mean) + mean(convex100[[1]]),
                    site = as.factor(1:7),
                    Time = time)
 
 moge50r <- data.frame(WSG = sapply(WSG100.rm, mean) - mean(WSG100.rm[[1]]),
                   Moist = sapply(Moist100.rm, mean) - mean(Moist100.rm[[1]]),
                   slope = sapply(slope100.rm, mean) - mean(slope100.rm[[1]]),
-                  convex = sapply(convex100.rm, mean) - mean(convex100.rm[[1]]),
+                  convex = -sapply(convex100.rm, mean) + mean(convex100.rm[[1]]),
                   site = as.factor(1:7),
                   Time = time)
 
@@ -241,7 +241,7 @@ res4r50 <- predict(r4.r50, se.fit=T)
 #   size = rep(c("1ha", "0.04ha"), c(50*7, 1250*7))) %>%
 #   tidyr::gather(., "trait", "val", 1:4) %>%
 #   mutate(trait = factor(trait, levels = c("WSG", "Moist", "Convex", "Slope"))) %>%
-#   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Convexity~(m)", "Slope~(degrees)")))
+#   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
 
 fig_dat_n <- data_frame(WSG = c(sapply(WSG100.rm, mean) - mean(WSG100.rm[[1]]),
     unlist(WSG100.rm) - WSG100.rm[[1]],
@@ -261,7 +261,7 @@ fig_dat_n <- data_frame(WSG = c(sapply(WSG100.rm, mean) - mean(WSG100.rm[[1]]),
   size = rep(c("50ha", "1ha", "0.04ha"), c(7, 50*7, 1250*7)))  %>%
   tidyr::gather(., "trait", "val", 1:4) %>%
   mutate(trait = factor(trait, levels = c("WSG", "Moist", "Convex", "Slope"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Convexity~(m)", "Slope~(degrees)")))
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
 
 
 fig_dat_n %>%
@@ -289,7 +289,7 @@ fig_dat5 <- fig_dat4 %>%
   mutate(obs = "ori") %>%
   bind_rows(., fig_dat_n) %>%
   mutate(trait = factor(trait, levels = c("WSG", "Moist", "Convex", "Slope"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Convexity~(m)", "Slope~(degrees)")))
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
 
 
   m1 <- function(x){min(x) * 0.94}
@@ -480,7 +480,7 @@ r1data100 %>% tidyr::gather(., "obs", "val", 2:3) %>%
 fig_dat4 <- bind_rows(fig_dat2, fig_dat3) %>%
   mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
   mutate(trait = factor(trait, levels = c("WSG", "Moist", "Convex", "Slope"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Convexity~(m)", "Slope~(degrees)")))
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
 
 fig_dat4 <- fig_dat4 %>%
   mutate(obs2 = "dat") %>%
@@ -527,7 +527,7 @@ temp <- bind_rows(fig_dat4, moge6, moge50_2) %>%
   # filter(size != "50ha") %>%
   mutate(obs2 = as.factor(obs2)) %>%
   mutate(trait = factor(trait, levels = c("WSG", "Moist", "Convex", "Slope"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)"))) %>%
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Concavity~(m)", "Slope~(degrees)"))) %>%
   mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha")))
   # mutate(obs2 = ifelse(obs2 == "dat", "obs", obs2))
 
@@ -536,7 +536,7 @@ fig_dat_n2 <- fig_dat_n %>%
   filter(size == "50ha") %>%
   mutate(obs2 = "tr") %>%
   mutate(trait = factor(trait, levels = c("WSG", "Moist", "Convex", "Slope"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)"))) %>%
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Concavity~(m)", "Slope~(degrees)"))) %>%
   mutate(est = NA) %>%
   mutate(est_mean = NA) %>%
   mutate(est_lo = NA) %>%
@@ -547,37 +547,29 @@ temp2 <- bind_rows(temp, fig_dat_n2) %>%
   mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha")))
 
 
-#last version
-pdf("~/Dropbox/MS/TurnoverBCI/fig/fig2_1.pdf", width = 9, height = 12)
-ggplot(filter(temp2, is.na(est_mean) == TRUE)) +
+# 9 inche version
+pdf("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/fig2_new.pdf", width = 9, height = 7)
+  ggplot(filter(temp2, is.na(est_mean) == TRUE)) +
     geom_point(data = temp2 %>% filter(size != "50ha" | obs2 != "tr"),
       aes(x = jitter(Time),
-    y = val), size = 0.8, alpha = 0.4) +
+    y = val), size = 1.2, alpha = 0.4) +
     # geom_point(data = temp2 %>% filter(size == "50ha" & obs2 == "tr"), aes(x = jitter(Time), y = val), size = 0.8, alpha = 0.4, colour = "red") +
-    facet_wrap(trait2 ~ size, scale = "free",
+    facet_wrap(size ~ trait2, scale = "free",
     labeller = labeller(trait2 = label_parsed),
-    switch = NULL, ncol = 3) + # geom_smooth() +
+    switch = NULL, ncol = 4) + # geom_smooth() +
     theme_bw() +
     xlab("Time") +
-    ylab("Deviaiton from initial trait values") +
+    ylab("Deviation from initial trait values") +
     geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs" & est == "est"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.1) +
     geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs" & est == "est"), aes(x = Time, y = est_mean), colour = "blue") +
 
-
-    # geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "tr"), aes(ymin = est_lo,
-    # ymax = est_up, x = Time), fill = "red", alpha = 0.1) +
-    # geom_line(data = filter(temp,
-    # trait == "WSG" & size == "1ha" & obs2 == "tr"), aes(x = Time, y = est_mean),
-    # colour = "red", lty = 1) +
-
     geom_ribbon(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")),
-    aes(ymin = est_lo, ymax = est_up, x = Time, fill = obs2), fill = "blue", alpha = 0.1) +
-    geom_line(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")), aes(x = Time, y = est_mean, colour = obs2, lty = obs2), colour = "blue", lty = 1) +
+    aes(ymin = est_lo, ymax = est_up, x = Time, fill = obs2), fill = "blue", alpha = 0.2) +
+    geom_line(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")), aes(x = Time, y = est_mean, colour = obs2, lty = obs2), colour = "blue", lty = 1, lwd = 0.375) +
 
     geom_ribbon(data = filter(temp, size == "50ha" & obs2 == "obs"),
-    aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.1) +
-    geom_line(data = filter(temp, size == "50ha" & obs2 == "obs"),  aes(x = Time, y = est_mean, lty = obs2), colour = "blue", lty = 1) +
-
+    aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.2) +
+    geom_line(data = filter(temp, size == "50ha" & obs2 == "obs"),  aes(x = Time, y = est_mean, lty = obs2), colour = "blue", lty = 1, lwd = 0.375) +
 
     scale_fill_manual(values = c("gray", "gray", "gray")) +
     scale_colour_manual(values = c("black", "black", "black")) +
@@ -585,8 +577,22 @@ ggplot(filter(temp2, is.na(est_mean) == TRUE)) +
     guides(linetype = FALSE) +
     guides(colour = FALSE) +
     guides(fill = FALSE) +
-    theme(axis.text.x = element_text(angle = 45),
-      plot.margin = unit(c(0.2, 0.2, 0.2 , 0.1), units = "lines")
-      )
+    theme(
+      plot.margin = unit(c(0.2, 0.2, 0.2 , 0.2), units = "lines"),
+      strip.text = element_text(size = 10.5, lineheight=0.5),
+      axis.title = element_text(size = 10.5),
+      axis.text.x = element_text(size = 9, angle = 45),
+      axis.text.y = element_text(size = 9),
+      legend.text = element_text(size = 10.5))
 
 dev.off()
+
+# 6 inche width
+#
+# theme(
+#   plot.margin = unit(c(0.2, 0.2, 0.2 , 0.2), units = "lines"),
+#   strip.text = element_text(size = 7, lineheight=0.5),
+#   axis.title = element_text(size = 7),
+#   axis.text.x = element_text(size = 6, angle = 45),
+#   axis.text.y = element_text(size = 6),
+#   legend.text = element_text(size = 7))
