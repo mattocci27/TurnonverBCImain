@@ -158,10 +158,35 @@ dummy <- bind_rows(dummy0, dummy1, dummy2, dummy3, dummy4, dummy5) %>%
   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
 
 
+###
+# small data for test
+###
+# dummy <- dummy %>% filter(size == "1ha")
+#
+# temp1 <- dummy %>% mutate(size = "0.04ha")
+# temp2 <- dummy %>% mutate(size = "All individuals (50ha)")
+#
+# dummy <- bind_rows(dummy, temp1, temp2) %>%
+#   mutate(size = factor(size, levels = c("All individuals (50ha)", "1ha", "0.04ha"))) %>%
+#   mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
+#   mutate(size2 = factor(size, labels = c("All individuals (50ha)", "1ha", "0.04ha"))) %>%
+#   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
+#
+#
+#
+# dummy0 <- dummy0 %>% filter(size == "1ha")
+#
+# dummy0 <- bind_rows(dummy0, temp1, temp2) %>%
+#   mutate(size = factor(size, levels = c("All individuals (50ha)", "1ha", "0.04ha"))) %>%
+#   mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
+#   mutate(size2 = factor(size, labels = c("All individuals (50ha)", "1ha", "0.04ha"))) %>%
+#   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
 
+
+## need to redcued to 6inches
 before <- proc.time()
-pdf("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/fig1_new.pdf",
-  width = 8, height = 7, paper = "special")
+postscript("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/fig1_new.eps",
+  width = 9, height = 8, paper = "special")
 
 ggplot(dummy0, aes(x = val)) +
   facet_wrap(~ size2 + trait2, nrow = 3, scale = "free",
@@ -169,21 +194,19 @@ ggplot(dummy0, aes(x = val)) +
   geom_blank(data = dummy) +
   geom_density(data = dummy0 %>% filter(size != "All individuals (50ha)"), adjust = 1,
     aes(colour = as.factor(time))) +
-  guides(colour = guide_legend(title = NULL)) +
-  # guides(fill = guide_legend(override.aes = list(fille = as.factor(time)))) +
-  theme(panel.margin.x = unit(0.5, "lines"),
-  legend.position = c(1, 1), legend.justification = c(0.8,0.9),
-  legend.text = element_text(size = 6),
-  legend.background = element_rect(fill=alpha('blue', 0)),
-  legend.key.size = unit(0.35, "cm"),
-  axis.text.x = element_text(angle = 45)) +
-  # theme(
-  #   strip.text = element_text(size = 8),
-  #   axis.title = element_text(size = 11),
-  #   axis.text.x = element_text(size = 7.5, angle = 45),
-  #   axis.text.y = element_text(size = 7.5),
-  #   legend.text = element_text(size = 8),
-  #   panel.margin = unit(1, "lines")) +
+  guides(colour = guide_legend(title = NULL), size = 21) +
+  # guides(fill = guide_legend(override.aes = list(fill = as.factor(time)))) +
+  theme(
+    legend.position = c(1, 1), legend.justification = c(0.8,0.9),
+    legend.text = element_text(size = 9),
+    legend.background = element_rect(fill=alpha('blue', 0)),
+    legend.key.size = unit(0.375, "cm"),
+    strip.text = element_text(size = 10.5, lineheight=0.5),
+    axis.title = element_text(size = 10.5),
+    axis.text.x = element_text(size = 9, angle = 45),
+    axis.text.y = element_text(size = 9),
+    legend.text = element_text(size = 10.5),
+    panel.margin = unit(0.2, "lines")) +
   geom_density(data = filter(dummy0, size == "All individuals (50ha)"), adjust = 4, aes(colour = as.factor(time))) +
   ylab("Density") +
   xlab("Trait values")
@@ -191,16 +214,4 @@ ggplot(dummy0, aes(x = val)) +
 dev.off()
 after <- proc.time()
 after - before
-after - before0
-
-# filter(dummy, size == "1ha") %>% group_by(trait) %>%
-#   summarize(min = min(val), max = max(val))
-#
-#
-#
-# moge <- dummy0 %>% filter(size == "1ha") %>% filter(trait == "WSG")
-#
-# ggplot(moge, aes(x = val)) +
-#   # geom_blank(data = dummy) +
-#   geom_density(data = moge, adjust = 1,
-#     aes(colour = as.factor(time)))
+# after - before0
