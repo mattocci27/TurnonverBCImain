@@ -22,11 +22,23 @@ system.time(joe.res5<-ses.temp.dpw2(D1_m,D5_m,D5m,R5m,t.dis2,runs=99))
 system.time(joe.res6<-ses.temp.dpw2(D1_m,D6_m,D6m,R6m,t.dis2,runs=99))
 system.time(joe.res7<-ses.temp.dpw2(D1_m,D7_m,D7m,R7m,t.dis2,runs=99))
 
-save.image("~/Dropbox/temporal/BCI_temporal_res20140401.rdata")
+# save.image("~/Dropbox/temporal/BCI_temporal_res20140401.rdata")
+
+###
 
 
+system.time(nate.res2 <- ses.temp.dpw(D1_m, D2_m, t.dis2, runs = 3))
 
+system.time(nate.res2 <- ses.temp.dpw(D100m[[1]], D100m[[2]], t.dis2, runs = 99))
 
+system.time(nate.res3 <- ses.temp.dpw(D100m[[1]], D100m[[3]], t.dis2, runs = 99))
+system.time(nate.res4 <- ses.temp.dpw(D100m[[1]], D100m[[4]], t.dis2, runs = 99))
+system.time(nate.res5 <- ses.temp.dpw(D100m[[1]], D100m[[5]], t.dis2, runs = 99))
+system.time(nate.res6 <- ses.temp.dpw(D100m[[1]], D100m[[6]], t.dis2, runs = 99))
+system.time(nate.res7 <- ses.temp.dpw(D100m[[1]], D100m[[7]], t.dis2, runs = 99))
+
+# system.time(joe.res2 <- ses.temp.dpw2(D100m[[1]], D100m[[2]], t.dis2, runs = 3))
+# system.time(joe.res7 <- ses.temp.dpw2(D100m[[1]], D100m[[7]], t.dis2, runs = 99))
 
 par(mfrow=c(2,3))
 hist(nate.res2$dpw.obs.z)
