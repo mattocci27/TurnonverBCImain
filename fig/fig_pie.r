@@ -262,7 +262,7 @@ lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
 
 ####
 # 4 species
-pdf("/Users/mattocci/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/pie_4_species.pdf", width = 6, height = 3.6)
+postscript("/Users/mattocci/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/pie_4_species.eps", width = 6, height = 3.6)
 
 n <- 4
 hues <- seq(15, 375, length=n+1)
