@@ -114,7 +114,7 @@ fig_dat2 <- bind_rows(fig_dat, temp1, temp2, temp3, temp4) %>%
   mutate(size = factor(size, levels = c("All individuals (50ha)","1ha", "0.04ha"))) %>%
   mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
   mutate(size2 = factor(size, labels = c("All individuals (50ha)", "1ha", "0.04ha"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Concavity~(m)", "Slope~(degrees)")))
 
 
 dummy1 <- data_frame(time = 1982,
@@ -155,7 +155,7 @@ dummy <- bind_rows(dummy0, dummy1, dummy2, dummy3, dummy4, dummy5) %>%
   mutate(size = factor(size, levels = c("All individuals (50ha)", "1ha", "0.04ha"))) %>%
   mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
   mutate(size2 = factor(size, labels = c("All individuals (50ha)", "1ha", "0.04ha"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Concavity~(m)", "Slope~(degrees)")))
 
 
 ###
