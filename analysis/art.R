@@ -1,22 +1,26 @@
 library(mgcv)
 
 set.seed(5)
-x <- 1:7
+n <- 7
+x <- 1:n
 
 before <- proc.time()
 p <- NULL
 r2 <- NULL
 dat2 <- NULL
 
-
-plot(y ~ x, xlab = expression(x[t]), ylab = expression(y[t]), ylim=c(-5,5))
-for (j in 1:100){
+plot(y ~ x, xlab = expression(x[t]), ylab = expression(y[t]), ylim=c(-10,10))
+for (j in 1:1500){
   y <- NULL
   y[1] <- 0
-  for (i in 2:7){
-    y[i] <- rnorm(1,y[i-1], 0.2)
+  for (i in 2:n){
+    y[i] <- rnorm(1, 1 * y[i-1], 1)
   }
 
+#  y <- rep(0,n)
+#  y <- y + arima.sim(list(ar=0.85), n=n)
+#  y <- as.numeric(y)
+#  y <- y - y[1]
   #plot(y ~ x)
   dat <- data.frame(x=x, y=y)
   e <- try(gamm(y ~ s(x, k=4), data = dat, correlation = corCAR1(form=~x)),
@@ -28,15 +32,40 @@ for (j in 1:100){
     p[j] <- res$gam %>% summary %>% .$s.pv
     r2[j] <- res$gam %>% summary %>% .$r.sq
     dat2 <- rbind(dat2, dat)
-  lines(fitted(res$lme) ~ x, lty = "solid", col = "midnightblue", lwd = 2)
+  #lines(fitted(res$lme) ~ x, lty = "solid", col = "midnightblue", lwd = 2)
   }
   #res <- gamm(y ~ s(x, k=4), data = dat, correlation = corCAR1(form=~x))
-
 }
 
 after <- proc.time()
 after - before
 
+r22 <- r2[!is.na(r2)] %>% sample(1000)
+p2 <- p[!is.na(p)] %>% sample(1000)
+
+for (j in 1:1500){
+  y <- NULL
+  y[1] <- 0
+  for (i in 2:n){
+    y[i] <- rnorm(1, 1 * y[i-1], 1)
+  }
+
+#  y <- rep(0,n)
+#  y <- y + arima.sim(list(ar=0.85), n=n)
+#  y <- as.numeric(y)
+#  y <- y - y[1]
+  #plot(y ~ x)
+  dat <- data.frame(x=x, y=y)
+  res <- lm(y~x,dat) %>% summary
+  p[j] <- res$coefficients[2,4]
+  r2[j] <- res$coefficients[2,1]
+  dat2 <- rbind(dat2, dat)
+  #lines(fitted(res$lme) ~ x, lty = "solid", col = "midnightblue", lwd = 2)
+  #res <- gamm(y ~ s(x, k=4), data = dat, correlation = corCAR1(form=~x))
+}
+
+library(gamclass)
+CVgam(y ~s(x, k=4), data =dat)
 
 dat2 <- dat2 %>% mutate(n = rep((1:(nrow(dat2)/7)), each = 7))
 
@@ -44,7 +73,7 @@ save.image("art.rda")
 
 load("~/Dropbox/MS/TurnoverBCI/TurnoverBCImain/analysis/art.rda")
 
-ggplot(dat2 %>% filter(n <= 20), aes(x=x,y=y, col = n %>% as.factor)) +
+ggplot(dat2 %>% filter(n <= 100), aes(x=x,y=y, col = n %>% as.factor)) +
   #geom_point() +
   geom_smooth(se = FALSE) +
   guides(col = FALSE) +
@@ -61,6 +90,7 @@ quantile(dat2$y, 0.975)
 plot(y ~ x, dat)
 
 quantile(r2, 0.975)
+
 
 
 # check
@@ -84,17 +114,28 @@ y[1] <- 0
 for (i in 2:7){
   y[i] <- rnorm(1,y[i-1], 1)
 }
-dat <- data.frame(x=x,y=y)
+
+n <- 7
+time <- 1:n
+x <- time/n
+y <- rep(5,n)
+y <- y + arima.sim(list(ar=0.85), n=n)
+y <- as.numeric(y)
+y <- y - y[1]
+
+#y <- arima.sim(list(order = c(1,1,0), ar=1.2e-11), n=6) %>% as.numeric
+dat <- data.frame(x=x, y=y)
 m1 <- smooth.spline(x,y)
 m2 <- gam(y ~ s(x, k=4), data = dat)
-m3 <- gamm(y ~ s(x, k=4), data = dat, correlation = corCAR1(form = ~ y))
-m4 <- gamm(y ~ s(x, k=4), data = dat, correlation = corCAR1())
+m3 <- gamm(y ~ s(x, k=4), data = dat, correlation = corCAR1(form = ~ time))
+#m4 <- gamm(y ~ s(x, k=4), data = dat, correlation = corCAR1())
 
 plot(y ~ x, xlab = expression(x[t]), ylab = expression(y[t]))
 lines(fitted(m1) ~ x, lty = "solid", col = "darkolivegreen", lwd = 2)
 lines(fitted(m2) ~ x, lty = "solid", col = "red", lwd = 2)
 lines(fitted(m3$lme) ~ x, lty = "solid", col = "midnightblue", lwd = 2)
 #lines(fitted(m4$lme) ~ x, lty = "solid", col = "orange", lwd = 2)
+summary(m3$lme)
 
 # use Ferguson
 test <- bckftg.alg(y, as.data.frame(x), lime = )
@@ -133,51 +174,67 @@ fig_dat <- data_frame(WSG = c(unlist(WSG100) - WSG100[[1]],
 fig_dat2 <- fig_dat %>%
   tidyr::gather(., "trait", "val", 1:4)
 
+
+
+fig_dat3 <- fig_dat2 %>%
+  group_by(Time, trait) %>%
+  summarise(val = mean(val))
+
+
 fig_dat3 <- data_frame(Time = fig_dat3$Time,
     size = "52ha",
     trait = fig_dat3$trait,
     val = fig_dat3$val)
 
-obs <- fig_dat3 %>% tidyr::spread(trait, val) %>%
-  mutate(Convex = scale(Convex)) %>%
-  mutate(Convex = Convex - Convex[1]) %>%
-  mutate(Moist = scale(Moist)) %>%
-  mutate(Moist = Moist - Moist[1]) %>%
-  mutate(Slope = scale(Slope)) %>%
-  mutate(Slope = Slope - Slope[1]) %>%
-  mutate(WSG = scale(WSG)) %>%
-  mutate(WSG = WSG - WSG[1])
+obs <- fig_dat3 %>% tidyr::spread(trait, val)
+  #mutate(Convex = scale(Convex)) %>%
+  #mutate(Convex = Convex - Convex[1]) %>%
+  #mutate(Moist = scale(Moist)) %>%
+  #mutate(Moist = Moist - Moist[1]) %>%
+  #mutate(Slope = scale(Slope)) %>%
+  #mutate(Slope = Slope - Slope[1]) %>%
+  #mutate(WSG = scale(WSG)) %>%
+  #mutate(WSG = WSG - WSG[1])
 
 obs2 <- obs %>%
   tidyr::gather(trait, val, 3:6)
 
 ggplot(obs2, aes(x=Time,y=val)) +
   geom_point() +
-  facet_grid(.~trait) +
-  geom_smooth(se=FALSE) +
-  geom_hline(yintercept = 3.74, linetype=2) +
-  geom_hline(yintercept = -3.51, linetype=2)
-
+  facet_wrap(~trait,scale ="free") +
+  geom_smooth(se=FALSE)
+#  geom_hline(yintercept = 3.74, linetype=2) +
+ # geom_hline(yintercept = -3.51, linetype=2)
 
 #corCAR check
 moge <- data.frame(WSG = unlist(WSG100),
                    Moist = unlist(Moist100),
-                   slope = unlist(slope.100.rare[10]),
+                   slope = unlist(slope100),
                    convex = unlist(convex100),
                    site = as.factor(rep(1:50,7)),
                    Time) %>%
+  mutate(WSG = WSG - WSG100[[1]]) %>%
+  mutate(Moist = Moist - Moist100[[1]]) %>%
+  mutate(convex = convex - convex100[[1]]) %>%
+  mutate(slope = slope - slope100[[1]])
 
+moge$Time2 <- rep(1:7, each = 50)
 
-m1 <- gam(Moist ~  s(Time,k=4), data=obs)
-m2 <- gamm(Moist ~  s(Time,k=4), data=obs, correlation = corAR1(form = ~Time))
+obs$Time2 <- 1:7
 
-plot(Moist ~ Time, data=obs, xlab = expression(x[t]), ylab = expression(y[t]))
+#obs <- obs %>% filter(Time != 1982)
+m1 <- gam(WSG ~  s(Time,k=4), data=obs)
+m2 <- gamm(WSG ~  s(Time,k=4), data=obs, correlation = corAR1(form = ~Time2))
+m3 <- gamm(WSG ~  s(Time,k=4), data=obs)
+
+plot(WSG ~ Time, data=obs, xlab = expression(x[t]), ylab = expression(y[t]))
 lines(fitted(m1) ~ obs$Time, lty = "solid", col = "darkolivegreen", lwd = 2)
 lines(fitted(m2$lme) ~ obs$Time, lty = "solid", col = "midnightblue", lwd = 2)
 
+summary(m2$lme)
 
-m1 <- gam(Moist ~  s(Time,k=4), data=moge)
-m2 <- gamm(Moist ~  s(Time,k=4), random = list(site = ~ 1), data=moge, correlation = corAR1(form = ~Time))
+m1 <- gam(WSG ~  s(Time,k=4), data=moge)
+m2 <- gamm(WSG ~  s(Time,k=4), random = list(site = ~ 1), data=moge, correlation = corAR1(form = ~Time))
 
 
 plot(Moist ~ Time, data=moge, xlab = expression(x[t]), ylab = expression(y[t]))
