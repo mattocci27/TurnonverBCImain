@@ -9,12 +9,15 @@ p <- NULL
 r2 <- NULL
 dat2 <- NULL
 
+p_range <- c(0.1, 0.5, 1, 10)
+#phi_range <- c(0, 1, 0.25, 0.5, 0.75, 1)
+
 plot(y ~ x, xlab = expression(x[t]), ylab = expression(y[t]), ylim=c(-10,10))
 for (j in 1:1500){
   y <- NULL
   y[1] <- 0
   for (i in 2:n){
-    y[i] <- rnorm(1, 1 * y[i-1], 1)
+    y[i] <- rnorm(1, 1 * y[i-1], 0.1)
   }
 
 #  y <- rep(0,n)
@@ -41,31 +44,11 @@ after <- proc.time()
 after - before
 
 r22 <- r2[!is.na(r2)] %>% sample(1000)
-p2 <- p[!is.na(p)] %>% sample(1000)
+r2 <- p[!is.na(p)] %>% sample(1000)
 
-for (j in 1:1500){
-  y <- NULL
-  y[1] <- 0
-  for (i in 2:n){
-    y[i] <- rnorm(1, 1 * y[i-1], 1)
-  }
-
-#  y <- rep(0,n)
-#  y <- y + arima.sim(list(ar=0.85), n=n)
-#  y <- as.numeric(y)
-#  y <- y - y[1]
-  #plot(y ~ x)
-  dat <- data.frame(x=x, y=y)
-  res <- lm(y~x,dat) %>% summary
-  p[j] <- res$coefficients[2,4]
-  r2[j] <- res$coefficients[2,1]
-  dat2 <- rbind(dat2, dat)
-  #lines(fitted(res$lme) ~ x, lty = "solid", col = "midnightblue", lwd = 2)
-  #res <- gamm(y ~ s(x, k=4), data = dat, correlation = corCAR1(form=~x))
-}
-
-library(gamclass)
-CVgam(y ~s(x, k=4), data =dat)
+par(mfrow=c(1,2))
+hist(r22, xlab = "R2 values")
+hist(p2, xlab = "P values")
 
 dat2 <- dat2 %>% mutate(n = rep((1:(nrow(dat2)/7)), each = 7))
 
@@ -73,11 +56,40 @@ save.image("art.rda")
 
 load("~/Dropbox/MS/TurnoverBCI/TurnoverBCImain/analysis/art.rda")
 
-ggplot(dat2 %>% filter(n <= 100), aes(x=x,y=y, col = n %>% as.factor)) +
+ggplot(dat2 %>% filter(n <= 50), aes(x=x,y=y, col = n %>% as.factor)) +
   #geom_point() +
   geom_smooth(se = FALSE) +
   guides(col = FALSE) +
+  xlab("Time") +
+  ggtitle("50 simulations") +
+  ylab("Imaginary community means at 50ha scale") +
   theme_bw()
+
+aa <- dat2 %>% filter(n <= 50) %>%
+  gamm(y ~ s(x,k=4), data =., random = list(n = ~ 1), correlation = corCAR1(form=~x))
+
+
+# site and tempo
+
+  y <- matrix(rep(0,350),nrow=7)
+  y[1,] <- 0
+  for (i in 2:n){
+    for (j in 2:50)
+    y[i,j] <- rnorm(1, 1 * y[i-1, j] + 0.3*y[i,j-1], 1)
+  }
+
+dat <- data_frame(y=as.vector(t(y)), x = rep(1:7, each=50)) %>%
+  mutate(site = rep(1:50, 7))
+
+res <- gamm(y ~ s(x,k=4), data = dat, random = list(site = ~ 1), correlation = corCAR1(form=~x))
+
+summary(res$gam)
+plot(y~x,dat)
+
+
+t(y) %>% levelplot
+
+plot(y ~ x, dat2)
 
 
 moge <- dat2 %>% filter(x == 7 & y > 0)
@@ -186,7 +198,8 @@ fig_dat3 <- data_frame(Time = fig_dat3$Time,
     trait = fig_dat3$trait,
     val = fig_dat3$val)
 
-obs <- fig_dat3 %>% tidyr::spread(trait, val)
+obs <- fig_dat3 %>% tidyr::spread(trait, val) %>%
+  mutate(Convex = -Convex)
   #mutate(Convex = scale(Convex)) %>%
   #mutate(Convex = Convex - Convex[1]) %>%
   #mutate(Moist = scale(Moist)) %>%
@@ -223,22 +236,72 @@ moge$Time2 <- rep(1:7, each = 50)
 obs$Time2 <- 1:7
 
 #obs <- obs %>% filter(Time != 1982)
-m1 <- gam(WSG ~  s(Time,k=4), data=obs)
-m2 <- gamm(WSG ~  s(Time,k=4), data=obs, correlation = corAR1(form = ~Time2))
-m3 <- gamm(WSG ~  s(Time,k=4), data=obs)
+m1 <- gam(Convex ~  s(Time,k=4), data=obs)
+m2 <- gamm(Convex ~  s(Time,k=4), data=obs, correlation = corAR1(form = ~Time2))
+m3 <- gamm(Convex ~  s(Time,k=6), data=obs)
 
-plot(WSG ~ Time, data=obs, xlab = expression(x[t]), ylab = expression(y[t]))
+plot(Convex ~ Time, data=obs, xlab = expression(x[t]), ylab = expression(y[t]))
 lines(fitted(m1) ~ obs$Time, lty = "solid", col = "darkolivegreen", lwd = 2)
 lines(fitted(m2$lme) ~ obs$Time, lty = "solid", col = "midnightblue", lwd = 2)
 
 summary(m2$lme)
 
+moge <- data.frame(WSG = unlist(WSG100),
+                   Moist = unlist(Moist100),
+                   slope = unlist(slope100),
+                   convex = unlist(convex100),
+                   site = as.factor(rep(1:50,7)),
+                   Time)
+
+moge$Time2 <- rep(1:7, each = 50)
+
 m1 <- gam(WSG ~  s(Time,k=4), data=moge)
-m2 <- gamm(WSG ~  s(Time,k=4), random = list(site = ~ 1), data=moge, correlation = corAR1(form = ~Time))
+
+m2 <- gamm(WSG ~  s(Time,k=4), random = list(site = ~ 1),
+           data=moge, correlation = corAR1(form = ~Time2))
+
+m3 <- gamm(WSG ~  s(Time,k=4),
+           random = list(site = ~ 1),
+           data=moge, correlation = corAR1(form = ~Time2 |site))
+
+summary(m2$gam)
+
+plot(WSG ~ Time, data=moge, xlab = expression(x[t]), ylab = expression(y[t]))
+lines(fitted(m1) ~ moge$Time, lty = "solid", col = "darkolivegreen", lwd = 2)
+lines(fitted(m2$lme) ~ moge$Time, lty = "solid", col = "midnightblue", lwd = 2)
+
+f1 <- sum((moge$WSG - fitted(m2$lme))^2)
+
+f2 <- sum((moge$WSG - mean(moge$WSG))^2)
 
 
-plot(Moist ~ Time, data=moge, xlab = expression(x[t]), ylab = expression(y[t]))
-lines(fitted(m1) ~ obs$Time, lty = "solid", col = "darkolivegreen", lwd = 2)
-lines(fitted(m2$lme) ~ obs$Time, lty = "solid", col = "midnightblue", lwd = 2)
+plot(fitted(m3$lme) ~ moge$Time, lty = "solid", col = "midnightblue", lwd = 2)
 
 
+a2 <- fitted(m2$lme) %>% as.numeric
+a3 <- fitted(m3$lme) %>% as.numeric
+
+
+## CV again
+
+train <- tail(obs,6)
+test <- head(obs,1)
+
+train_m <- gamm(WSG ~  s(Time,k=4), data=train, correlation = corAR1(form = ~Time2))
+pred <- predict(train_m$gam, test)
+resd <- (pred - test$WSG)^2
+
+
+moge$WSG %>% t %>% matrix(ncol=7) %>% levelplot(asp="fill")
+
+moge2 <- moge %>% tidyr::gather(trait, val, 1:4)
+
+ggplot(moge2, aes(x=Time,y=val, fill = site %>% as.factor)) +
+  #geom_point() +
+  facet_wrap(~trait, scales="free") +
+  geom_smooth(se = FALSE, col = "gray") +
+  guides(col = FALSE, fill = FALSE) +
+  xlab("Time") +
+  ggtitle("50 simulations") +
+  ylab("Imaginary community means at 50ha scale") +
+  theme_bw()
