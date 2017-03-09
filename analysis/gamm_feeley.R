@@ -72,28 +72,6 @@ moge20r <- data.frame(WSG = unlist(WSG20),
                    site = as.factor(rep(1:1250,7)),
                    Time)
 
-#
-# r1.r <- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data=moge20, correlation = corAR1())
-# r2.r <- gamm(Moist ~  s(Time,k=4), random = list(site=~1), data=moge20, correlation = corAR1())
-# r3.r <- gamm(convex ~  s(Time,k=4), random = list(site=~1), data=moge20, correlation = corAR1())
-# r4.r <- gamm(slope ~  s(Time,k=4), random = list(site=~1), data=moge20, correlation = corAR1())
-#
-r1 <- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data=moge20, correlation = corCAR1(form=~Time))
-r2 <- gamm(Moist ~  s(Time,k=4), random = list(site=~1), data=moge20, correlation = corCAR1(form=~Time))
-r3 <- gamm(convex ~  s(Time,k=4), random = list(site=~1), data=moge20, correlation = corCAR1(form=~Time))
-r4 <- gamm(slope ~  s(Time,k=4), random = list(site=~1), data=moge20, correlation = corCAR1(form=~Time))
-
-
-r1.r100<- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data=moge100r, correlation = corCAR1(form=~Time))
-r2.r100<- gamm(Moist ~  s(Time,k=4), random = list(site=~1), data=moge100r, correlation = corCAR1(form=~Time))
-r3.r100<- gamm(convex ~  s(Time,k=4), random = list(site=~1), data=moge100r, correlation = corCAR1(form=~Time))
-r4.r100<- gamm(slope ~  s(Time,k=4), random = list(site=~1), data=moge100r, correlation = corCAR1(form=~Time))
-
-r1_100 <- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data=moge, correlation = corCAR1(form=~Time))
-r2_100 <- gamm(Moist ~  s(Time,k=4), random = list(site=~1), data=moge, correlation = corCAR1(form=~Time))
-r3_100 <- gamm(convex ~  s(Time,k=4), random = list(site=~1), data=moge, correlation = corCAR1(form=~Time))
-r4_100 <- gamm(slope ~  s(Time,k=4), random = list(site=~1), data=moge, correlation = corCAR1(form=~Time))
-
 ##############################################################
 #Feeley's R2
 ##############################################################
@@ -108,44 +86,90 @@ moge <- moge %>%
   mutate(WSG = WSG - WSG100[[1]]) %>%
   mutate(Moist = Moist - Moist100[[1]]) %>%
   mutate(convex = convex - convex100[[1]]) %>%
-  mutate(slope = slope - slope100[[1]])
+  mutate(slope = slope - slope100[[1]]) %>%
+  mutate(concav = -convex)
+
+
+moge20 <- moge20 %>%
+  mutate(WSG = WSG - WSG20[[1]]) %>%
+  mutate(Moist = Moist - Moist20[[1]]) %>%
+  mutate(convex = convex - convex20[[1]]) %>%
+  mutate(slope = slope - slope20[[1]]) %>%
+  mutate(concav = -convex)
+
+#m1 <- gamm(WSG ~ s(Time, k=4), random = list(site=~1),
+#           data = moge20,
+#          # weights = varFixed(~ Time),
+#           correlation = corCAR1(form=~Time2))
+
+
+varf <- moge %>%
+  group_by(Time) %>%
+  summarize(varf = var(WSG))
+
+moge2 <- moge %>%
+  mutate(varf = rep(varf$varf, each = 50)) %>%
+  mutate(varf = ifelse(varf == 0, 0, varf))
+
+
+m1 <- gamm(WSG ~ s(Time, k=4), random = list(site=~1),
+           data = moge2 %>% filter(varf >0),
+           weights = varFixed(~ varf),
+           correlation = corCAR1(form=~Time2))
+
+
+m2 <- gamm(WSG ~ s(Time, k=4), random = list(site=~1),
+           data = moge2 %>% filter(varf >0),
+           correlation = corCAR1(form=~Time2))
+
+par(mfrow=c(1,2))
+plot(m1$lme)
+plot(m2$lme)
+par(mfrow=c(1,1))
+
+m3 <- gamm(WSG ~ s(Time, k=4), random = list(site=~1),
+           data = moge,
+           weights = varFixed(~ Time),
+           correlation = corCAR1(form=~Time2))
+
+m4 <- gamm(WSG ~ s(Time, k=4), random = list(site=~1),
+           data = moge,
+           correlation = corCAR1(form=~Time2))
+
+
+#summary(m1$gam)
+par(mfrow=c(2,2))
+plot(m1$gam, residuals = T)
+plot(m2$gam, residuals = T)
+plot(m3$gam, residuals = T)
+plot(m4$gam, residuals = T)
+par(mfrow=c(1,1))
+
+moge3 <- moge2 %>% filter(varf >0)
+
+plot(residuals(m1$lme) ~ moge3$Time)
 
 
 
-# moge <- data.frame(WSG = unlist(WSG100.rm),
-#                    Moist = unlist(Moist100),
-#                    slope = unlist(slope100),
-#                    convex = unlist(convex100),
-#                    site = as.factor(rep(1:50,7)),
-#                    Time)
-# moge <- moge %>%
-#   mutate(WSG = WSG - WSG100.rm[[1]]) %>%
-#   mutate(Moist = Moist - Moist100[[1]]) %>%
-#   mutate(convex = convex - convex100[[1]]) %>%
-#   mutate(slope = slope - slope100[[1]])
-
-cross_site <- data.frame(site = 1:50, temp = rnorm(50)) %>%
-  arrange(temp)
+tapply(moge2$WSG, moge2$Time, mean)
 
 
-#wood density = 0.4
-#slope = 0.02
-#convex = 0.09
-#moist =
-#WSG_rm = 0.4399393
-# moge %>% filter(site %in% cross_site[1:5, "site"])
-# 1:5 vs 6:50
-# 6:10 vs 1:5, 11:50
-k <- 10
+plot(temp ~ Time, moge2)
 
-par(mfrow = c(2, 5))
-# res.cv <- numeric(k)
+
+# function
+gamm_cv <- function(var_name, data = moge, k = 10){
   res.cv <- NULL
   SS <- NULL
   PREDS <- NULL
+
+  cross_site <- data.frame(site = 1:50, temp = rnorm(50)) %>%
+   arrange(temp)
+  form <- paste(var_name, "~ s(Time, k=4)") %>% noquote %>% as.formula
+
   i <- 1
   temp_train1 <- moge %>% filter(site %in% cross_site[6:50, "site"])
-  r2.1 <- gamm(WSG ~  s(Time,k=4), random = list(site=~1),
+  r2.1 <- gamm(form, random = list(site=~1),
                data = temp_train1,
                weights = varFixed(~ Time),
                correlation = corCAR1(form=~Time2))
@@ -156,22 +180,108 @@ par(mfrow = c(2, 5))
   res2 <- unique(res[order(res$Time),])
   res3 <- merge(temp_pre, res2, by = "Time")
 
-  SS[i] <- sum((res3$WSG - mean(res3$WSG))^2)
-  PREDS[i] <- sum((res3$fitted - res3$WSG)^2)
+  SS[i] <- sum((res3[,var_name] - mean(res3[,var_name]))^2)
+  PREDS[i] <- sum((res3$fitted - res3[,var_name])^2)
+
+
+  for (i in 2:(k-1)){
+    temp_train1 <- moge %>% filter(site %in% cross_site[1:(5*(i-1)), "site"])
+    temp_train2 <- moge %>% filter(site %in% cross_site[(5*i +1):50, "site"])
+
+    temp.data <- bind_rows(temp_train1, temp_train2)
+    r2.1 <- gamm(form, random = list(site=~1),
+                 weights = varFixed(~ Time),
+                 data = temp.data, correlation = corCAR1(form = ~Time2))
+    res <- data.frame(fitted = r2.1$gam$fitted.values, Time= r2.1$gam$model$Time)
+    res2 <- unique(res[order(res$Time),])
+
+    temp_pre <- moge %>% filter(site %in% cross_site[(5*(i-1) + 1):(5*i), "site"])
+
+    res3 <- merge(temp_pre, res2, by = "Time")
+    SS[i] <- sum((res3[,var_name] - mean(res3[,var_name]))^2)
+    PREDS[i] <- sum((res3$fitted - res3[,var_name])^2)
+  }
+
+
+  i <- 10
+  temp_train1 <- moge %>% filter(site %in% cross_site[1:45, "site"])
+  temp_pre <- moge %>% filter(site %in% cross_site[46:50, "site"])
+
+  r2.1 <- gamm(form, random = list(site=~1),
+               weights = varFixed(~ Time),
+               data=temp_train1, correlation = corCAR1(form=~Time2))
+  res <- data.frame(fitted = r2.1$gam$fitted.values, Time= r2.1$gam$model$Time)
+  res2 <- unique(res[order(res$Time),])
+  res3 <- merge(temp_pre, res2, by = "Time")
+  SS[i] <- sum((res3[,var_name] - mean(res3[,var_name]))^2)
+  PREDS[i] <- sum((res3$fitted - res3[,var_name])^2)
+
+  1 - mean(PREDS, na.rm=T)/mean(SS,na.rm=T)
+}
+
+
+set.seed(3)
+gamm_cv("WSG", data = moge)
+gamm_cv("Moist", data = moge)
+gamm_cv("slope", data = moge)
+gamm_cv("concav", data = moge)
+
+moge2 <- moge
+moge2$concav <- abs(moge$concav)
+
+for (i in 1:10) gamm_cv("concav", data = moge2) %>% print
+
+m1 <- gamm(concav ~ s(Time, k=4), random = list(site=~1),
+               weights = varFixed(~ Time),
+               data=moge2, correlation = corCAR1(form=~Time2))
+
+
+#wood density = 0.4
+#slope = 0.02
+#convex = 0.09
+#moist =
+#WSG_rm = 0.4399393
+# moge %>% filter(site %in% cross_site[1:5, "site"])
+# 1:5 vs 6:50
+# 6:10 vs 1:5, 11:50
+
+set.seed(5)
+k <- 10
+
+par(mfrow = c(2, 5))
+# res.cv <- numeric(k)
+  res.cv <- NULL
+  SS <- NULL
+  PREDS <- NULL
+  i <- 1
+  temp_train1 <- moge %>% filter(site %in% cross_site[6:50, "site"])
+  r2.1 <- gamm(concav ~  s(Time,k=4), random = list(site=~1),
+               data = temp_train1,
+               weights = varFixed(~ Time),
+               correlation = corCAR1(form=~Time2))
+  res <- data.frame(fitted = r2.1$gam$fitted.values, Time = r2.1$gam$model$Time)
+
+  temp_pre <- moge %>% filter(site %in% cross_site[1:5, "site"])
+
+  res2 <- unique(res[order(res$Time),])
+  res3 <- merge(temp_pre, res2, by = "Time")
+
+  SS[i] <- sum((res3$concav - mean(res3$concav))^2)
+  PREDS[i] <- sum((res3$fitted - res3$concav)^2)
   # res.cv[i] <- 1 - mean(PREDS)/mean(SS)
 
   # r2.1$lme$residuals$site
   site_vec <- res3$site %>% unique
-  plot(WSG ~ Time, res3, main = paste("subset", i), ylab = "WSG", type = "n")
-  for (j in 1:7) points(WSG ~ Time, res3 %>% filter(site == site_vec[j]), type = "b")
-  points(fitted ~ Time, res3, pch = 16)
+  #plot(concav ~ Time, res3, main = paste("subset", i), ylab = "concav", type = "n")
+  #for (j in 1:7) points(concav ~ Time, res3 %>% filter(site == site_vec[j]), type = "b")
+  #points(fitted ~ Time, res3, pch = 16)
 
 for (i in 2:(k-1)){
   temp_train1 <- moge %>% filter(site %in% cross_site[1:(5*(i-1)), "site"])
   temp_train2 <- moge %>% filter(site %in% cross_site[(5*i +1):50, "site"])
 
   temp.data <- bind_rows(temp_train1, temp_train2)
-  r2.1 <- gamm(WSG ~  s(Time,k=4), random = list(site=~1),
+  r2.1 <- gamm(concav ~  s(Time,k=4), random = list(site=~1),
                weights = varFixed(~ Time),
                data = temp.data, correlation = corCAR1(form = ~Time2))
   res <- data.frame(fitted = r2.1$gam$fitted.values, Time= r2.1$gam$model$Time)
@@ -180,13 +290,13 @@ for (i in 2:(k-1)){
   temp_pre <- moge %>% filter(site %in% cross_site[(5*(i-1) + 1):(5*i), "site"])
 
   res3 <- merge(temp_pre, res2, by = "Time")
-  SS[i] <- sum((res3$WSG - mean(res3$WSG))^2)
-  PREDS[i] <- sum((res3$fitted - res3$WSG)^2)
+  SS[i] <- sum((res3$concav - mean(res3$concav))^2)
+  PREDS[i] <- sum((res3$fitted - res3$concav)^2)
   # res.cv[i] <- 1 - mean(PREDS)/mean(SS)
   site_vec <- res3$site %>% unique
-  plot(WSG ~ Time, res3, main = paste("subset", i), ylab = "WSG", type = "n")
-  for (j in 1:7) points(WSG ~ Time, res3 %>% filter(site == site_vec[j]), type = "b")
-  points(fitted ~ Time, res3, pch = 16)
+  #plot(concav ~ Time, res3, main = paste("subset", i), ylab = "concav", type = "n")
+  #for (j in 1:7) points(concav ~ Time, res3 %>% filter(site == site_vec[j]), type = "b")
+  #points(fitted ~ Time, res3, pch = 16)
 }
 
 
@@ -194,20 +304,20 @@ i <- 10
 temp_train1 <- moge %>% filter(site %in% cross_site[1:45, "site"])
 temp_pre <- moge %>% filter(site %in% cross_site[46:50, "site"])
 
-  r2.1 <- gamm(WSG ~  s(Time,k=4), random = list(site=~1),
+  r2.1 <- gamm(concav ~  s(Time,k=4), random = list(site=~1),
                weights = varFixed(~ Time),
                data=temp_train1, correlation = corCAR1(form=~Time2))
   res <- data.frame(fitted = r2.1$gam$fitted.values, Time= r2.1$gam$model$Time)
   res2 <- unique(res[order(res$Time),])
   res3 <- merge(temp_pre, res2, by = "Time")
-  SS[i] <- sum((res3$WSG - mean(res3$WSG))^2)
-  PREDS[i] <- sum((res3$fitted - res3$WSG)^2)
+  SS[i] <- sum((res3$concav - mean(res3$concav))^2)
+  PREDS[i] <- sum((res3$fitted - res3$concav)^2)
   # res.cv[i] <- 1 - mean(PREDS)/(SS)
   site_vec <- res3$site %>% unique
-  plot(WSG ~ Time, res3, main = paste("subset", i), ylab = "WSG", type = "n")
+  #plot(concav ~ Time, res3, main = paste("subset", i), ylab = "slope", type = "n")
 
-  for (j in 1:7) points(WSG ~ Time, res3 %>% filter(site == site_vec[j]), type = "b")
-  points(fitted ~ Time, res3, pch = 16)
+  #for (j in 1:7) points(slope ~ Time, res3 %>% filter(site == site_vec[j]), type = "b")
+  #points(fitted ~ Time, res3, pch = 16)
 
 
 1 - mean(PREDS, na.rm=T)/mean(SS,na.rm=T)
@@ -230,6 +340,8 @@ c(4.027, trait$sp.slope.mean) %>% rank
 c(0.00418, -trait$sp.convex.mean) %>% rank
 c(0.059, -trait$sp.convex.mean) %>% rank
 
+
+
 ##############################################################
 #original R2
 ##############################################################
@@ -246,7 +358,7 @@ par(mfrow = c(2,5))
   SS <- NULL
   PREDS <- NULL
   i <- 1
-  r2.1 <- gamm(WSG ~  s(Time,k=4), random = list(site=~1), data=moge.cross[(35*i+1):350,], correlation = corCAR1(form=~Time))
+  r2.1 <- gamm(Moist ~  s(Time,k=4), random = list(site=~1), data=moge.cross[(35*i+1):350,], correlation = corCAR1(form=~Time))
   res <- data.frame(fitted = r2.1$gam$fitted.values, Time= r2.1$gam$model$Time)
 
   # res <- data.frame(fitted = r2.1$gam$fitted.values,
@@ -258,7 +370,7 @@ par(mfrow = c(2,5))
   res2 <- unique(res[order(res$Time),])
   res3 <- merge(moge.cross[1:35,],res2,by="Time")
 
-  SS[i] <- sum((moge.cross[1:35,"WSG"] - mean(moge.cross[1:35,"WSG"]))^2)
+  SS[i] <- sum((moge.cross[1:35,"Moist"] - mean(moge.cross[1:35,"WSG"]))^2)
   PREDS[i] <- sum((res3$fitted - res3$WSG)^2)
   # res.cv[i] <- 1 - mean(PREDS)/mean(SS)
   plot(WSG ~ Time, res3, main = paste("subset", i), ylab = "Wood density")
