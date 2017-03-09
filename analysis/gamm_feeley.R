@@ -122,20 +122,21 @@ m2 <- gamm(WSG ~ s(Time, k=4), random = list(site=~1),
            data = moge2 %>% filter(varf >0),
            correlation = corCAR1(form=~Time2))
 
-par(mfrow=c(1,2))
-plot(m1$lme)
-plot(m2$lme)
-par(mfrow=c(1,1))
-
 m3 <- gamm(WSG ~ s(Time, k=4), random = list(site=~1),
            data = moge,
-           weights = varFixed(~ Time),
+           weights = varFixed(~ Time2),
            correlation = corCAR1(form=~Time2))
 
 m4 <- gamm(WSG ~ s(Time, k=4), random = list(site=~1),
            data = moge,
            correlation = corCAR1(form=~Time2))
 
+par(mfrow=c(2,2))
+plot(m1$lme)
+plot(m2$lme)
+plot(m3$lme)
+plot(m4$lme)
+par(mfrow=c(1,1))
 
 #summary(m1$gam)
 par(mfrow=c(2,2))
@@ -171,7 +172,7 @@ gamm_cv <- function(var_name, data = moge, k = 10){
   temp_train1 <- moge %>% filter(site %in% cross_site[6:50, "site"])
   r2.1 <- gamm(form, random = list(site=~1),
                data = temp_train1,
-               weights = varFixed(~ Time),
+               weights = varFixed(~ Time2),
                correlation = corCAR1(form=~Time2))
   res <- data.frame(fitted = r2.1$gam$fitted.values, Time = r2.1$gam$model$Time)
 
@@ -190,7 +191,7 @@ gamm_cv <- function(var_name, data = moge, k = 10){
 
     temp.data <- bind_rows(temp_train1, temp_train2)
     r2.1 <- gamm(form, random = list(site=~1),
-                 weights = varFixed(~ Time),
+                 weights = varFixed(~ Time2),
                  data = temp.data, correlation = corCAR1(form = ~Time2))
     res <- data.frame(fitted = r2.1$gam$fitted.values, Time= r2.1$gam$model$Time)
     res2 <- unique(res[order(res$Time),])
@@ -208,7 +209,7 @@ gamm_cv <- function(var_name, data = moge, k = 10){
   temp_pre <- moge %>% filter(site %in% cross_site[46:50, "site"])
 
   r2.1 <- gamm(form, random = list(site=~1),
-               weights = varFixed(~ Time),
+               weights = varFixed(~ Time2),
                data=temp_train1, correlation = corCAR1(form=~Time2))
   res <- data.frame(fitted = r2.1$gam$fitted.values, Time= r2.1$gam$model$Time)
   res2 <- unique(res[order(res$Time),])
