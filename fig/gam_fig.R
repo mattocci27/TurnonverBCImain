@@ -177,7 +177,7 @@ r4_50 <- gamm(slope ~  s(Time,k=4),data=moge50,
 m1 <- gamm(Moist ~  s(Time,k=4), data = moge,
   random = list(site = ~ 1),
   correlation = corAR1(form = ~ Time2),
-  weights = varFixed(~Time),
+  weights = varFixed(~Time2),
   method = "ML")
 
 
@@ -196,42 +196,54 @@ AICctab(m1$lme, m2$lme)
 
 r1_20 <- gamm(WSG ~  s(Time, k = 4), data=moge20,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 r2_20 <- gamm(Moist ~  s(Time, k = 4), data=moge20,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 r3_20 <- gamm(convex ~  s(Time, k = 4), data=moge20,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 r4_20 <- gamm(slope ~  s(Time, k = 4), data=moge20,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 
 
 r1.r100 <- gamm(WSG ~  s(Time, k = 4), data=moge100r,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 r2.r100 <- gamm(Moist ~  s(Time, k = 4), data=moge100r,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 r3.r100 <- gamm(convex ~  s(Time, k = 4), data=moge100r,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 r4.r100 <- gamm(slope ~  s(Time, k = 4), data=moge100r,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 
 r1_100 <- gamm(WSG ~  s(Time, k = 4), data=moge,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 r2_100 <- gamm(Moist ~  s(Time, k = 4), data=moge,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 r3_100 <- gamm(convex ~  s(Time, k = 4), data=moge,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 r4_100 <- gamm(slope ~  s(Time, k = 4), data=moge,
               random = list(site = ~ 1),
+              weights = varFixed(~ Time2),
               correlation = corAR1(form = ~ Time2))
 
 
@@ -253,6 +265,8 @@ res3r50 <- predict(r3.r50$gam ,se.fit=T)
 res4_50 <- predict(r4_50$gam ,se.fit=T)
 res4r50 <- predict(r4.r50$gam ,se.fit=T)
 
+res3_20 <- predict(r3_20$gam ,se.fit=T)
+res4_20 <- predict(r4_20$gam ,se.fit=T)
 
 # fig_dat_n <- data_frame(WSG = c(unlist(WSG100.rm), unlist(WSG20.rm)),
 #   Moist = c(unlist(Moist100.rm), unlist(Moist20.rm)),
@@ -395,6 +409,25 @@ r4data100_r <- data.frame(time = spline(r4.r100$gam$model$Time, res4r100$fit)$x,
 
 moge4 <- bind_rows(r4data100, r4data100_r)
 
+
+
+
+r3data20 <- data.frame(time = spline(r3_20$gam$model$Time, res3_20$fit)$x,
+          mean = spline(r3_20$gam$model$Time, res3_20$fit)$y,
+          upper = spline(r3_20$gam$model$Time,
+              res3_20$fit + 1.96*res3_20$se.fit)$y,
+          lower = spline(r3_20$gam$model$Time,
+              res3_20$fit - 1.96*res3_20$se.fit)$y,
+          obs = "obs")
+
+r4data20 <- data.frame(time = spline(r4_20$gam$model$Time, res4_20$fit)$x,
+          mean = spline(r4_20$gam$model$Time, res4_20$fit)$y,
+          upper = spline(r4_20$gam$model$Time,
+              res4_20$fit + 1.96*res4_20$se.fit)$y,
+          lower = spline(r4_20$gam$model$Time,
+              res4_20$fit - 1.96*res4_20$se.fit)$y,
+          obs = "obs")
+
 moge <- bind_rows(moge1, moge2, moge3, moge4) %>%
   mutate(Trait = rep(c("WSG", "Moist", "Convex", "Slope"), each = 42)) %>%
   mutate(size = "1ha") %>%
@@ -413,8 +446,8 @@ ggplot(gam_dat, aes(x = time, y = val, colour = obs)) +
 fig_dat4 <- bind_rows(fig_dat2, fig_dat3) %>%
   mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
   mutate(trait = factor(trait, levels = c("WSG", "Moist", "Convex", "Slope"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)"))) %>%
-  filter(size != "50ha")
+  mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
+#filter(size != "50ha")
 
 fig_dat4 <- fig_dat4 %>%
   mutate(obs2 = "dat") %>%
@@ -450,7 +483,7 @@ temp <- bind_rows(fig_dat4, moge6) %>%
   mutate(obs2 = as.factor(obs2)) %>%
   mutate(trait = factor(trait, levels = c("WSG", "Moist", "Convex", "Slope"))) %>%
   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Concavity~(m)", "Slope~(degrees)"))) %>%
-  mutate(size = factor(size, levels = c("1ha", "0.04ha")))
+  mutate(size = factor(size, levels = c("50ha","1ha", "0.04ha")))
   # mutate(obs2 = ifelse(obs2 == "dat", "obs", obs2))
 
 
@@ -560,3 +593,64 @@ ggplot(filter(temp, is.na(est_mean) == TRUE) %>% filter(size == "1ha")) +
 
 dev.off()
 
+
+
+pdf("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/ver2/fig2_new3.pdf", width = 9, height = 7)
+
+#before <- proc.time()
+ggplot(filter(temp, is.na(est_mean) == TRUE)) +
+    geom_point(data = temp %>% filter(obs2 != "tr"),
+      aes(x = jitter(Time),
+    y = val), size = 1.2, alpha = 0.4) +
+    geom_line(data = temp, aes(x = Time, y = val, fill = site),
+              alpha = 0.2, lwd = 0.3) +
+    guides(fill = FALSE) +
+    facet_wrap(size ~ trait2, scale = "free",
+    labeller = labeller(trait2 = label_parsed),
+    switch = NULL, ncol = 4) + # geom_smooth() +
+    theme_bw() +
+#after <- proc.time()
+#after - before
+
+    xlab("Time") +
+    ylab("Deviation from initial trait values") +
+    geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs" & est == "est"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.4) +
+    geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs" & est == "est"), aes(x = Time, y = est_mean), colour = "blue", lwd = 0.5) +
+
+    geom_ribbon(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")) %>%
+      filter(trait != "Moist"),
+    aes(ymin = est_lo, ymax = est_up, x = Time, fill = obs2), fill = "blue", alpha = 0.4) +
+    geom_line(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")) %>%
+      filter(trait != "Moist"),
+              aes(x = Time, y = est_mean, colour = obs2, lty = obs2),
+              colour = "blue", lty = 1, lwd = 0.5) +
+
+    #scale_fill_manual(values = c("gray", "gray")) +
+    scale_colour_manual(values = c("black", "black")) +
+    scale_linetype_manual(values = c(2, 2)) +
+    guides(linetype = FALSE) +
+    guides(colour = FALSE) +
+    guides(fill = FALSE) +
+    theme(
+      plot.margin = unit(c(0.2, 0.2, 0.2 , 0.2), units = "lines"),
+      strip.text = element_text(size = 10.5, lineheight=0.5),
+      axis.title = element_text(size = 10.5),
+      axis.text.x = element_text(size = 9, angle = 45),
+      axis.text.y = element_text(size = 9),
+      legend.text = element_text(size = 10.5))
+
+dev.off()
+
+
+
+## error
+par(mfrow = c(2,4))
+plot(r1_100$gam, residuals = T, main = "WSG 1ha")
+plot(r2_100$gam, residuals = T, main =  )
+plot(r3_100$gam, residuals = T)
+plot(r4_100$gam, residuals = T)
+
+plot(r1_20$gam, residuals = T)
+plot(r2_20$gam, residuals = T)
+plot(r3_20$gam, residuals = T)
+plot(r4_20$gam, residuals = T)
