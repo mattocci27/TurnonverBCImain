@@ -1,5 +1,5 @@
 ### figure and analysis
-### GLA for species with extream trait valus. (response to reviewr 2)
+### GLA for species with extreme trait values. (response to reviewer 2)
 ###
 
 
@@ -270,12 +270,3 @@ ggplot(.,
         legend.text = element_text(size = 7))
 
 dev.off()
-
-
-
-
-
-
-
-
-
