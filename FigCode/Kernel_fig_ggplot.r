@@ -6,7 +6,7 @@ rm(list = ls()) # This clears everything from memory.
 before0 <- proc.time()
 setwd("~/Dropbox/BCI_Turnover")
 load("BCI_turnover20150611.RData")
-source("TurnoverSource20150611.r")
+source("~/Dropbox/MS/TurnoverBCI/TurnoverBCImain/source.R")
 
 library(ggplot2)
 library(gridExtra)

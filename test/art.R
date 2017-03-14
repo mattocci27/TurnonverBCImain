@@ -1,3 +1,7 @@
+###
+### This simulation shows that the pattens in the 50ha scale
+### can be created by temporal autocorrelation alone.
+
 library(mgcv)
 
 set.seed(5)
@@ -155,7 +159,7 @@ test <- bckftg.alg(y, as.data.frame(x), lime = )
 ###
 setwd("~/Dropbox/BCI_Turnover")
 load("BCI_turnover20150611.RData")
-source("TurnoverSource20150611.r")
+source("~/Dropbox/MS/TurnoverBCI/TurnoverBCImain/source.R")
 load("gam_fig.RData")
 
 # library(MASS)

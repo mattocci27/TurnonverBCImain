@@ -1,5 +1,6 @@
-# CV sp
-# every censuss
+###
+### Species-level GLM for every census (appendix)
+###
 rm(list = ls()) # This clears everything from memory.
 
 setwd("~/Dropbox/BCI_Turnover")

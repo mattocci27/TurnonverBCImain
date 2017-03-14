@@ -2,19 +2,18 @@ rm(list = ls()) # This clears everything from memory.
 
 library(dplyr)
 library(ggplot2)
-library(cowplot)
 
 setwd("~/Dropbox/BCI_Turnover")
 load("BCI_turnover20150611.RData")
-source("TurnoverSource20150611.r")
+source("~/Dropbox/MS/TurnoverBCI/TurnoverBCImain/source.R")
 # prepare data set
-ab.data <- as.data.frame(sapply(D20m,function(x)apply(x,2,sum)))
+ab.data <- as.data.frame(sapply(D20ba,function(x)apply(x,2,sum)))
 ab.data$sp <- rownames(ab.data)
 trait.temp <- data.frame(sp=rownames(trait),
            moist=trait$Moist,
            slope=trait$sp.slope.mean,
            slope.sd = trait$sp.slope.sd,
-           convex= -trait$sp.convex.mean, # convavity
+           convex=trait$sp.convex.mean,
            convex.sd=trait$sp.convex.sd,
            WSG=trait$WSG,
            slope10=trait$slope_size_10,
@@ -41,7 +40,6 @@ trait.temp <- data.frame(sp=rownames(trait),
 ab.t.data <- merge(ab.data,trait.temp,by="sp")
 rownames(ab.t.data) <- ab.t.data$sp
 ab.t.data2 <- na.omit(ab.t.data)
-
 
 #this may be useful way to detect species.
 #using the product of delta abundance and deviaiton from mean (or median) trait for each species
@@ -94,9 +92,7 @@ slopeab <- slopeab[order(slopeab$index),]
 WSGab <- data.frame(sp = ab.t.data$sp,
                     delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) - ab.t.data$census_1982/sum(ab.t.data$census_1982),
                     WSG = ab.t.data$WSG,
-                    WSG_delta =ab.t.data$WSG - mean(WSG100[[1]])) %>%
-                    mutate(WSG_delta2 = WSG - mean(WSG, na.rm = T))
-
+                    WSG_delta =ab.t.data$WSG - mean(ab.t.data$WSG,na.rm=T))
 WSGab$index <- WSGab$delta_ab * WSGab$WSG_delta*100
 
 WSGab <- WSGab[order(WSGab$index),]
@@ -105,7 +101,7 @@ WSGab <- WSGab[order(WSGab$index),]
 moistab <- data.frame(sp = ab.t.data$sp,
                     delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) - ab.t.data$census_1982/sum(ab.t.data$census_1982),
                     moist = ab.t.data$moist,
-                    moist_delta = ab.t.data$moist - mean(Moist100[[1]]))
+                    moist_delta =ab.t.data$moist - mean(ab.t.data$moist,na.rm=T))
 moistab$index <- moistab$delta_ab * moistab$moist_delta*100
 
 moistab <- moistab[order(moistab$index),]
@@ -114,7 +110,7 @@ moistab <- moistab[order(moistab$index),]
 convexab <- data.frame(sp = ab.t.data$sp,
                     delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) - ab.t.data$census_1982/sum(ab.t.data$census_1982),
                     convex = ab.t.data$convex,
-                    convex_delta =ab.t.data$convex + mean(convex100[[1]])) # concave
+                    convex_delta =ab.t.data$convex - mean(ab.t.data$convex,na.rm=T))
 convexab$index <- convexab$delta_ab * convexab$convex_delta*100
 
 convexab <- convexab[order(convexab$index),]
@@ -124,10 +120,11 @@ convexab <- convexab[order(convexab$index),]
 slopeab <- data.frame(sp = ab.t.data$sp,
                     delta_ab = ab.t.data$census_2010/sum(ab.t.data$census_2010) - ab.t.data$census_1982/sum(ab.t.data$census_1982),
                     slope = ab.t.data$slope,
-                    slope_delta =ab.t.data$slope - mean(slope100[[1]]))
+                    slope_delta =ab.t.data$slope - mean(ab.t.data$slope,na.rm=T))
 slopeab$index <- slopeab$delta_ab * slopeab$slope_delta*100
 
 slopeab <- slopeab[order(slopeab$index),]
+
 
 # sp list for appendix ====================================================
 
@@ -141,18 +138,18 @@ sp_list <- WSGab %>%
   mutate(Moisture = round(index, 4)) %>%
   select(-index) %>%
   full_join(., convexab, by = "sp") %>%
-  mutate(Concavity = round(index, 4)) %>%
+  mutate(Convexity = round(index, 4)) %>%
   select(-index) %>%
   full_join(., slopeab, by = "sp") %>%
   mutate(Slope = round(index, 4), sp6 = sp) %>%
   left_join(., taxa, by = "sp6") %>%
   select(sp, family, genus, species,
-    Abundance_change, Wood_density, Moisture, Concavity, Slope) %>%
+    Abundance_change, Wood_density, Moisture, Convexity, Slope) %>%
   arrange(sp) %>%
   mutate(species = paste(genus, species)) %>%
   select(-genus)
 
-write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list.csv")
+write.csv(sp_list, "/Users/mattocci/Dropbox/MS/TurnoverBCI/sp_list_ba.csv")
 
 
 
@@ -222,20 +219,12 @@ cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
 
 sp_vec2 <- c("PIPECO", "POULAR", "TET2PA", "SWARS1", "ALSEBL", "HYBAPR")
 
-sp_vec2 <- c("FARAOC", "HYBAPR", "PIPECO", "POULAR")
-
-#sp
-sp1 <- sp_list %>% arrange(desc(Wood_density)) %>% head(6) %>% .$sp %>% as.character
-sp2 <- sp_list %>% arrange(desc(Moisture)) %>% head(1) %>% .$sp %>% as.character
-sp3 <- sp_list %>% arrange(desc(Concavity)) %>% head(6) %>% .$sp %>% as.character
-sp4 <- sp_list %>% arrange((Slope)) %>% head(3) %>% .$sp %>% as.character
-
-sp_vec3 <- c(sp1,sp2,sp3,sp4) %>% unique
+sp_vec2 <- c("PIPECO", "POULAR", "QUARAS", "CAVAPL", "TET2PA", "HYBAPR", "FARAOC")
 
 fig_dat2 <- full_join(fig_dat, temp, by = "trait_sig") %>%
   arrange(val2) %>%
   mutate(trait = factor(trait, levels = c("WSG_index", "moist_index", "convex_index", "slope_index"))) %>%
-  mutate(trait2 = factor(trait, labels = c("Wood density", "Moisture", "Concavity", "Slope"))) %>%
+  mutate(trait2 = factor(trait, labels = c("Wood density", "Moisture", "Convexity", "Slope"))) %>%
   mutate(sig = factor(sig, levels = c("Positive", "Negative"))) %>%
   mutate(col = ifelse(sp == "POULAR", "POULAR",
     ifelse(sp == "PIPECO", "PIPECO", "Other species"))) %>%
@@ -243,9 +232,9 @@ fig_dat2 <- full_join(fig_dat, temp, by = "trait_sig") %>%
   mutate(sp2 = ifelse(sp %in% sp_vec, as.character(sp), "Other species")) %>%
   mutate(sp3 = ifelse(sp %in% sp_vec2, as.character(sp), "Other species")) %>%
   mutate(sp2 = factor(sp2, levels = c("FARAOC", "HYBAPR", "PIPECA", "PIPECO", "POULAR", "PSYCLI", "Other species"))) %>%
-  mutate(sp3 = factor(sp3, levels = c("FARAOC", "HYBAPR", "PIPECO", "POULAR", "Other species"))) %>%
-  mutate(sp4 = ifelse(sp %in% sp_vec3, as.character(sp), "Other species")) %>%
-  mutate(sp4 = factor(sp4, levels = c(sort(sp_vec3), "Other species")))
+   mutate(sp3 = factor(sp3, levels = c("PIPECO", "POULAR", "QUARAS", "CAVAPL", "TET2PA", "HYBAPR", "FARAOC", "Other species")))
+
+
 
 
 
@@ -257,35 +246,20 @@ lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
     sp2 = "Other species") %>%
     mutate(size = factor(size, levels = c("50ha", "1ha", "0.04ha"))) %>%
     mutate(trait = factor(trait, levels = c("WSG", "moist", "convex", "slope"))) %>%
-    mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Concavity~(m)", "Slope~(degrees)")))
+    mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moisture", "Convexity~(m)", "Slope~(degrees)")))
 
-
-####
-# 4 species
-postscript("/Users/mattocci/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/pie_4_species.eps", width = 6, height = 3.6)
-
-n <- 4
-hues <- seq(15, 375, length=n+1)
-cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
-
-
+pdf("~/Dropbox/MS/TurnoverBCI/fig/fig4_BA.pdf", width = 6, height = 3.6)
 lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
   mutate(x = 1.4, y = 0.8) %>%
   mutate(n2 = paste("n =", n, sep = " "))
 
-# lab_dat2 <- lab_dat %>% dplyr::select(trait2, sig) %>%
-#   mutate(temp = paste("(", letters[1:8], ")", sep = "")) %>%
-#   mutate(x = 1.0, y = 0.2)
-
   ggplot(fig_dat2) +
   geom_bar(aes(y = val2, x = mean2/2,
-    fill = as.factor(sp3), width = mean2), position = "fill", stat="identity", color = "white", size = 0.02) +
-  geom_text(data = lab_dat, aes(label = n2, x = 1.25, y = 1),
+    fill = as.factor(col), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
+  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
     size = 4, vjust = 0) +
-  # geom_text(data = lab_dat2, aes(label = temp, x = 2, y = 0.1),
-  #     size = 4, vjust = 0) +
-  facet_grid(sig ~ trait2) +
   coord_polar(theta="y") +
+  facet_grid(sig ~ trait2) +
   # scale_fill_gradient(low = "blue", high = "red") +
   # guides(fill = FALSE) +
   # scale_fill_manual(values = ifelse(levels(fig_dat2$sp) == "POULAR", "red", "gray")) +
@@ -299,14 +273,42 @@ lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
      axis.ticks = element_blank()) +
   xlab("") + ylab("") +
   theme(legend.position = "bottom",
-    legend.margin = unit(-0.2, "cm"),
-    panel.grid = element_blank())
+    legend.margin = unit(-0.2, "cm"))
 
 dev.off()
 
-fig_dat2 %>% group_by(trait) %>%
-  summarise(shift = sum(val))
 
-fig_dat2 %>% filter(trait == "slope_index") %>%
-  filter(sig == "Negative") %>% tail(2) %>%
-  .$val2 %>% sum
+
+pdf("~/Dropbox/MS/TurnoverBCI/fig/BA_pie.pdf", width = 6, height = 3.6)
+# 6 species
+n <- 7
+hues <- seq(15, 375, length=n+1)
+cols_hex <- sort(hcl(h=hues, l=65, c=100)[1:n])
+
+
+lab_dat <- fig_dat2 %>% count(trait2, sig) %>% as.data.frame %>%
+  mutate(x = 1.4, y = 0.8) %>%
+  mutate(n2 = paste("n =", n, sep = " "))
+
+  ggplot(fig_dat2) +
+  geom_bar(aes(y = val2, x = mean2/2,
+    fill = as.factor(sp3), width = mean2), position = "fill", stat="identity", color = "white", size = 0.01) +
+  geom_text(data = lab_dat, aes(label = n2, x = 1.2, y = 1),
+    size = 4, vjust = 0) +
+  coord_polar(theta="y") +
+  facet_grid(sig ~ trait2) +
+  # scale_fill_gradient(low = "blue", high = "red") +
+  # guides(fill = FALSE) +
+  # scale_fill_manual(values = ifelse(levels(fig_dat2$sp) == "POULAR", "red", "gray")) +
+  # scale_fill_manual(values = c("PIPECO" = "#F8766D", "POULAR" = "#00C0AF", "Other species" = "gray"), name = "") +
+  scale_fill_manual(values = c(cols_hex, "gray"),
+    guide = guide_legend(title.position = "top",
+      title = "Species",)) +
+  theme_bw() +
+  theme(axis.text.x = element_blank(),
+     axis.text.y = element_blank(),
+     axis.ticks = element_blank()) +
+  xlab("") + ylab("") +
+  theme(legend.position = "bottom",
+    legend.margin = unit(-0.2, "cm"))
+dev.off()

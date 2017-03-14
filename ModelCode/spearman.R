@@ -1,5 +1,6 @@
-# CV sp
-# every censuss
+###
+### spearman
+###
 rm(list = ls()) # This clears everything from memory.
 
 setwd("~/Dropbox/BCI_Turnover")

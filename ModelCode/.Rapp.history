@@ -1,0 +1,2 @@
+load("/Users/mattocci/Dropbox/MS/TurnoverBCI/TurnoverBCImain/analysis/art.rds")
+ls()

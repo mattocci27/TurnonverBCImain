@@ -1,5 +1,5 @@
 #######
-#analysis from here
+#BCI data
 ######
 rm(list = ls()) # This clears everything from memory.
 
@@ -8,6 +8,7 @@ library(foreach)
 source("~/Dropbox/BCI_Turnover/TurnoverSource20150611.r")
 
 ## BCI topo data
+## this URL does not work (3/14/2017)
 source("http://ctfs.arnarb.harvard.edu/Public/CTFSRPackage/files/source/spatial/quadfunc.r")
 source("http://ctfs.arnarb.harvard.edu/Public/CTFSRPackage/files/source/topography/slope.r")
 

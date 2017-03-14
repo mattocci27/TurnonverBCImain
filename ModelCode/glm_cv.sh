@@ -1,3 +1,7 @@
+###
+### shell script to run glm_cv.R
+###
+
 for SIZE in plot20m plot100m
 do
 

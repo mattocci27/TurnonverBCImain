@@ -1,3 +1,7 @@
+### figure and analysis
+### GLA for species with extream trait valus. (response to reviewr 2)
+###
+
 
 setwd("~/Dropbox/BCI_Turnover")
 load("BCI_turnover20141213.RData")
@@ -95,6 +99,7 @@ cv_glm_s <- function(dat, glmfit, K = 10){
 }
 
 
+var_name <- "WSG"
 temp <- quantile(ab_t_data[,var_name], 0.9, na.rm = T) %>% as.numeric
 dat <- dat %>%
   filter(WSG > temp) %>%
@@ -104,6 +109,11 @@ glmfit <- glm.nb((census_2010 + 1) ~ WSG +
                data = ab_t_data)
 
 cv_glm_s(dat, glmfit, K = 10)
+
+
+
+
+
 
 
 var_name <- "WSG"

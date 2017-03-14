@@ -2,7 +2,7 @@ rm(list = ls()) # This clears everything from memory.
 
 setwd("~/Dropbox/BCI_Turnover")
 load("BCI_turnover20150611.RData")
-source("TurnoverSource20150611.r")
+source("~/Dropbox/MS/TurnoverBCI/TurnoverBCImain/source.R")
 # prepare data set
 ab.data <- as.data.frame(sapply(D20m,function(x)apply(x,2,sum)))
 ab.data$sp <- rownames(ab.data)
