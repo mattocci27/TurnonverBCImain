@@ -554,6 +554,7 @@ dev.off()
 
 pdf("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/ver2/fig2_new2.pdf", width = 9, height = 4.66)
 
+pdf("~/Desktop/fig2_new2.pdf", width = 9, height = 4.66)
 #before <- proc.time()
 ggplot(filter(temp, is.na(est_mean) == TRUE) %>% filter(size == "1ha")) +
     geom_point(data = temp %>% filter(obs2 != "tr"),
@@ -597,29 +598,27 @@ ggplot(filter(temp, is.na(est_mean) == TRUE) %>% filter(size == "1ha")) +
 dev.off()
 
 
+#pdf("~/Desktop/fig2.pdf", width = 6, height = 4.66)
+pdf("~/Desktop/fig2.pdf", width = 6, height = 3.7 )
 
-pdf("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/ver2/fig2_new3.pdf", width = 9, height = 7)
-
-#before <- proc.time()
-ggplot(filter(temp, is.na(est_mean) == TRUE)) +
+p <-ggplot(filter(temp, is.na(est_mean) == TRUE)) +
     geom_point(data = temp %>% filter(obs2 != "tr"),
       aes(x = jitter(Time),
-    y = val), size = 1.2, alpha = 0.4) +
+    y = val), size = 1, alpha = 0.4) +
     geom_line(data = temp, aes(x = Time, y = val, fill = site),
               alpha = 0.2, lwd = 0.3) +
     guides(fill = FALSE) +
-    facet_wrap(size ~ trait2, scale = "free",
+    facet_wrap( ~ size + trait2, scale = "free_y",
     labeller = labeller(trait2 = label_parsed),
     switch = NULL, ncol = 4) + # geom_smooth() +
     theme_bw() +
-#after <- proc.time()
-#after - before
 
     xlab("Time") +
     ylab("Deviation from initial trait values") +
-    geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs" & est == "est"), aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.4) +
-    geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs" & est == "est"), aes(x = Time, y = est_mean), colour = "blue", lwd = 0.5) +
-
+    geom_ribbon(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs" & est == "est"),
+                aes(ymin = est_lo, ymax = est_up, x = Time), fill = "blue", alpha = 0.4) +
+    geom_line(data = filter(temp, trait == "WSG" & size == "1ha" & obs2 == "obs" & est == "est"),
+              aes(x = Time, y = est_mean), colour = "blue", lwd = 0.5) +
     geom_ribbon(data = filter(temp, trait != "WSG" & (size == "1ha" & obs2 == "obs")) %>%
       filter(trait != "Moist"),
     aes(ymin = est_lo, ymax = est_up, x = Time, fill = obs2), fill = "blue", alpha = 0.4) +
@@ -635,12 +634,34 @@ ggplot(filter(temp, is.na(est_mean) == TRUE)) +
     guides(colour = FALSE) +
     guides(fill = FALSE) +
     theme(
-      plot.margin = unit(c(0.2, 0.2, 0.2 , 0.2), units = "lines"),
-      strip.text = element_text(size = 10.5, lineheight=0.5),
-      axis.title = element_text(size = 10.5),
-      axis.text.x = element_text(size = 9, angle = 45),
-      axis.text.y = element_text(size = 9),
-      legend.text = element_text(size = 10.5))
+      plot.margin = unit(c(0.5, 0.2, 0.2 , 0.2), units = "cm"),
+      strip.text = element_text(size = 7),
+      #strip.background = element_rect(size = unit(5, units = "cm")),
+      axis.title = element_text(size = 7),
+      axis.text.x = element_text(size = 5, angle = 0),
+      axis.text.y = element_text(size = 5),
+      legend.text = element_text(size = 7))
+
+g <- ggplotGrob(p)
+
+g$heights
+g
+#g$grobs[[62]]$height
+
+# strip height
+for (i in c(6, 11, 16)) g$heights[[i]] <- unit(0.35, "cm")
+for (i in c(5, 10, 15)) g$heights[[i]] <- unit(0, "cm")
+#for (i in c(1, 2, 3,4)) g$heights[[i]] <- unit(0.1, "cm")
+
+# marge between each subpanel
+for (i in c(8, 13, 18)) g$heights[[i]] <- unit(0.3, "cm") 
+for (i in c(62:73)) g$grobs[[i]]$heights <- unit(c(1,1), "npc")
+#g$grobs[[72]]$height
+
+#g$heights[[8]] <- unit(0.1, "cm")
+grid.draw(g)
+
+g$heights
 
 dev.off()
 

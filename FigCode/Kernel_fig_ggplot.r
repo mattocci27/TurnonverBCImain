@@ -184,13 +184,15 @@ dummy <- bind_rows(dummy0, dummy1, dummy2, dummy3, dummy4, dummy5) %>%
 #   mutate(size2 = factor(size, labels = c("All individuals (50ha)", "1ha", "0.04ha"))) %>%
 #   mutate(trait2 = factor(trait, labels = c("Wood~density ~(g~cm^{-3})", "Moist", "Concavity~(m)", "Slope~(degrees)")))
 
-
 ## need to redcued to 6inches
 before <- proc.time()
-postscript("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/fig1_new.eps",
-  width = 9, height = 8, paper = "special")
+#postscript("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/fig1_new.eps",
+#  width = 9, height = 8, paper = "special")
 
-ggplot(dummy0, aes(x = val)) +
+postscript("~/Desktop/fig1_new.eps",
+  width = 6, height = 5, paper = "special")
+
+p <- ggplot(dummy0, aes(x = val)) +
   facet_wrap(~ size2 + trait2, nrow = 3, scale = "free",
   labeller = labeller(trait2 = label_parsed, sizes = label_value)) +
   geom_blank(data = dummy) +
@@ -199,20 +201,28 @@ ggplot(dummy0, aes(x = val)) +
   guides(colour = guide_legend(title = NULL), size = 21) +
   # guides(fill = guide_legend(override.aes = list(fill = as.factor(time)))) +
   theme(
-    legend.position = c(1, 1), legend.justification = c(0.8,0.9),
+   legend.position = c(0.99, 0.99), legend.justification = c(0.8,0.9),
     #legend.text = element_text(size = 9),
     legend.background = element_rect(fill=alpha('blue', 0)),
-    legend.key.size = unit(0.375, "cm"),
-    strip.text = element_text(size = 10.5, lineheight=0.5),
-    axis.title = element_text(size = 10.5),
-    axis.text.x = element_text(size = 9, angle = 45),
-    axis.text.y = element_text(size = 9),
-    legend.text = element_text(size = 10.5),
-    panel.margin = unit(0.2, "lines")) +
+    legend.key.size = unit(0.3, "cm"),
+    strip.text = element_text(size = 7, lineheight=0.5),
+    axis.title = element_text(size = 7),
+    axis.text.x = element_text(size = 5, angle = 45),
+    axis.text.y = element_text(size = 5),
+    legend.text = element_text(size = 7),
+    plot.margin = unit(c(0.5, 0.2, 0.2 , 0.2), units = "cm")) +
   geom_density(data = filter(dummy0, size == "All individuals (50ha)"), adjust = 4, aes(colour = as.factor(time))) +
   ylab("Density") +
   xlab("Trait values")
 
+g <- ggplotGrob(p)
+
+g$heights
+g
+for (i in c(6, 11, 16)) g$heights[[i]] <- unit(0.35, "cm")
+for (i in c(62:73)) g$grobs[[i]]$heights <- unit(c(1,1), "npc")
+
+grid.draw(g)
 dev.off()
 after <- proc.time()
 after - before

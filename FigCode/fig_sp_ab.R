@@ -200,6 +200,8 @@ lab_dat <- data_frame(lab = paste("(", letters[1:12], ")", sep = ""),
 # fig. 3
 pdf("~/Dropbox/MS/TurnoverBCI/TurnoverBCI_MS/fig/fig3_new.pdf", width = 6, height = 5, paper = "special")
 
+pdf("~/Desktop/fig3_new.pdf", width = 6, height = 4.33, paper = "special")
+
   ggplot(p_dat2 %>% arrange(cat), aes(y = ab2010/ab1982, x = val, shape = cat, fill = cat, alpha = cat, colour = cat)) +
     geom_point() +
     facet_grid(size ~ trait2, scale = "free_x", labeller = labeller(trait2 = label_parsed, size = label_value)) +

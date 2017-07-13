@@ -58,7 +58,7 @@ dat2 <- dat2 %>% mutate(n = rep((1:(nrow(dat2)/7)), each = 7))
 
 save.image("art.rda")
 
-load("~/Dropbox/MS/TurnoverBCI/TurnoverBCImain/analysis/art.rda")
+load("~/Dropbox/MS/TurnoverBCI/TurnoverBCImain/test/art.rda")
 
 ggplot(dat2 %>% filter(n <= 50), aes(x=x,y=y, col = n %>% as.factor)) +
   #geom_point() +
@@ -70,7 +70,10 @@ ggplot(dat2 %>% filter(n <= 50), aes(x=x,y=y, col = n %>% as.factor)) +
   theme_bw()
 
 aa <- dat2 %>% filter(n <= 50) %>%
-  gamm(y ~ s(x,k=4), data =., random = list(n = ~ 1), correlation = corCAR1(form=~x))
+  gamm(y ~ s(x,k=4), data =.,
+       random = list(n = ~ 1),
+       correlation = corCAR1(form=~x),
+       weights = varFixed(~ x))
 
 
 # site and tempo
@@ -85,7 +88,7 @@ aa <- dat2 %>% filter(n <= 50) %>%
 dat <- data_frame(y=as.vector(t(y)), x = rep(1:7, each=50)) %>%
   mutate(site = rep(1:50, 7))
 
-res <- gamm(y ~ s(x,k=4), data = dat, random = list(site = ~ 1), correlation = corCAR1(form=~x))
+res <- gamm(y ~ s(x, k=4), data = dat, random = list(site = ~ 1), correlation = corCAR1(form=~x))
 
 summary(res$gam)
 plot(y~x,dat)

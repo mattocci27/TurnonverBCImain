@@ -1,0 +1,34 @@
+
+``` {r}
+library(ggplot)
+library(grid)
+
+d <- ggplot(mpg, aes(displ, hwy)) +
+  geom_point() +
+  facet_wrap(~ cyl + drv)
+
+#d <- ggplot(mpg, aes(displ, hwy)) +
+#  geom_point() +
+#  facet_wrap(~ cyl + drv, 
+#             labeller = function (labels) {
+#               labels <- lapply(labels, as.character)
+#               list(do.call(paste, c(labels, list(sep = "\n"))))
+#             }) 
+print(d)
+
+g <- ggplotGrob(d)
+
+g$heights
+g$layout
+g$grobs[[46]]$heights 
+
+for(i in c(6,11,16)) g$heights[[i]] = unit(.5,"cm")   # Three strip heights changed
+for(i in c(47:55)) g$grobs[[i]]$heights <-  unit(c(1,1), "npc")   # The height of three grobs changed
+#for(i in c(46:54)) g$grobs[[i]]$heights <-  unit(1, "npc")   # The height of three grobs changed
+
+g$grobs[[54]]$heights %>% str
+grid.newpage()
+grid.draw(g)
+
+```
+
